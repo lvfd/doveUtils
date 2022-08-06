@@ -1,0 +1,27 @@
+{
+  "name": "dove-utils",
+  "version": "1.0.0",
+  "description": "Compile, compress and publish the javascript for all projects.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lvfd/doveUtils.git"
+  },
+  "keywords": [
+    "javascript",
+    "webpack",
+    "express"
+  ],
+  "author": "lvfd@acca.com.cn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lvfd/doveUtils/issues"
+  },
+  "homepage": "https://github.com/lvfd/doveUtils#readme",
+  "devDependencies": {
+    "webpack": "^5.74.0"
+  }
+}
