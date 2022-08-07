@@ -4,7 +4,8 @@
   "description": "Compile, compress and publish the javascript for all projects.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "server": "express server"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/lvfd/doveUtils#readme",
   "devDependencies": {
-    "webpack": "^5.74.0"
+    "jquery": "^3.6.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   }
 }

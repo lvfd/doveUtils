@@ -1,4 +1,4 @@
-# /dist/*
+/dist/*
 # !/dist/css/
 # /dist/css/*
 # !/dist/css/uikit.css
