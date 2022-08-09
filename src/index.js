@@ -1,9 +1,8 @@
-import $ from 'jquery'
+// import $ from 'jquery'
+import other from './other.js'
 
 function component() {
    const element = document.createElement('div');
-
-   
    element.innerHTML = 'Hello World111';
 
    return element;
@@ -11,4 +10,6 @@ function component() {
 
  document.body.appendChild(component());
 
- console.log($);
+ other()
+
+ // console.log($);
