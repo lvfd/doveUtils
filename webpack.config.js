@@ -5,13 +5,14 @@ const env = process.env.NODE_ENV
 let config = {
   entry: {
     index: './src/index.js',
-    other: './src/other.js',
+    // other: './src/other.js',
+    test: './src/public/test.bower.js',
   },
   plugins: [
     new HtmlWebpackPlugin(),
   ],
   output: {
-    filename: '[name].dove.js',
+    filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
@@ -19,7 +20,9 @@ let config = {
     rules: [
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'src'),
+        exclude: /\.bower\.js$/,
+        // exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -34,6 +37,11 @@ let config = {
 if (env === 'development') {
   config.mode = 'development'
   config.devtool = 'inline-source-map'
+}
+
+if (env === 'production') {
+  config.mode = 'production'
+  config.devtool = 'source-map'
 }
 
 module.exports = config

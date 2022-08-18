@@ -1,5 +1,6 @@
 // import $ from 'jquery'
-import other from './other.js'
+// import other from './other.js'
+import test from './public/test.bower'
 
 function component() {
    const element = document.createElement('div');
@@ -7,9 +8,13 @@ function component() {
 
    return element;
  }
+ const test2 = () => {
+   console.log('test2')
+ }
 
  document.body.appendChild(component());
+ test()
 
- other()
+ // other()
 
  // console.log($);
