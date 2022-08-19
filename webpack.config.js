@@ -4,15 +4,17 @@ const env = process.env.NODE_ENV
 
 let config = {
   entry: {
-    index: './src/index.js',
+    // index: './src/index.js',
     // other: './src/other.js',
-    test: './src/public/test.bower.js',
+    // test: './src/public/test.bower.js',
+    dovepay_recharge: './src/dovepay/recharge',
   },
   plugins: [
     new HtmlWebpackPlugin(),
   ],
   output: {
-    filename: '[name].[contenthash].js',
+    // filename: '[name].[contenthash].js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
