@@ -2,43 +2,42 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const env = process.env.NODE_ENV
 
+let babelLoaderConfig = {
+  test: /\.m?js$/,
+  include: path.resolve(__dirname, 'src'),
+  exclude: /\.bower\.js$/,
+  use: {
+    loader: "babel-loader",
+    options: {
+      presets: ['@babel/preset-env']
+    },
+  },
+}
+
 let config = {
   entry: {
-    // index: './src/index.js',
-    // other: './src/other.js',
-    // test: './src/public/test.bower.js',
     dovepay_recharge: './src/dovepay/recharge',
   },
-  plugins: [
-    new HtmlWebpackPlugin(),
-  ],
   output: {
     // filename: '[name].[contenthash].js',
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
   module: {
-    rules: [
-      {
-        test: /\.m?js$/,
-        include: path.resolve(__dirname, 'src'),
-        exclude: /\.bower\.js$/,
-        // exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-          options: {
-            presets: ['@babel/preset-env']
-          },
-        },
-      },
-    ],
+    rules: [babelLoaderConfig],
   },
 }
 
 if (env === 'development') {
   config.mode = 'development'
   config.devtool = 'inline-source-map'
+  config.plugins = [new HtmlWebpackPlugin()]
 }
 
 if (env === 'production') {
