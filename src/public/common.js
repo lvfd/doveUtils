@@ -46,9 +46,7 @@ Common.prototype.loadfile = function(fileType, config) {
   const type = fileType === 'js'? 'script': 'link'
   const url = config.url
   const root = config.root || document
-  const head = root.querySelector('head')
-  const body = root.querySelector('body')
-  if (!head && !body) throw new Error('没有head和body节点')
+  
   let node = document.createElement(type)
   if (type === 'script') {
     node.src = url
@@ -57,6 +55,9 @@ Common.prototype.loadfile = function(fileType, config) {
     node.href = url
     node.rel = 'stylesheet'
   }
+  const head = root.querySelector('head')
+  const body = root.querySelector('body')
+  if (!head && !body) throw new Error('没有head和body节点')
   if (head) {
     head.appendChild(node)
   } else {
