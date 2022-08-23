@@ -1,12 +1,10 @@
+import common from './common'
+import errorHandler from './errorHandler'
+
 function DovePayPublic() {}
 
 DovePayPublic.faviconUrl = 'images/favicon.ico';
 DovePayPublic.polyfillAddress = 'http://localhost:2000/doveUikit/utils/Polyfill.js';
-DovePayPublic.uikitAddress = {  // deprec
-  base: 'http://localhost:8080/dovePay/',
-  css: ['improveUi/uikit.min.css', 'css/uikit.custom.css'],
-  js: ['improveUi/uikit.min.js', 'improveUi/uikit-icons.min.js'],
-};
 
 DovePayPublic.prototype.adaptContentIframe = function(root) {
   var iframes = root.querySelectorAll('iframe[dp-adaptcontent]');
@@ -157,26 +155,39 @@ DovePayPublic.prototype.importPolyfill = function(iframe) {
   return body.appendChild(DovePayPublic.getScript(address));
 };
 
-DovePayPublic.prototype.importUikit = function(iframe) {  // deprec
-  var base = DovePayPublic.uikitAddress.base;
-  var cssArr = DovePayPublic.uikitAddress.css;
-  var jsArr = DovePayPublic.uikitAddress.js;
-  var root = iframe? iframe.contentDocument: document;
-  var head = root.querySelector('head');
-  var body = root.querySelector('body');
-  if (!head || !body) throw new Error('必须有<head>和<body>节点');
-  for (var i = 0; i < cssArr.length; i++) {
-    var css = cssArr[i];
-    head.appendChild(DovePayPublic.getStyle(css, base));
-  }
-  for (var i = 0; i < jsArr.length; i++) {
-    var js = jsArr[i];
-    if (body.firstChild) {
-      body.insertBefore(DovePayPublic.getScript(js, base), body.firstChild);
-    } else {
-      body.appendChild(DovePayPublic.getScript(js, base));
-    }
-  }
+DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
+  const root = iframe? iframe.contentDocument: document
+  const base = `${common.getNodeBase()}/doveuikit/dist`
+  const baseJava = `${common.getNodeBase('java')}/dovePay/improveUi`
+  const cssName = ['uikit.dove-theme', 'uikit.custom']
+  const jsName = ['uikit', 'uikit-icons']
+  const suffix = common.getNodeSuffix()
+  const promise = common.loadfile('css', {
+    url: `${base}/css/${cssName[0]}${suffix}css`,
+    root: root,
+  })
+  .then((res) => {
+    console.log(res)
+    return common.loadfile('css', {
+      url: `${baseJava}/${cssName[1]}.css`,
+      root: root
+    })
+  })
+  .then((res) => {
+    console.log(res)
+    return common.loadfile('js', {
+      url: `${base}/js/${jsName[0]}${suffix}js`,
+      root: root,
+    })
+  })
+  .then((res) => {
+    console.log(res)
+    return common.loadfile('js', {
+      url: `${base}/js/${jsName[1]}${suffix}js`,
+      root: root,
+    })
+  })
+  return promise
 };
 
 DovePayPublic.prototype.initModalShower = function(root) {
