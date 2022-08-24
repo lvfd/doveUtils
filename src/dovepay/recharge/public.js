@@ -1,3 +1,3 @@
-import { dovepay } from '../../public'
+import { dovepay, log } from '../../public'
 
-export { dovepay }
+export { dovepay, log }

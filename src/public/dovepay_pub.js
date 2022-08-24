@@ -1,5 +1,6 @@
 import common from './common'
 import errorHandler from './errorHandler'
+import log from './logger'
 
 function DovePayPublic() {}
 
@@ -167,21 +168,21 @@ DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
     root: root,
   })
   .then((res) => {
-    console.log(res)
+    log(res)
     return common.loadfile('css', {
       url: `${baseJava}/${cssName[1]}.css`,
       root: root
     })
   })
   .then((res) => {
-    console.log(res)
+    log(res)
     return common.loadfile('js', {
       url: `${base}/js/${jsName[0]}${suffix}js`,
       root: root,
     })
   })
   .then((res) => {
-    console.log(res)
+    log(res)
     return common.loadfile('js', {
       url: `${base}/js/${jsName[1]}${suffix}js`,
       root: root,
