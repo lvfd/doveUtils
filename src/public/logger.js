@@ -15,3 +15,4 @@ function log(logs, consoleType) {
 
 export default logByType()
 export var log_insteadJquery = logByType('doveJqueryInsteadLogger')
+export var log_recharge = logByType('doveRecharge')

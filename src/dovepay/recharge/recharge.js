@@ -1,4 +1,4 @@
-import { dovepay as dpublic } from './public'
+import { dovepay as dpublic, log_recharge as log } from './public'
 
 function RechargeUi() {}
 
@@ -56,27 +56,55 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
     
     function handle_rechargeInput(node) {
       var input = node;
-      input.addEventListener('paste', forbid);
-      input.addEventListener('change', toDigitUppercase);
-      input.addEventListener('keyup', toDigitUppercase);
-      input.addEventListener('input', limitLength);
+      
+      // Add listeners:
+      input.addEventListener('paste', forbid)
+      input.addEventListener('change', checkValue)
+      input.addEventListener('change', toDigitUppercase)
+      input.addEventListener('keyup', toDigitUppercase)
+      input.addEventListener('keyup', forbidRLKeys)
+      input.addEventListener('input', limitLength)
+      input.addEventListener('focus', setSelectAll)
+
+      // Init input
+      input.value = 0
+      toDigitUppercaseHandler(input.value)
+      input.setAttribute('min', 0)
+
       function forbid(e) {
         e.preventDefault();
         alert('不允许此操作')
         return false;
       }
-      function toDigitUppercase(){
-        var num = this.value;
+      function forbidRLKeys(event) {
+        const keycode = event.which||event.keyCode
+        if (keycode === 37 || keycode === 39) {
+          this.select()
+        }
+      }
+      function toDigitUppercase(e){
+        toDigitUppercaseHandler(this.value);
+      }
+      function toDigitUppercaseHandler(num) {
         var uppercaseSpan = root.getElementById('uppercase');
         var str = dpublic.digitUppercase(num);
         uppercaseSpan.innerText = str;
         uppercaseSpan.classList.add('orange01');
       }
-      function limitLength() {
+      function limitLength(e) {
         var length = this.getAttribute('maxlength')? this.getAttribute('maxlength'): 9;
         if (this.value.length > length) {
           this.value = this.value.slice(0, length);
         };
+      }
+      function setSelectAll(e) {
+        this.select()
+      }
+      function checkValue(e) {
+        let value = this.value
+        if (value === null || value === undefined || value < 0) {
+          this.value = 0
+        }
       }
     }
 
