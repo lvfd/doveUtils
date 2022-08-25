@@ -3,7 +3,7 @@ export default function(error, callback) {
   
   let errMsg = error? error: '未知错误'
   if (console) {
-    console.error('错误信息IN_CONSOLE: ', errMsg)
+    console.error('[doveErrorLog]', errMsg)
   }
   if (typeof UIkit !== 'undefined') {
     try {

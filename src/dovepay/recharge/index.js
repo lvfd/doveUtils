@@ -1,13 +1,17 @@
-import { dovepay as dpublic, log } from './public'
+import { dovepay as dpublic, log, loadJquery } from './public'
 import rechargeUi from './recharge'
 
 const importUikit = dpublic.importUikit
 
 document.addEventListener('DOMContentLoaded', function(event) {
-  log('------PROCESS START------')
-  importUikit()
+  log('DOM节点全部加载完毕')
+  loadJquery()
   .then((res) => {
-    log(res)
+    log(`页面框架: ${res}`)
+    return importUikit()
+  })
+  .then((res) => {
+    log(`页面框架: ${res}`)
     Entry()
   })
 })
@@ -23,14 +27,21 @@ function Entry() {
 }
 
 function iframeHandler(event) {
-  importUikit(this)
+  const target = this
+  const currentHref = target.contentWindow.location.href
+  log(`加载访问${currentHref} 的iframe已经完成`)
+  loadJquery({root: target})
   .then((res) => {
-    log(res)
-    dpublic.resizeMainContentIframe(this)
+    log(`iframe(url=${currentHref} ): ${res}`)
+    return importUikit(target)
+  })
+  .then((res) => {
+    log(`iframe(url=${currentHref} ): ${res}`)
+    dpublic.resizeMainContentIframe(target)
     dpublic.hideAllNavDetails()
-    var idocument = this.contentDocument
+    var idocument = target.contentDocument
     idocument.addEventListener('click', dpublic.hideAllNavDetails)
-    pageHandler(idocument.body.id, this)
+    pageHandler(idocument.body.id, target)
   })
 }
 

@@ -1,3 +1,3 @@
-import { dovepay, log } from '../../public'
+import { dovepay, log, loadJquery } from '../../public'
 
-export { dovepay, log }
+export { dovepay, log, loadJquery }
