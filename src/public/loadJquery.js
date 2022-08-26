@@ -70,4 +70,8 @@ function getOldJquery(rootNode) {
     return jqueryList
 }
 
+function DoveUpdateJquery() {}
+DoveUpdateJquery.prototype.exec = insteadJquery
+
 export default insteadJquery
+export { DoveUpdateJquery }
