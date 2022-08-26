@@ -1,4 +1,4 @@
-import { dovepay as dpublic, log_recharge as log } from './public'
+import { dovepay as dpublic, log_recharge as log, encryptMobileNumber } from './public'
 
 function RechargeUi() {}
 
@@ -289,7 +289,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
       var mobile = modal.querySelector('.mobile');
       if (data.trigger === btn_callmodal) {
         UIkit.modal(modal).show();
-        mobile.innerText = data.mobileNode.value;
+        mobile.innerText = encryptMobileNumber(data.mobileNode.value);
         var btn = document.querySelector('.action_callSendsms');
         btn.click();
         return;
@@ -297,7 +297,6 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
       $.ajax({
         type : 'POST',
         contentType : 'application/x-www-form-urlencoded;charset=utf-8',
-//        url : data.trigger === btn_callsms? "../accountAction.do": 'accountAction.do',
         url: "./protected/accountAction.do",
         data : {
           m : 'sendCode',

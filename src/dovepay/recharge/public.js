@@ -1,3 +1,3 @@
-import { dovepay, log, log_recharge, loadJquery } from '../../public'
+import { dovepay, log, log_recharge, loadJquery, encryptMobileNumber } from '../../public'
 
-export { dovepay, log, log_recharge, loadJquery }
+export { dovepay, log, log_recharge, loadJquery, encryptMobileNumber }
