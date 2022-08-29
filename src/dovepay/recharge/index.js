@@ -4,7 +4,8 @@ import rechargeUi from './recharge'
 const importUikit = dpublic.importUikit
 
 document.addEventListener('DOMContentLoaded', function(event) {
-  log('DOM节点全部加载完毕')
+  // log('DOM节点全部加载完毕')
+  // 
   loadJquery()
   .then((res) => {
     log(`页面框架: ${res}`)

@@ -45,4 +45,4 @@ function encryptMobileNumberByRules(mobile, headDigit, string, lastDigit) {
 // 135****4567 135****8948 [缺省脱敏加密方法] [手机号码格式错误]
 
 
-export default decryptMobileNumber
+export default encryptMobileNumber

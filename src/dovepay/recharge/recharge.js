@@ -62,7 +62,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
       input.addEventListener('change', checkValue)
       input.addEventListener('change', toDigitUppercase)
       input.addEventListener('keyup', toDigitUppercase)
-      input.addEventListener('keyup', forbidRLKeys)
+      input.addEventListener('keyup', forbidKeys)
       input.addEventListener('input', limitLength)
       input.addEventListener('focus', setSelectAll)
 
@@ -76,10 +76,19 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         alert('不允许此操作')
         return false;
       }
-      function forbidRLKeys(event) {
-        const keycode = event.which||event.keyCode
-        if (keycode === 37 || keycode === 39) {
+      function forbidKeys(event) {
+        const keycode = event.keyCode
+        // log(keycode)
+        /* left& right */
+        if (keycode === 37 || keycode === 39 ) {
           this.select()
+        }
+        /* +- */
+        if (keycode === 109 || keycode === 189 || keycode === 107 || keycode === 187) {
+          let val = this.value
+          // this.value = val.substring(val.length - 1, val.length)
+          event.preventDefault()
+          // this.value = val.replace(/[^\0-9\.]/g,'')
         }
       }
       function toDigitUppercase(e){

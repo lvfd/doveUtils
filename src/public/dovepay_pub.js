@@ -106,7 +106,7 @@ DovePayPublic.prototype.hideAllNavDetails = function() {
 DovePayPublic.prototype.resizeMainContentIframe = function(iframe, config) {
   var content = iframe.contentDocument;
   var height = DovePayPublic.getIframeContentHeight(iframe, {type: 'body'});
-  console.log(height);
+  // console.log(height);
   iframe.height = height;
 }
 
