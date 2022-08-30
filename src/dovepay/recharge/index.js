@@ -1,5 +1,6 @@
 import { dovepay as dpublic, log, loadJquery } from './public'
 import rechargeUi from './recharge'
+import { changeRechargeStepArrow } from './changeDom'
 
 const importUikit = dpublic.importUikit
 
@@ -47,6 +48,9 @@ function iframeHandler(event) {
 }
 
 function pageHandler(id, iframe) {
+  /* 多页应用*/
+  changeRechargeStepArrow(iframe)
+  /* 单页应用 */
   try {
     if (!rechargeUi[id]) return;
     rechargeUi[id].call(this, iframe);

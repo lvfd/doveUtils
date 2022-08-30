@@ -34,7 +34,18 @@ RechargeUi.prototype.accountsRecConfirmUi = function(iframe) {
   dpublic.changeDocumentTitle('德付通 - 请确认充值信息');
   dpublic.init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
   RechargeUi.init_accountName(root); // 邮箱脱敏
-//  dpublic.initModalShower(root);
+  /* 标红金额 & 加载大写金额 */
+  const upcSrcNode = root.querySelector('#upperCaseSrc')
+  const upcDistNode = root.querySelector('#upperCaseDist')
+  upcSrcNode.classList.add('orange01') 
+  try {
+    upcDistNode.innerText = dpublic.digitUppercase(parseInt(upcSrcNode.innerText))
+    upcDistNode.classList.add('orange01') 
+  } catch(e) {
+    console.error(e.stack)
+    upcDistNode.innerText = '大写金额加载失败'
+  }
+
 }
 
 RechargeUi.prototype.accountsRechargeUi = function(iframe) {
@@ -48,9 +59,9 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
     dpublic.init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
     handle_rechargeInput(root.querySelector('input[name=amt]'));  // 处理充值金额输入
     RechargeUi.init_accountName(root); // 邮箱脱敏
-    init_tab(root.querySelectorAll('li.bankstyle>a'), root.querySelectorAll('.SelectBank'));  // 注册选项卡(充值渠道)
+    init_tab(root.querySelectorAll('li.bankstyle>a'), root.querySelectorAll('.SelectBank'), {iframe: iframe});  // 注册选项卡(充值渠道)
     init_links_cardType([{name:'储蓄卡', value: 'debit'}, {name:'信用卡', value: 'credit'}], root.querySelectorAll('.classified')); // 生成银行卡类型选项卡链接
-    init_tab(root.querySelectorAll('ul.cardTypeTrigger > li > a'), root.querySelectorAll('.classified'));  // 注册选项卡(银行卡类型)
+    init_tab(root.querySelectorAll('ul.cardTypeTrigger > li > a'), root.querySelectorAll('.classified'), {iframe: iframe});  // 注册选项卡(银行卡类型)
     init_bankRadio(root.querySelectorAll('.bankRadios')); // 银行list单选UI效果
     check_banklogo(root.querySelectorAll('.dove-banklogo'));  // check银行logo显示状态
     
@@ -76,7 +87,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         alert('不允许此操作')
         return false;
       }
-      function forbidKeys(event) {
+      function forbidKeys(event) {  // input[type=number]节点测试有问题
         const keycode = event.keyCode
         // log(keycode)
         /* left& right */
@@ -163,6 +174,9 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
             var pointer_bankInput = parent.querySelector('#bankInput_' + value.split("_")[1]);
             var content = pointer_bankInput? pointer_bankInput: parent.querySelectorAll('.' + value);
             showPointedTab(parent, content);
+            if (config && config.iframe) {
+              dpublic.resizeMainContentIframe(config.iframe)
+            }
           } catch(e) {
             dpublic.errHandler(e);
           }

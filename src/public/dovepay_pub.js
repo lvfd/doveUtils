@@ -1,6 +1,10 @@
 import common from './common'
 import errorHandler from './errorHandler'
 import log from './logger'
+import {
+  getHeight_iframe_adaptiveContent as getContentHeight,
+  getHeight_mainContent_minHeight as getContentMinHeight,
+} from './adaptiveHandler'
 
 function DovePayPublic() {}
 
@@ -24,9 +28,6 @@ DovePayPublic.prototype.adaptContentIframe = function(root) {
       var wrapPadding = parseInt(getComputedStyle(this).getPropertyValue('padding-top')) +
                         parseInt(getComputedStyle(this).getPropertyValue('padding-bottom'));
       this.style.width = 'inherit';
-      var contentHeight = DovePayPublic.getIframeContentHeight(this);
-      var finalHeight = wrapPadding? contentHeight + wrapPadding: contentHeight;
-      this.height = finalHeight;
     } catch (e) {
       if (console) console.error(e);
       return;
@@ -74,6 +75,10 @@ DovePayPublic.prototype.digitUppercase = function(n) {
       ['元', '万', '亿'],
       ['', '拾', '佰', '仟']
   ];
+  // 不能输入负数
+  if (n < 0) {
+    return '不能输入负数'
+  }
   var head = n < 0 ? '欠' : '';
   n = Math.abs(n);
   var s = '';
@@ -104,10 +109,16 @@ DovePayPublic.prototype.hideAllNavDetails = function() {
 };
 
 DovePayPublic.prototype.resizeMainContentIframe = function(iframe, config) {
-  var content = iframe.contentDocument;
-  var height = DovePayPublic.getIframeContentHeight(iframe, {type: 'body'});
-  // console.log(height);
-  iframe.height = height;
+  const subNavNode = document.querySelector('#mainContent .uk-subnav')
+  const subNavMarginBottom = window.getComputedStyle(subNavNode).getPropertyValue('margin-bottom')
+  const height = getContentHeight(iframe, {type: 'body'})
+  const minHeight = getContentMinHeight([
+    document.querySelector('.gblMHeader'),
+    document.querySelector('#gblMarketingFooter'),
+    document.querySelector('#my_menu')
+  ]) - parseInt(subNavMarginBottom)
+  // log(`[iframe框架高度初始化] height: ${height}, minHeight: ${minHeight}`)
+  iframe.height = Math.max(height, minHeight);
 }
 
 DovePayPublic.prototype.init_btn_countdown = function(config) {
@@ -206,10 +217,34 @@ DovePayPublic.prototype.initModalShower = function(root) {
 
 DovePayPublic.prototype.width_resize = function(iframe){
   if (!iframe) return;
-  iframe.parentElement.style.width = '100%';
-  var wrap = iframe.contentDocument.querySelector('#rightContSon');
-  wrap.style.width = 'inherit';
-  wrap.classList.add('uk-container');
+  try {
+    iframe.parentElement.style.width = '100%';
+    const rootDoc = iframe.contentDocument
+    let wrap
+    const rightContSon = rootDoc.querySelector('#rightContSon')
+    const wrapTableList = rootDoc.querySelectorAll('table[width="810"]')
+    if (rightContSon) {
+      wrap = rightContSon
+      wrap.style.width = 'inherit'
+      wrap.classList.add('uk-container')
+    }
+    else if (wrapTableList.length > 0) {
+      wrap = wrapTableList[0]
+      wrap.removeAttribute('width')
+      wrap.classList.add('uk-container')
+      if (wrapTableList.length > 1) {
+        for (let i = 1; i < wrapTableList.length; i++) {
+          wrapTableList[i].setAttribute('width', '100%')
+        }
+      }
+    }
+    else {
+      throw new Error('找不到合适的框架')
+    }
+  } catch(error) {
+    console.error('无法初始化宽屏函数: ')
+    console.error(error.stack)
+  }
 };
 
 DovePayPublic.initDocumentIcon = function(path) {
@@ -228,16 +263,6 @@ DovePayPublic.initDocumentIcon = function(path) {
     return link;
   }
 };
-
-DovePayPublic.getIframeContentHeight = function(iframe, config) {
-  var content = iframe.contentDocument? iframe.contentDocument: iframe.contentWindow.document;
-  var documentElement_height = content.documentElement.scrollHeight;
-  var html_height = content.querySelector('html').scrollHeight;
-  var body_height = content.body.scrollHeight;
-  if (config && config.type === 'body') return body_height;
-  var height = Math.max(documentElement_height, html_height, body_height);
-  return height;
-}
 
 DovePayPublic.getScript = function(address, base) {
   var basePath = base? base: '';
