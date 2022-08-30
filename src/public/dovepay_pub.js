@@ -229,14 +229,15 @@ DovePayPublic.prototype.width_resize = function(iframe){
       wrap.classList.add('uk-container')
     }
     else if (wrapTableList.length > 0) {
-      wrap = wrapTableList[0]
-      wrap.removeAttribute('width')
-      wrap.classList.add('uk-container')
-      if (wrapTableList.length > 1) {
-        for (let i = 1; i < wrapTableList.length; i++) {
-          wrapTableList[i].setAttribute('width', '100%')
-        }
+      for (let i = 0; i < wrapTableList.length; i++) {
+        wrapTableList[i].removeAttribute('width')
+        wrapTableList[i].style.width = '100%'
       }
+      const wrapDiv = document.createElement('div')
+      wrapDiv.classList.add('uk-container')
+      const wrapTable = wrapTableList[0]
+      wrapTable.parentNode.insertBefore(wrapDiv, wrapTable)
+      wrapDiv.appendChild(wrapTable)
     }
     else {
       throw new Error('找不到合适的框架')
