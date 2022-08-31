@@ -21,13 +21,14 @@ function log(logs, consoleType) {
   const isTest = hostname.search(reg) !== -1
   if (!isTest) return
   console.info(
-    `%c ${dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')}: %c ${consoleText}: %c ${logs}`,
+    `%c ${dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss')}: %c ${consoleText}: `,
     'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
     `background:${consoleColor}; padding: 1px; border-radius: 0 3px 3px 0;  color: #fff`,
-    'background:transparent'
+    logs
     )
 }
 
 export default logByType()
 export var log_insteadJquery = logByType({text:'doveJqueryInsteadLogger', color:'#0769AD'})
 export var log_recharge = logByType({text:'doveRecharge', color:'#FF0B00'})
+export var log_changeDom = logByType({text: 'changeDom', color: '#844C82'})

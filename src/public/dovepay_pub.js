@@ -9,7 +9,6 @@ import {
 function DovePayPublic() {}
 
 DovePayPublic.faviconUrl = 'images/favicon.ico';
-DovePayPublic.polyfillAddress = 'http://localhost:2000/doveUikit/utils/Polyfill.js';
 
 DovePayPublic.prototype.adaptContentIframe = function(root) {
   var iframes = root.querySelectorAll('iframe[dp-adaptcontent]');
@@ -24,10 +23,16 @@ DovePayPublic.prototype.adaptContentIframe = function(root) {
         wrap.style.overflow = 'auto';
         wrap.style.width = '100%';
       };
-      
       var wrapPadding = parseInt(getComputedStyle(this).getPropertyValue('padding-top')) +
                         parseInt(getComputedStyle(this).getPropertyValue('padding-bottom'));
-      this.style.width = 'inherit';
+      this.style.width = 'inherit'
+      const contentHeight = this.contentDocument.body.offsetHeight
+      let finalHeight = parseInt(contentHeight + wrapPadding)
+      const footDialog = this.contentDocument.querySelector('.foot.dialog')
+      if (footDialog) {
+        finalHeight += parseInt(window.getComputedStyle(footDialog).getPropertyValue('margin-bottom'))
+      }
+      this.style.height = finalHeight + 'px'
     } catch (e) {
       if (console) console.error(e);
       return;
@@ -154,19 +159,6 @@ DovePayPublic.prototype.init_step = function(progress, configArray) {
   progress.value = value + addvalue;
 };
 
-DovePayPublic.prototype.importPolyfill = function(iframe) {
-  var address = DovePayPublic.polyfillAddress;
-  if (!address) return;
-  var root = iframe? iframe.contentDocument: document;
-  var body = root.querySelector('body');
-  if (!body) {
-    console.error('必须有<body>节点');
-    return;
-  }
-  if (body.firstChild) return body.insertBefore(DovePayPublic.getScript(address), body.firstChild);
-  return body.appendChild(DovePayPublic.getScript(address));
-};
-
 DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
   const root = iframe? iframe.contentDocument: document
   const base = `${common.getNodeBase()}/doveuikit/dist`
@@ -216,35 +208,81 @@ DovePayPublic.prototype.initModalShower = function(root) {
 };
 
 DovePayPublic.prototype.width_resize = function(iframe){
-  if (!iframe) return;
+  if (!iframe) return 'no';
   try {
-    iframe.parentElement.style.width = '100%';
     const rootDoc = iframe.contentDocument
+    if (rootDoc.querySelector('.uk-container')) {
+      return 'no'
+    }
+    iframe.parentElement.style.width = '100%';
     let wrap
-    const rightContSon = rootDoc.querySelector('#rightContSon')
-    const wrapTableList = rootDoc.querySelectorAll('table[width="810"]')
-    if (rightContSon) {
-      wrap = rightContSon
-      wrap.style.width = 'inherit'
+    const rightContent = rootDoc.querySelector('body > #rightContent')
+    const wrapTableList = rootDoc.querySelectorAll('table[width="810"], table[width="988"]')
+    const allDiv = rootDoc.querySelectorAll('div')
+    const wrapDiv_BOP = rootDoc.querySelector('div[style*=height][style*=overflow-y][style*=overflow-x][style*=auto][style*=hidden]')
+    
+    /* 去除所有具有固定宽度的div宽度 */
+    if (allDiv.length > 0) {
+      for (let i = 0; i < allDiv.length; i++) {
+        const div = allDiv[i]
+        const divWidth = window.getComputedStyle(div).getPropertyValue('width')
+        if (parseInt(divWidth) === 988 || parseInt(divWidth) === 810) {
+          div.style.width = '100%'
+        }
+      }
+    }
+
+    /* 处理前台BOP页面 */
+    if (wrapDiv_BOP) {
+      wrapDiv_BOP.removeAttribute('style')
+      wrapDiv_BOP.classList.add('uk-container')
+    }
+
+    /* 具有id=rightContent的div直接处理*/
+    if (rightContent) {
+      wrap = rightContent
       wrap.classList.add('uk-container')
     }
-    else if (wrapTableList.length > 0) {
+
+    /* 去除所有具有固定宽度的table宽度并处理 */
+    if (wrapTableList.length > 0) {
       for (let i = 0; i < wrapTableList.length; i++) {
         wrapTableList[i].removeAttribute('width')
         wrapTableList[i].style.width = '100%'
       }
-      const wrapDiv = document.createElement('div')
-      wrapDiv.classList.add('uk-container')
+      wrap = document.createElement('div')
+      wrap.classList.add('uk-container')
       const wrapTable = wrapTableList[0]
-      wrapTable.parentNode.insertBefore(wrapDiv, wrapTable)
-      wrapDiv.appendChild(wrapTable)
+      wrapTable.parentNode.insertBefore(wrap, wrapTable)
+      wrap.appendChild(wrapTable)
     }
-    else {
-      throw new Error('找不到合适的框架')
+
+    /* 检查经过以上处理后.uk-container的兄弟Table元素 */
+    if (rootDoc.querySelector('.uk-container')) {
+      const parentNode = rootDoc.querySelector('.uk-container').parentNode
+      if (parentNode && parentNode.hasChildNodes()) {
+        const childNodeList = parentNode.childNodes
+        for (let i = 0; i < childNodeList.length; i++) {
+          const childNode = childNodeList[i]
+          if (/table/i.test(childNode.tagName)){
+            childNode.removeAttribute('width')
+            childNode.classList.add('uk-container')
+          }
+        }
+      }
     }
+
+    /* 如果不是以上所有情况： */
+    if (!rootDoc.querySelector('.uk-container')) {
+      const body = rootDoc.body
+      body.classList.add('uk-container')
+    }
+
+    /* 输出结果*/
+    const result = rootDoc.querySelector('.uk-container')? 'success': 'no'
+    return result
   } catch(error) {
-    console.error('无法初始化宽屏函数: ')
-    console.error(error.stack)
+    throw new Error(error)
   }
 };
 

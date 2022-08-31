@@ -1,0 +1,23 @@
+let info = [
+  {name: 'abc', regExp: '农业银行'},
+  {name: 'boc', regExp: '中国银行'},
+  {name: 'bos', regExp: '上海银行'},
+  {name: 'ccb', regExp: '建设银行'},
+  {name: 'ceb', regExp: '光大银行'},
+  {name: 'citic', regExp: '中信银行'},
+  {name: 'cmb', regExp: '招商银行'},
+  {name: 'cmbc', regExp: '民生银行'},
+  {name: 'comm', regExp: '交通银行'},
+  {name: 'czb', regExp: '浙商银行'},
+  {name: 'gdb', regExp: '广发银行'},
+  {name: 'glb', regExp: '桂林银行'},
+  {name: 'hzcb', regExp: '杭州银行'},
+  {name: 'icbc', regExp: '工商银行'},
+  {name: 'lzccb', regExp: '柳州银行'},
+  {name: 'nbcb', regExp: '宁波银行'},
+  {name: 'qdccb', regExp: '青岛银行'},
+  {name: 'spabank', regExp: '平安银行'},
+  {name: 'spdb', regExp: '浦发银行'},
+  {name: 'znx', regExp: '浙江农.*'},
+]
+export default info
