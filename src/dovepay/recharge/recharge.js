@@ -58,6 +58,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
     dpublic.changeDocumentTitle('德付通 - 请输入充值信息');
     dpublic.init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
     handle_rechargeInput(root.querySelector('input[name=amt]'));  // 处理充值金额输入
+    bindInputsDisplayHandler(root)  // 绑定是否显示充值金额输入框（线下充值不显示）
     RechargeUi.init_accountName(root); // 邮箱脱敏
     init_tab(root.querySelectorAll('li.bankstyle>a'), root.querySelectorAll('.SelectBank'), {iframe: iframe});  // 注册选项卡(充值渠道)
     init_links_cardType([{name:'储蓄卡', value: 'debit'}, {name:'信用卡', value: 'credit'}], root.querySelectorAll('.classified')); // 生成银行卡类型选项卡链接
@@ -65,6 +66,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
     init_bankRadio(root.querySelectorAll('.bankRadios')); // 银行list单选UI效果
     check_banklogo(root.querySelectorAll('.dove-banklogo'));  // check银行logo显示状态
     
+
     function handle_rechargeInput(node) {
       var input = node;
       
@@ -252,6 +254,50 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         }
       }
     }
+
+    function bindInputsDisplayHandler(rootDoc) {
+      const tdList = rootDoc.querySelectorAll('td[height="30"][align="right"].bigTT01')
+      const reg = /充值金额|金额大写/
+      tdList.forEach(function(td) {
+        if (reg.test(td.innerHTML)) {
+          td.parentNode.classList.add('hideDuringOffline')
+        }
+      })
+      const triggerHide = rootDoc.querySelector('li.bankstyle>a[data-value="bankTitle_xianxia"]')
+      const triggerShowList = rootDoc.querySelectorAll('li.bankstyle>a:not([data-value="bankTitle_xianxia"])')
+      triggerHide.addEventListener('click', function(e) {
+        const trHideDuringOfflineList = rootDoc.querySelectorAll('.hideDuringOffline')
+        trHideDuringOfflineList.forEach(function(trHideDuringOffline) {
+          trHideDuringOffline.classList.remove('uk-animation-fade', 'uk-animation-reverse')
+          window.setTimeout(() => {
+            trHideDuringOffline.classList.add('uk-animation-fade','uk-animation-reverse')
+            trHideDuringOffline.setAttribute('data-ishide', true)
+          }, 0)
+          // trHideDuringOffline.classList.add('uk-animation-fade','uk-animation-reverse')
+        })
+      })
+      triggerShowList.forEach(function(triggerShow) {
+        triggerShow.addEventListener('click', function(e) {
+          const trHideDuringOfflineList = rootDoc.querySelectorAll('.hideDuringOffline')
+          trHideDuringOfflineList.forEach(function(trHideDuringOffline) {
+            // console.log(trHideDuringOffline.getAttribute('data-ishide'))
+            if (trHideDuringOffline.getAttribute('data-ishide')) {
+              // console.log('222222222222222222111112')
+              trHideDuringOffline.style.visibility = 'hidden'
+              trHideDuringOffline.classList.remove('uk-animation-fade', 'uk-animation-reverse')
+              window.setTimeout(() => {
+                if (trHideDuringOffline.getAttribute('data-ishide')) {
+                  // console.log('2222222222222222222')
+                  trHideDuringOffline.style.visibility = 'unset'
+                  trHideDuringOffline.classList.add('uk-animation-fade')
+                  trHideDuringOffline.setAttribute('data-ishide', false)
+                }
+              }, 0)
+            }
+          })
+        })
+      })
+    } 
     
   }
   
