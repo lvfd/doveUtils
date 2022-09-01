@@ -1,6 +1,7 @@
 import {
   log_changeDom as log,
   dovepay,
+  bankInfo,
 } from './public'
 
 const regExp = {
@@ -140,23 +141,69 @@ function buildBankLogoButton(iframe) {
     return
   }
   log(`--------> ${iframeSrc} 进入 buildBankLogoButton 方法`)
-  
-  let logoBtn = document.createElement('button')
-  logoBtn.classList.add('uk-button')
-  logoBtn.classList.add('uk-button-default')
-  logoBtn.setAttribute('type', 'button')
-  let logoSpan = document.createElement('span')
-  logoSpan.classList.add('dove-banklogo')
-  logoSpan.setAttribute('data-content', '银行和机构logo')
-  logoBtn.appendChild(logoSpan)
 
+  const targetTds = rootDoc.querySelectorAll('form td[valign=middle][align=left]')
+  if (targetTds.length === 0) {
+    return
+  }
+  targetTds.forEach(function(targetTd) {
+    try {
+      const targetTdText = targetTd.innerText
+      const btnTitle = targetTdText
+      let svgPath, bankName, cardType = '', cardNumber = ''
 
+      bankInfo.some(function(info) {
+        const reg = new RegExp(info.regExp)
+        if (reg.test(targetTdText)) {
+          svgPath = info.path
+          bankName = reg.exec(targetTdText)[0]
+          return true
+        }
+      })
 
-  return logoBtn
+      if (!svgPath) {
+        return
+      }
+
+      if (/(?:借记)|(?:储蓄)|(?:贷记)卡/.test(targetTdText)) {
+        cardType = '储蓄卡'
+      }
+      if ((/信用卡/).test(targetTdText)) {
+        cardType = '信用卡'
+      }
+      if (/\d{4,}/.test(targetTdText)) {
+        const rawData = /\d{4,}/.exec(targetTdText)[0]
+        cardNumber = `**${rawData.substring(rawData.length - 4)}`
+      }
+
+      let logoBtn = document.createElement('button')
+      logoBtn.classList.add('uk-button')
+      logoBtn.classList.add('uk-button-default')
+      logoBtn.setAttribute('type', 'button')
+      let logoSpan = document.createElement('span')
+      logoSpan.classList.add('dove-banklogo')
+      logoSpan.setAttribute('data-content', '银行和机构logo')
+      logoSpan.setAttribute('title', btnTitle)
+      logoSpan.style.backgroundImage = `url(${svgPath})`
+      let cardTypeSpan = document.createElement('span')
+      cardTypeSpan.innerText = cardType
+      let cardNumberSpan = document.createElement('span')
+      cardNumberSpan.innerText = cardNumber
+      logoBtn.appendChild(logoSpan)
+      logoBtn.appendChild(cardTypeSpan)
+      logoBtn.appendChild(cardNumberSpan)
+
+      targetTd.innerHTML = ''
+      targetTd.appendChild(logoBtn)
+    } catch (error) {
+      console.error(error.stack)
+    }
+  })
 }
 
 export {
   changeRechargeStepArrow,
   changeButtonStyle,
   changeMainContentWidth,
+  buildBankLogoButton,
 }

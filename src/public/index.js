@@ -10,8 +10,10 @@ import errorHandler from './errorHandler'
 import loadJquery from './loadJquery'
 import encryptMobileNumber from './mobile/encryptMobileNumber'
 import polyfill from './polyfill'
+import bankInfo from './bankInfo'
 
 export var dovepay = dpublic
 export var common = common_public
 export { polyfill }
+export { bankInfo }
 export { log, log_recharge, log_changeDom, errorHandler, loadJquery, encryptMobileNumber }

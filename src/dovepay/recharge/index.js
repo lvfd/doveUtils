@@ -4,6 +4,7 @@ import {
   changeRechargeStepArrow,
   changeButtonStyle,
   changeMainContentWidth,
+  buildBankLogoButton,
 } from './changeDom'
 
 const importUikit = dpublic.importUikit
@@ -68,6 +69,7 @@ function pageHandler(id, iframe) {
     changeMainContentWidth(iframe)
     changeRechargeStepArrow(iframe)
     changeButtonStyle(iframe)
+    buildBankLogoButton(iframe)
   } catch(error) {
     console.error('[Multiple Page Style Error]', error.stack)
   }
