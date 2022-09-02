@@ -163,7 +163,7 @@ DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
   const root = iframe? iframe.contentDocument: document
   const base = `${common.getNodeBase()}/doveuikit/dist`
   const baseJava = `${common.getNodeBase('java')}/dovePay`  /* deprec. */
-  const basePlugin = `${common.getNodeBase()}/doveuikit/plugin`
+  const basePlugin = `${common.getNodeBase()}/doveutils/plugin`
   const cssName = ['uikit.dove-theme', 'uikit.custom']
   const jsName = ['uikit', 'uikit-icons']
   const suffix = common.getNodeSuffix()
@@ -174,9 +174,10 @@ DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
   .then((res) => {
     log(res)
     const rootWindow = iframe? iframe.contentWindow: window
-    if (/\.dovepay\.com\/dovePay/.test(rootWindow.location.href)) {
+    if (/(\.dovepay\.com)|(localhost).*\/dovePay/.test(rootWindow.location.href)) {
+      log(`${basePlugin}/css/${cssName[1]}.css`)
       return common.loadfile('css', {
-        url: `${base}/css/${cssName[1]}.css`,
+        url: `${basePlugin}/css/${cssName[1]}.css`,
         root: root
       })
     }
@@ -199,6 +200,9 @@ DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
       url: `${base}/js/${jsName[1]}${suffix}js`,
       root: root,
     })
+  })
+  .catch((error) => {
+    errorHandler(error)
   })
   return promise
 };
