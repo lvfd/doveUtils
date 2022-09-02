@@ -1,0 +1,134 @@
+@CHARSET "UTF-8";
+h1, h2, h3 {
+  margin-top: 0;
+}
+.uk-subnav>*>:first-child{
+  font-size: 12px;
+}
+.uk-modal-title {
+  font-size: 18px;
+}
+.dove-blue.uk-button,
+.uk-checkbox:checked, .uk-checkbox:indeterminate, .uk-radio:checked,
+.uk-badge{
+  background-color: rgb(3,78,162);
+}
+
+.uk-progress::-webkit-progress-value {
+  background-color: rgb(3,78,162);
+}
+.uk-progress::-moz-progress-bar {
+  background-color: rgb(3,78,162);
+}
+.dove-blue.uk-button:hover {
+  background-color: rgb(3,63,134);
+}
+.dove-yellow.uk-button {
+  background-color: rgb(250,166,26);
+}
+.dove-yellow.uk-button:hover {
+  background-color: rgb(238,155,17);
+}
+.uk-progress {
+  color: rgb(3,78,162);
+}
+.bankRadios.other {
+  display: none;
+}
+.dove-banklogo.uk-button img {
+  vertical-align: middle;
+}
+.dove-banklogo {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.dove-banklogo::after {
+  content: attr(data-content);
+  visibility: hidden;
+}
+.dove-banklogo.abc {
+  background-image: url("../images/bank/abc.svg");
+}
+.dove-banklogo.boc,
+.dove-banklogo.bocb2b {
+  background-image: url("../images/bank/boc.svg");
+}
+.dove-banklogo.bos {
+  background-image: url("../images/bank/bos.svg");
+}
+.dove-banklogo.ccb {
+  background-image: url("../images/bank/ccb.svg");
+}
+.dove-banklogo.ceb {
+  background-image: url("../images/bank/ceb.svg");
+}
+.dove-banklogo.citic,
+.dove-banklogo.citicb2b {
+  background-image: url("../images/bank/citic.svg");
+}
+.dove-banklogo.cmb,
+.dove-banklogo.cmbchina {
+  background-image: url("../images/bank/cmb.svg");
+}
+.dove-banklogo.cmbc {
+  background-image: url("../images/bank/cmbc.svg");
+}
+.dove-banklogo.comm {
+  background-image: url("../images/bank/comm.svg");
+}
+.dove-banklogo.czb {
+  background-image: url("../images/bank/czb.svg");
+}
+.dove-banklogo.gdb {
+  background-image: url("../images/bank/gdb.svg");
+}
+.dove-banklogo.hzcb {
+  background-image: url("../images/bank/hzcb.svg");
+}
+.dove-banklogo.icbc {
+  background-image: url("../images/bank/icbc.svg");
+}
+.dove-banklogo.lzccb {
+  background-image: url("../images/bank/lzccb.svg");
+}
+.dove-banklogo.nbcb {
+  background-image: url("../images/bank/nbcb.svg");
+}
+.dove-banklogo.qdccb {
+  background-image: url("../images/bank/qdccb.svg");
+}
+.dove-banklogo.spabank {
+  background-image: url("../images/bank/spabank.svg");
+}
+.dove-banklogo.spdb {
+  background-image: url("../images/bank/spdb.svg");
+}
+.dove-banklogo.znx {
+  background-image: url("../images/bank/znx.svg");
+}
+.dove-superscript.uk-badge {
+  vertical-align: top;
+  margin-left: -2em;
+  margin-top: -0.5em;
+}
+#rightContSon .SelectBank a.uk-button,
+.SelectBank input[type=button] {
+  color: white;
+}
+.offlineRechargeBanklist li{
+  width: auto;
+}
+#rightContSon #bankInput_xianxia .offlineRechargeBanklist span {
+  color: #666;
+}
+#accountsRechargeUi input[name=Submit],
+.SelectBank a.uk-button,
+.SelectBank a.uk-button:hover {
+  height: inherit;
+  line-height: inherit;
+}
+#bankInput_xianxia ul,
+#bankInput_xianxia ul li {
+  float: none;
+}

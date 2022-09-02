@@ -18,16 +18,27 @@ Common.prototype.isDOM = function(item) {
     : (item && (typeof item === 'object') && (item.nodeType === 1) && (typeof item.nodeName === 'string'));
 }
 
+Common.prototype.getObjWindow = function(iframeNode) {
+  return iframeNode? iframeNode.contentWindow: window
+}
+
+Common.prototype.getObjDocument = function(iframeNode) {
+  return iframeNode? iframeNode.contentDocument: document
+}
+
 Common.prototype.getNodeBase = function(type) {
   const localhostPort = 3013
   const root = window.location
   const protocol = root.protocol
   const host = root.host
   let hostname = root.hostname
-  if (hostname === 'localhost') {
+  if (/(^localhost$)|(^10\.1\.\d+\.\d+$)/.test(hostname)) {
     hostname += `:${localhostPort}`
   }
   if (type && type === 'java') {
+    if (/^10\.1\.\d+\.\d+$/.test(root.hostname)) {
+      return 'https://test.dovepay.com'
+    }
     return `${protocol}//${host}`
   }
   return `${protocol}//${hostname}`

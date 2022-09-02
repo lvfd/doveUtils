@@ -2,15 +2,19 @@ import {
   log_changeDom as log,
   dovepay,
   bankInfo,
+  common,
 } from './public'
 
 const regExp = {
   accountAction: new RegExp(/dovePay.protected.accountAction/, 'i'),
 }
 
+const getWindow = common.getObjWindow
+const getDocument = common.getObjDocument
+
 function changeMainContentWidth(iframe) {
-  const rootDoc = iframe.contentDocument
-  const iframeSrc = iframe.contentWindow.location.href
+  const rootDoc = getDocument()
+  const iframeSrc = getWindow().location.href
   const entryReg = regExp.accountAction
   /* 不设置拦截 */
   // const key = entryReg.test(iframeSrc)
@@ -22,8 +26,8 @@ function changeMainContentWidth(iframe) {
 }
 
 function changeButtonStyle(iframe) {
-  const rootDoc = iframe.contentDocument
-  const iframeSrc = iframe.contentWindow.location.href
+  const rootDoc = getDocument()
+  const iframeSrc = getWindow().location.href
   const entryReg = regExp.accountAction
   const key = entryReg.test(iframeSrc)
   if (key === false) {
@@ -53,8 +57,8 @@ function changeButtonStyle(iframe) {
 }
 
 function changeRechargeStepArrow(iframe) {
-  const rootDoc = iframe.contentDocument
-  const iframeSrc = iframe.contentWindow.location.href
+  const rootDoc = getDocument()
+  const iframeSrc = getWindow().location.href
   const entryReg = regExp.accountAction
   const key = entryReg.test(iframeSrc)
   if (key === false) {
@@ -133,8 +137,8 @@ function changeRechargeStepArrow(iframe) {
 }
 
 function buildBankLogoButton(iframe) {
-  const rootDoc = iframe.contentDocument
-  const iframeSrc = iframe.contentWindow.location.href
+  const rootDoc = getDocument()
+  const iframeSrc = getWindow().location.href
   const entryReg = regExp.accountAction
   const key = entryReg.test(iframeSrc)
   if (key === false) {

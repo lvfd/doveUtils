@@ -162,7 +162,8 @@ DovePayPublic.prototype.init_step = function(progress, configArray) {
 DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
   const root = iframe? iframe.contentDocument: document
   const base = `${common.getNodeBase()}/doveuikit/dist`
-  const baseJava = `${common.getNodeBase('java')}/dovePay/improveUi`
+  const baseJava = `${common.getNodeBase('java')}/dovePay`  /* deprec. */
+  const basePlugin = `${common.getNodeBase()}/doveuikit/plugin`
   const cssName = ['uikit.dove-theme', 'uikit.custom']
   const jsName = ['uikit', 'uikit-icons']
   const suffix = common.getNodeSuffix()
@@ -172,10 +173,18 @@ DovePayPublic.prototype.importUikit = function(iframe) {  // rewrite
   })
   .then((res) => {
     log(res)
-    return common.loadfile('css', {
-      url: `${baseJava}/${cssName[1]}.css`,
-      root: root
-    })
+    const rootWindow = iframe? iframe.contentWindow: window
+    if (/\.dovepay\.com\/dovePay/.test(rootWindow.location.href)) {
+      return common.loadfile('css', {
+        url: `${base}/css/${cssName[1]}.css`,
+        root: root
+      })
+    }
+    else {
+      return new Promise((resolve) => {
+        resolve(`不需要加载${cssName[1]}.css`)
+      })
+    }
   })
   .then((res) => {
     log(res)
