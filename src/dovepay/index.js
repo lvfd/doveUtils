@@ -1,15 +1,24 @@
-import { dovepay as dpublic, log, loadJquery, polyfill } from './public'
 import rechargeUi from './recharge'
+import {
+  logDefault,
+  polyfill,
+  adaptContentIframe,
+  resizeMainContentIframe,
+  hideAllNavDetails,
+  errHandler,
+} from '../public'
+import {
+  loadJquery,
+  importUikit,
+} from '../load'
 import { 
   changeRechargeStepArrow,
   changeButtonStyle,
   changeMainContentWidth,
   buildBankLogoButton,
-} from './changeDom'
+} from '../change'
 
-const importUikit = dpublic.importUikit
-
-document.addEventListener('DOMContentLoaded', function(event) {
+document.addEventListener('DOMContentLoaded', function() {
   // log('DOM节点全部加载完毕')
   // 
   loadJquery()
@@ -29,7 +38,7 @@ function Entry() {
   dovePayNavHandler()
 
   /* dialog的iframe框架自适应 */
-  dpublic.adaptContentIframe(document)
+  adaptContentIframe(document)
 
   /* 监听iframe */
   var iframe = document.getElementById('content_opr')? document.getElementById('content_opr'): null;
@@ -40,7 +49,7 @@ function Entry() {
   }
 }
 
-function iframeHandler(event) {
+function iframeHandler() {
   
   /* polyfill: */
   polyfill()
@@ -55,10 +64,10 @@ function iframeHandler(event) {
   importUikit(target)
   .then((res) => {
     log(`iframe(url=${currentHref} ): ${res}`)
-    dpublic.resizeMainContentIframe(target)
-    dpublic.hideAllNavDetails()
+    resizeMainContentIframe(target)
+    hideAllNavDetails()
     var idocument = target.contentDocument
-    idocument.addEventListener('click', dpublic.hideAllNavDetails)
+    idocument.addEventListener('click', hideAllNavDetails)
     pageHandler(idocument.body.id, target)
   })
 }
@@ -78,7 +87,7 @@ function pageHandler(id, iframe) {
     if (!rechargeUi[id]) return;
     rechargeUi[id].call(this, iframe);
   } catch(e) {
-    dpublic.errHandler(e, true);
+    errHandler(e, true);
   }
 }
 

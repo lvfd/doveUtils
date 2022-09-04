@@ -1,10 +1,14 @@
-import common from './common'
-import {log_insteadJquery as log} from './logger'
-import errorHandler from './errorHandler'
+import {
+  log_insteadJquery as log,
+  errorHandler
+} from '../public'
+import {
+  getNodeBase,
+  getNodeSuffix,
+} from './utils'
 
-const loadFile = common.loadfile
-const serverUrl = common.getNodeBase()
-const suffix = common.getNodeSuffix()
+const serverUrl = getNodeBase()
+const suffix = getNodeSuffix()
 const jqueryName = 'jquery'
 
 function insteadJquery(config) {
@@ -12,14 +16,14 @@ function insteadJquery(config) {
         const root = config && config.root? config.root: 'document'
         const oldScripts = getOldJquery(root)
         if (oldScripts.length < 1) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 resolve('不需要替换Jquery')
             })
         }
         let newJquery = {}
         newJquery.version = config && config.version? config.version: '3.6.0'
         newJquery.src = `${serverUrl}/doveutils/plugin/${jqueryName}/${jqueryName}-${newJquery.version}${suffix}js`
-        let targetJquery
+        // let targetJquery
         let promise
         for (let i = 0; i < oldScripts.length; i++) {
             let targetScript = oldScripts[i]
@@ -28,7 +32,7 @@ function insteadJquery(config) {
                 const newJqueryNode = document.createElement('script')
                 promise = new Promise((resolve, reject) => {
                     try {
-                        newJqueryNode.onload = function(event) {
+                        newJqueryNode.onload = function() {
                             const trigger = this
                             const url = trigger.src? trigger.src: trigger.href
                             resolve(`来自${url}的${trigger.tagName}加载完毕`)

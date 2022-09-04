@@ -16,7 +16,7 @@ let babelLoaderConfig = {
 
 let config = {
   entry: {
-    dovepay_recharge: './src/dovepay/recharge',
+    dovepay_recharge: './src/dovepay',
   },
   output: {
     // filename: '[name].[contenthash].js',

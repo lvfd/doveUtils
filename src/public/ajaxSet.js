@@ -1,7 +1,7 @@
-import errorHandler from './errorHandler'
+import {errorHandler} from './basic'
 
-export var setAjaxError = function(root) {
-  let root = root? root: document
+export var setAjaxError = function(rootnode) {
+  let root = rootnode? rootnode: document
   if (typeof $ === 'undefined') throw new Error('错误处理方法定义失败: 未定义jQuery')
   $(root).ajaxError(function(event, xhr, settings){
     let reqUrl = settings.url;

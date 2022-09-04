@@ -1,5 +1,7 @@
-import common from './common'
-const basePath = common.getNodeBase
+import {
+  getNodeBase
+} from '../load'
+const basePath = getNodeBase
 
 let info = [
   {name: 'abc', regExp: '(?:农行)|(?:农业银行)'},

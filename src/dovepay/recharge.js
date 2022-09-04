@@ -1,4 +1,17 @@
-import { dovepay as dpublic, log_recharge as log, encryptMobileNumber } from './public'
+import {
+  // log_recharge as log,
+  encryptMobileNumber,
+  errHandler, 
+  changeDocumentTitle,
+  init_step,
+  getDigitUppercase as digitUppercase,
+  initModalShower,
+  resizeMainContentIframe,
+  init_btn_countdown,
+} from '../public'
+import {
+  width_resize,
+} from '../change'
 
 function RechargeUi() {}
 
@@ -17,7 +30,7 @@ RechargeUi.init_accountName = function(node) {
       throw new Error('发生错误: 用户名不是邮箱格式');
     }
   } catch (e) {
-    dpublic.errHandler(e, true);
+    errHandler(e, true);
   }
   if ( position < 4 ) {
     input = input.slice(0, position) + specStr + input.slice(position);
@@ -30,16 +43,16 @@ RechargeUi.init_accountName = function(node) {
 
 RechargeUi.prototype.accountsRecConfirmUi = function(iframe) {
   var root = RechargeUi.getRootNode(iframe);
-  dpublic.width_resize(iframe);
-  dpublic.changeDocumentTitle('德付通 - 请确认充值信息');
-  dpublic.init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
+  width_resize(iframe);
+  changeDocumentTitle('德付通 - 请确认充值信息');
+  init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
   RechargeUi.init_accountName(root); // 邮箱脱敏
   /* 标红金额 & 加载大写金额 */
   const upcSrcNode = root.querySelector('#upperCaseSrc')
   const upcDistNode = root.querySelector('#upperCaseDist')
   upcSrcNode.classList.add('orange01') 
   try {
-    upcDistNode.innerText = dpublic.digitUppercase(parseInt(upcSrcNode.innerText))
+    upcDistNode.innerText = digitUppercase(parseInt(upcSrcNode.innerText))
     upcDistNode.classList.add('orange01') 
   } catch(e) {
     console.error(e.stack)
@@ -50,13 +63,13 @@ RechargeUi.prototype.accountsRecConfirmUi = function(iframe) {
 
 RechargeUi.prototype.accountsRechargeUi = function(iframe) {
   var root = RechargeUi.getRootNode(iframe);
-  dpublic.width_resize(iframe);
-  dpublic.initModalShower(root);
+  width_resize(iframe);
+  initModalShower(root);
   init_recharge_input(root);
   
   function init_recharge_input(root) {
-    dpublic.changeDocumentTitle('德付通 - 请输入充值信息');
-    dpublic.init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
+    changeDocumentTitle('德付通 - 请输入充值信息');
+    init_step(root.querySelector('#rechargeStep'), [1, 3]); // 进度条+1: total 3
     handle_rechargeInput(root.querySelector('input[name=amt]'));  // 处理充值金额输入
     bindInputsDisplayHandler(root)  // 绑定是否显示充值金额输入框（线下充值不显示）
     RechargeUi.init_accountName(root); // 邮箱脱敏
@@ -98,31 +111,31 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         }
         /* +- */
         if (keycode === 109 || keycode === 189 || keycode === 107 || keycode === 187) {
-          let val = this.value
+          // let val = this.value
           // this.value = val.substring(val.length - 1, val.length)
           event.preventDefault()
           // this.value = val.replace(/[^\0-9\.]/g,'')
         }
       }
-      function toDigitUppercase(e){
+      function toDigitUppercase(){
         toDigitUppercaseHandler(this.value);
       }
       function toDigitUppercaseHandler(num) {
         var uppercaseSpan = root.getElementById('uppercase');
-        var str = dpublic.digitUppercase(num);
+        var str = digitUppercase(num);
         uppercaseSpan.innerText = str;
         uppercaseSpan.classList.add('orange01');
       }
-      function limitLength(e) {
+      function limitLength() {
         var length = this.getAttribute('maxlength')? this.getAttribute('maxlength'): 9;
         if (this.value.length > length) {
           this.value = this.value.slice(0, length);
-        };
+        }
       }
-      function setSelectAll(e) {
+      function setSelectAll() {
         this.select()
       }
-      function checkValue(e) {
+      function checkValue() {
         let value = this.value
         if (value === null || value === undefined || value < 0) {
           this.value = 0
@@ -169,7 +182,6 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
             var value = this.getAttribute('data-value');
             if (!contents || contents.length < 1) {
               throw new Error('参数非法');
-              return;
             }
             hideAllTab(contents);
             var parent = contents[0].parentElement;
@@ -177,10 +189,10 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
             var content = pointer_bankInput? pointer_bankInput: parent.querySelectorAll('.' + value);
             showPointedTab(parent, content);
             if (config && config.iframe) {
-              dpublic.resizeMainContentIframe(config.iframe)
+              resizeMainContentIframe(config.iframe)
             }
           } catch(e) {
-            dpublic.errHandler(e);
+            errHandler(e);
           }
           function removeOthersStyle(links) {
             for (var i = 0; i < links.length; i++) {
@@ -227,7 +239,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         e.preventDefault();
         this.parentElement.querySelector('input[type=radio]').click();
       }
-      function changeStyle(e) {
+      function changeStyle() {
         for (var j = 0; j < div.length; j++) {
           div[j].querySelector('button').classList.remove('activateButton');
         }
@@ -265,7 +277,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
       })
       const triggerHide = rootDoc.querySelector('li.bankstyle>a[data-value="bankTitle_xianxia"]')
       const triggerShowList = rootDoc.querySelectorAll('li.bankstyle>a:not([data-value="bankTitle_xianxia"])')
-      triggerHide.addEventListener('click', function(e) {
+      triggerHide.addEventListener('click', function() {
         const trHideDuringOfflineList = rootDoc.querySelectorAll('.hideDuringOffline')
         trHideDuringOfflineList.forEach(function(trHideDuringOffline) {
           trHideDuringOffline.classList.remove('uk-animation-fade', 'uk-animation-reverse')
@@ -277,7 +289,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
         })
       })
       triggerShowList.forEach(function(triggerShow) {
-        triggerShow.addEventListener('click', function(e) {
+        triggerShow.addEventListener('click', function() {
           const trHideDuringOfflineList = rootDoc.querySelectorAll('.hideDuringOffline')
           trHideDuringOfflineList.forEach(function(trHideDuringOffline) {
             // console.log(trHideDuringOffline.getAttribute('data-ishide'))
@@ -305,9 +317,9 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
 
 RechargeUi.prototype.addFastCardUi = function(iframe) {
   var root = RechargeUi.getRootNode(iframe);
-  dpublic.width_resize(iframe);
-  dpublic.changeDocumentTitle('德付通 - 添加银行卡');
-  dpublic.initModalShower(root);
+  width_resize(iframe);
+  changeDocumentTitle('德付通 - 添加银行卡');
+  initModalShower(root);
   
   var holderCardType_value = '01';  // 身份证
   
@@ -327,26 +339,25 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
     return checkAllInput(trigger, fetchData(callSmsModal));
   }
   function checkAllInput(trigger, callback) {
-    var trigger = trigger;
     var inputlist = root.querySelectorAll('input[type="text"][needCheck]');
     var checkboxlist = root.querySelectorAll('input[type="checkbox"][needCheck]');
     var mobile = root.querySelector('#holderPhone');
-    for (var i = 0; i < inputlist.length; i++) {
+    for (let i = 0; i < inputlist.length; i++) {
       inputlist[i].focus();
       inputlist[i].blur();
     }
     var errlist = root.querySelectorAll('.uk-label-danger[needCheck]');
-    for (var i = 0; i < errlist.length; i++) {
+    for (let i = 0; i < errlist.length; i++) {
       if (errlist[i].innerText) return;
     }
     var data = {
         trigger: trigger,
         mobileNode: mobile,
     };
-    for (var i = 0; i < inputlist.length; i++) {
+    for (let i = 0; i < inputlist.length; i++) {
       inputlist[i].setAttribute('disabled', 'disabled');
     }
-    for (var i = 0; i < checkboxlist.length; i++) {
+    for (let i = 0; i < checkboxlist.length; i++) {
       checkboxlist[i].setAttribute('disabled', 'disabled');
     }
     callback.call(this, data);
@@ -388,7 +399,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
       var modal = data.modal;
       if (!res) {
         UIkit.modal.alert('远程请求短信验证码无返回');
-      };
+      }
       if(res.code == '1'){
         root.querySelector("#smskey").value = res.smskey;
        
@@ -396,7 +407,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
         var regetBtn = modal.querySelector('.action_callSendsms');
         
         codeInput.focus();
-        dpublic.init_btn_countdown({
+        init_btn_countdown({
           text: '点击获取验证码',
           textDisable: '重新获取',
           button: regetBtn,
