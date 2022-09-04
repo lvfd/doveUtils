@@ -1,6 +1,6 @@
 import rechargeUi from './recharge'
 import {
-  logDefault,
+  logDefault as log,
   polyfill,
   adaptContentIframe,
   resizeMainContentIframe,
