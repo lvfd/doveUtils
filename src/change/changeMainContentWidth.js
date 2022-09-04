@@ -4,7 +4,9 @@ import {
   getObjWindow as getWindow,
   // getObjDocument as getDocument,
 } from '../public'
-import width_resize from './width_resize'
+import {
+  width_resize
+} from '../dom'
 
 function changeMainContentWidth(iframe) {
   // const rootDoc = getDocument(iframe)

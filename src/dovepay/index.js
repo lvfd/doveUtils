@@ -1,12 +1,14 @@
 import rechargeUi from './recharge'
 import {
   logDefault as log,
+  errHandler,
   polyfill,
+} from '../public'
+import {
   adaptContentIframe,
   resizeMainContentIframe,
   hideAllNavDetails,
-  errHandler,
-} from '../public'
+} from '../dom'
 import {
   loadJquery,
   importUikit,

@@ -3,8 +3,10 @@ import {
   log_changeDom as log,
   getObjWindow as getWindow,
   getObjDocument as getDocument,
-  init_step,
 } from '../public'
+import {
+  init_step,
+} from '../dom'
 
 function changeRechargeStepArrow(iframe) {
   const rootDoc = getDocument(iframe)

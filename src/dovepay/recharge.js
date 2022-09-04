@@ -1,17 +1,17 @@
 import {
   // log_recharge as log,
-  encryptMobileNumber,
   errHandler, 
+  getDigitUppercase as digitUppercase, 
+} from '../public'
+import {
+  encryptMobileNumber,
   changeDocumentTitle,
   init_step,
-  getDigitUppercase as digitUppercase,
+  width_resize,
   initModalShower,
   resizeMainContentIframe,
   init_btn_countdown,
-} from '../public'
-import {
-  width_resize,
-} from '../change'
+} from '../dom'
 
 function RechargeUi() {}
 
