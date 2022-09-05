@@ -14,6 +14,7 @@ import {
   importUikit,
 } from '../load'
 import { 
+  dovePayNavHandler,
   changeRechargeStepArrow,
   changeButtonStyle,
   changeMainContentWidth,
@@ -93,18 +94,4 @@ function pageHandler(id, iframe) {
   } catch(e) {
     errHandler(e, true);
   }
-}
-
-function dovePayNavHandler() {
-  const navChildLinkList = document.querySelectorAll('#my_menu a[target="content_opr"]')
-  if (navChildLinkList.length === 0) {
-    return
-  }
-  try {
-    navChildLinkList.forEach(function(navChild) {
-      navChild.style.fontSize = '0.5rem'
-    })
-  } catch(error) {
-    console.error(error.stack)
-  }  
 }
