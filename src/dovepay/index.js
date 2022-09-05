@@ -29,8 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
   })
 
   importUikit()
-  .then((res) => {
-    log(`页面框架: ${res}`)
+  .then((/*res*/) => {
+    // log(`页面框架: ${res}`)
+    log('页面框架Uikit加载完成')
     Entry()
   })
 })
@@ -64,8 +65,9 @@ function iframeHandler() {
     log(`iframe(url=${currentHref} ): ${res}`)
   })
   importUikit(target)
-  .then((res) => {
-    log(`iframe(url=${currentHref} ): ${res}`)
+  .then((/*res*/) => {
+    // log(`iframe(url=${currentHref} ): ${res}`)
+    log(`iframe(url=${currentHref} ): Uikit加载完成`)
     resizeMainContentIframe(target)
     hideAllNavDetails()
     var idocument = target.contentDocument

@@ -5,13 +5,19 @@ module.exports = {
         "node": true,
         "jquery": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:json/recommended"
+    ],
     "overrides": [
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
+    "plugins": [
+        "json"
+    ],
     "rules": {
     },
     "globals": {

@@ -22,7 +22,6 @@ let config = {
     // filename: '[name].[contenthash].js',
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
-    clean: true,
   },
   optimization: {
     splitChunks: {
@@ -37,6 +36,7 @@ let config = {
 if (env === 'development') {
   config.mode = 'development'
   config.devtool = 'inline-source-map'
+  config.output.clean = true
   config.plugins = [new HtmlWebpackPlugin()]
 }
 

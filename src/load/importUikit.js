@@ -21,11 +21,11 @@ export default function(iframe) {  // rewrite
     url: `${base}/css/${cssName[0]}${suffix}css`,
     root: root,
   })
-  .then((res) => {
-    log(res)
+  .then((/*res*/) => {
+    // log(res)
     const rootWindow = iframe? iframe.contentWindow: window
     if (/(\.dovepay\.com)|(localhost).*\/dovePay/.test(rootWindow.location.href)) {
-      log(`${basePlugin}/css/${cssName[1]}.css`)
+      // log(`${basePlugin}/css/${cssName[1]}.css`)
       return loadfile('css', {
         url: `${basePlugin}/css/${cssName[1]}.css`,
         root: root
@@ -37,15 +37,15 @@ export default function(iframe) {  // rewrite
       })
     }
   })
-  .then((res) => {
-    log(res)
+  .then((/*res*/) => {
+    // log(res)
     return loadfile('js', {
       url: `${base}/js/${jsName[0]}${suffix}js`,
       root: root,
     })
   })
-  .then((res) => {
-    log(res)
+  .then((/*res*/) => {
+    // log(res)
     return loadfile('js', {
       url: `${base}/js/${jsName[1]}${suffix}js`,
       root: root,
