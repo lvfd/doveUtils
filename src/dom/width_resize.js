@@ -1,10 +1,12 @@
-export default function(iframe){
+export default function(iframe, classlistArray){
   if (!iframe) return 'no';
-  const containerClassList = ['uk-container-large']
+  const containerClassList = classlistArray
   function addClass(node, list) {
-    list.forEach(function(className) {
-      node.classList.add(className)
-    })
+    if (list && list.length > 0) {
+      list.forEach(function(className) {
+        node.classList.add(className)
+      })
+    } 
   }
   try {
     const rootDoc = iframe.contentDocument

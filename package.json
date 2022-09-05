@@ -4,10 +4,10 @@
   "description": "Compile, compress and publish the javascript for all projects.",
   "main": "index.js",
   "scripts": {
-    "build": "npx webpack",
-    "test": "npx webpack --node-env development",
-    "watch": "npx webpack --watch --node-env development",
-    "release": ""
+    "paydev": "npx webpack --config-name dovepay --node-env development",
+    "paypro": "npx webpack --config-name dovepay --node-env production",
+    "fredev": "npx webpack --config-name dovepay-freight --node-env development",
+    "frepro": "npx webpack --config-name dovepay-freight --node-env production"
   },
   "repository": {
     "type": "git",

@@ -8,9 +8,9 @@ export function dovePayNavHandler() {
       const wrap = document.querySelector('#my_menu')
       wrap.style.backgroundColor = 'rgb(3,78,162)'
       const container = wrap.querySelector('.menu')
-      container.classList.add('uk-container', 'uk-container-xlarge')
-      const ul = container.querySelector('.uk-subnav')
-      ul.style.justifyContent = 'left'
+      container.classList.add('uk-container', 'uk-container-expand')
+      // const ul = container.querySelector('.uk-subnav')
+      // ul.style.justifyContent = 'left'
       navChildLinkList.forEach(function(navChild) {
         navChild.style.fontSize = '0.5rem'
       })
