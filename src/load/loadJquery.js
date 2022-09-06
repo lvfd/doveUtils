@@ -2,10 +2,13 @@ import {
   log_insteadJquery as log,
   errorHandler
 } from '../public'
+
 import {
   getNodeBase,
   getNodeSuffix,
 } from './utils'
+
+import filter from '../change/filter'
 
 const serverUrl = getNodeBase()
 const suffix = getNodeSuffix()
@@ -14,6 +17,16 @@ const jqueryName = 'jquery'
 function insteadJquery(config) {
     try {
         const root = config && config.root? config.root: 'document'
+
+        /* 不处理userweb */
+        const winRoot = config && config.root? config.root.contentWindow: window
+        const isUserWeb = filter.userweb.test(winRoot.location.href)
+        if (isUserWeb) {
+          return new Promise((resolve) => {
+            resolve('属于用户系统, 不更新jquery')
+          })
+        }
+
         const oldScripts = getOldJquery(root)
         if (oldScripts.length < 1) {
             return new Promise((resolve) => {
@@ -65,6 +78,7 @@ function getOldJquery(rootNode) {
         const script = scriptList[i]
         if (!script.src) continue
         let src = script.src
+        // if (src.search(/jquery(?!-migrate)/) === -1) continue
         if (src.search(/jquery/) === -1) continue
         script.setAttribute('data-isJquery', true)
     }

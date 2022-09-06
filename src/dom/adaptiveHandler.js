@@ -20,6 +20,9 @@ function getHeight_mainContent_minHeight(nodeArray) {
   }
   let finalHeight = windowHeight
   for (let i = 0; i < nodeArray.length; i++) {
+    if (!nodeArray[i]) {
+      continue
+    }
     let height = nodeArray[i].offsetHeight
     finalHeight = finalHeight - height
   }
@@ -68,7 +71,7 @@ function adaptContentIframe(root) {
 // 执行根据内容高度或浏览器高度决定iframe(系统界面)高度
 function resizeMainContentIframe(iframe) {
   const subNavNode = document.querySelector('#mainContent .uk-subnav')
-  const subNavMarginBottom = window.getComputedStyle(subNavNode).getPropertyValue('margin-bottom')
+  const subNavMarginBottom = subNavNode? window.getComputedStyle(subNavNode).getPropertyValue('margin-bottom'): 0
   const height = getHeight_iframe_adaptiveContent(iframe, {type: 'body'})
   const minHeight = getHeight_mainContent_minHeight([
     document.querySelector('.gblMHeader'),

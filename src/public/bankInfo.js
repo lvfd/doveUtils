@@ -24,6 +24,7 @@ let info = [
   {name: 'spabank', regExp: '平安(?:银行)?'},
   {name: 'spdb', regExp: '浦发(?:银行)?'},
   {name: 'znx', regExp: '浙江农.*'},
+  {name: 'bob', regExp: '北京银行'},
 ]
 info.forEach(function(obj) {
   obj.path = `${basePath()}/doveutils/plugin/svg/banklogo/${obj.name}.svg`
