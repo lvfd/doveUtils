@@ -75,10 +75,10 @@ function buildBankLogoButton(iframe) {
           return
         }
 
-        if (/(?:借记)|(?:储蓄)|(?:贷记)卡/.test(targetTdText)) {
+        if (/((?:借记)|(?:储蓄))卡/.test(targetTdText)) {
           cardType = '储蓄卡'
         }
-        if ((/信用卡/).test(targetTdText)) {
+        if ((/((?:信用)|(?:贷记))卡/).test(targetTdText)) {
           cardType = '信用卡'
         }
         if (/\d{4,}/.test(targetTdText)) {
@@ -118,6 +118,18 @@ function buildBankLogoButton(iframe) {
 
       } catch (error) {
         console.error(error.stack)
+      }
+    })
+  }
+
+  /* 更改title */
+  const titleSpanList = rootDoc.querySelectorAll('.dove-banklogo')
+  if (titleSpanList.length > 0) {
+    titleSpanList.forEach(function(titleSpan) {
+      const title = titleSpan.getAttribute('title')
+      if (title) {
+        const newTitle = title.replace(/贷记卡/,'信用卡').replace(/借记卡/,'储蓄卡')
+        titleSpan.setAttribute('title', newTitle)
       }
     })
   }
