@@ -9,30 +9,27 @@ function format(text) {
 }
 
 export default function(error, callback) {
-  
-  let errMsg = error? error: '未知错误'
-  if (console) {
-    format(errMsg)
+  let errMsg = Array.isArray(error)? error[0]: error
+  format(errMsg)
+  if (Array.isArray(error) && error[1] === 'console') {
+    return
   }
-  if (typeof UIkit !== 'undefined') {
-    try {
-      UIkit.modal.alert(errMsg).then(callback)
-    } catch (e) {
-      alert(errMsg)
-    }
-  } else {
-    alert(errMsg)
+  try {
+    return UIkit.modal.alert(errMsg)
+    .then(callback)
+    .catch(error => format(error))
+  } catch (e) {
+    return alert(errMsg)
   }
-
 }
 
 export function errHandler(error, show) {
+  format(error)
   try {
-    format(error)
     if (show) {
-      UIkit.modal.alert(error);
+      return UIkit.modal.alert(error);
     }
   } catch(e) {
-    alert(error);
+    return alert(error);
   }
 }

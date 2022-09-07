@@ -29,46 +29,40 @@ export default function(iframe) {  // rewrite
   const cssName = ['uikit.dove-theme', 'uikit.custom']
   const jsName = ['uikit', 'uikit-icons']
   const suffix = getNodeSuffix()
-  const promise = loadfile('css', {
-    url: `${base}/css/${cssName[0]}${suffix}css`,
-    root: root,
-  })
-  .then((/*res*/) => {
-    // log(res)
-    if (/((\.dovepay\.com.*)|(localhost.*))\/dovePay/.test(rootWindow.location.href)) {
-      // log(`${basePlugin}/css/${cssName[1]}.css`)
-      return loadfile('css', {
-        url: `${basePlugin}/css/${cssName[1]}.css`,
-        root: root
-      })
-    }
-    else {
-      return new Promise((resolve) => {
-        resolve(`不需要加载${cssName[1]}.css`)
-      })
-    }
-  })
-  .then((/*res*/) => {
-    // log(res)
-    return loadfile('js', {
-      url: `${base}/js/${jsName[0]}${suffix}js`,
+  // const promise = new Promise((resolve, reject) => {
+    return loadfile('css', {
+      url: `${base}/css/${cssName[0]}${suffix}css`,
       root: root,
+    }).catch(error => errorHandler(error))
+    .then(() => {
+      if (/((\.dovepay\.com.*)|(localhost.*))\/dovePay/.test(rootWindow.location.href)) {
+        // log(`${basePlugin}/css/${cssName[1]}.css`)
+        return loadfile('css', {
+          url: `${basePlugin}/css/${cssName[1]}.css`,
+          root: root
+        })
+      }
+      else {
+        return new Promise((resolve) => {
+          resolve(`不需要加载${cssName[1]}.css`)
+        })
+      }
+    }).catch(error => errorHandler(error))
+    .then((/*res*/) => {
+      // log(res)
+      return loadfile('js', {
+        url: `${base}/js/${jsName[0]}${suffix}js`,
+        root: root,
+      })
+    }).catch(error => errorHandler(error))
+    .then((/*res*/) => {
+      // log(res)
+      return loadfile('js', {
+        url: `${base}/js/${jsName[1]}${suffix}js`,
+        root: root,
+      })
+    }).catch(error => errorHandler(error))
+    .then(() => {
+      return Promise.resolve('importUikit finish')
     })
-  })
-  .then((/*res*/) => {
-    // log(res)
-    return loadfile('js', {
-      url: `${base}/js/${jsName[1]}${suffix}js`,
-      root: root,
-    })
-  })
-  .then(() => {
-    return new Promise((resolve) => {
-      resolve('uikit加载完成')
-    })
-  })
-  .catch((error) => {
-    errorHandler(error)
-  })
-  return promise
 }

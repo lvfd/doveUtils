@@ -44,18 +44,14 @@ function insteadJquery(config) {
             if (i === 0) {
                 const newJqueryNode = document.createElement('script')
                 promise = new Promise((resolve, reject) => {
-                    try {
-                        newJqueryNode.onload = function() {
-                            const trigger = this
-                            const url = trigger.src? trigger.src: trigger.href
-                            resolve(`来自${url}的${trigger.tagName}加载完毕`)
-                        }
-                        newJqueryNode.src = newJquery.src
-                        parent.insertBefore(newJqueryNode, targetScript)
-                        log('jquery替换完成')
-                    } catch(e) {
-                        reject(e)
+                    newJqueryNode.onload = function() {
+                        resolve(`${this.src}加载完毕`)
                     }
+                    newJqueryNode.onerror = function() {
+                        reject(`[更新jquery]加载失败`)
+                    }
+                    newJqueryNode.src = newJquery.src
+                    parent.insertBefore(newJqueryNode, targetScript)
                 })
             }
             parent.removeChild(targetScript)
@@ -71,7 +67,7 @@ function getOldJquery(rootNode) {
     const scriptList = root.querySelectorAll('script')
     if (!scriptList) throw new Error('scriptList报错')
     if (scriptList.length < 1) {
-        log('没有找到script标签')
+        // log('没有找到script标签')
         return {}
     }
     for (let i = 0; i < scriptList.length; i++) {

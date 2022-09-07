@@ -3,11 +3,14 @@ export function dovePayNavHandler() {
   if (navChildLinkList.length === 0) {
     return
   }
+  const wrap = document.querySelector('#my_menu')
+  const container = wrap.querySelector('.menu')
+  if (!wrap || !container) {
+    return
+  }
   try {
     // if (/dovePay/.test(window.location.href)) {
-      const wrap = document.querySelector('#my_menu')
       wrap.style.backgroundColor = 'rgb(3,78,162)'
-      const container = wrap.querySelector('.menu')
       container.classList.add('uk-container', 'uk-container-expand')
       // const ul = container.querySelector('.uk-subnav')
       // ul.style.justifyContent = 'left'

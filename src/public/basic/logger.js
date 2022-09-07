@@ -17,7 +17,7 @@ function log(logs, consoleType) {
     consoleColor = typeof consoleType === 'object'? consoleType.color: defaultConfig.color
   }
   const hostname = window.location.hostname
-  const reg = /^test|^localhost/
+  const reg = /(^test)|(^localhost)/
   const isTest = hostname.search(reg) !== -1
   if (!isTest) return
   console.info(
