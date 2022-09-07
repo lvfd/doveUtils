@@ -76,8 +76,25 @@ function Entry() {
 
 function iframeHandler() {
   const target = this
-  const currentHref = target.contentWindow.location.href
+  let currentHref
 
+
+  /* 1. 无法操作iframe的情况下，直接返回不进行处理 */
+  try {
+    currentHref = target.contentWindow.location.href  
+  } catch (error) {
+
+    /* 隐藏nav次级菜单和main遮罩（如果有） */
+    hideAllNavDetails()
+    loadingOverlay('hide')
+    
+    /* 打印错误并返回 ，线路 1 结束*/
+    errorHandler(`iframe加载发生错误, 原因:\n${error.stack}`)
+    return
+
+  }
+  
+  /* 2. 可以操作iframe, 线路 1继续进行*/
   /* 添加iframe遮罩 */
   /* (关闭条件：1、pageHandler执行完毕) */
   loadingOverlay('show', { transparent: false, iframe: target })
