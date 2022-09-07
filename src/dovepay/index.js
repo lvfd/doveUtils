@@ -38,31 +38,38 @@ document.addEventListener('DOMContentLoaded', function() {
   .then(success => log(`页面框架${success}`))
   .catch(error => errorHandler([error, 'console']))
 
-  /* 初始化 */
+  /* 开始同步函数 */
   .then(() => Entry())
 })
 
 function Entry() {
 
-   /* polyfill: */
-  polyfill()
+  try {
+    /* polyfill: */
+    polyfill()
+    /* 初始化导航菜单 */
+    dovePayNavHandler()
+    /* dialog的iframe框架自适应 */
+    adaptContentIframe(document)
+  } catch (error) {
+    errorHandler([error.stack, 'console'])
+  }
 
-  /* 初始化导航菜单 */
-  dovePayNavHandler()
-
-  /* dialog的iframe框架自适应 */
-  adaptContentIframe(document)
+  /* 必须关闭遮罩 */
+  finally {
+    loadingOverlay('hide')
+  }
 
   /* 有iframe监听load */
-  var iframe = document.getElementById('content_opr')? document.getElementById('content_opr'): null;
-  if (iframe !== null) {
+  var iframe = document.querySelector('#content_opr')
+  if (iframe) {
   
     /* 线路 1: */
     iframe.addEventListener('load', iframeHandler)
 
     /* 线路 2: */
     iframe.addEventListener('error', function() {
-      return errorHandler('iframe加载失败', loadingOverlay.call(this, 'hide'))
+      return errorHandler('iframe加载失败')
     })
   }
 
@@ -79,22 +86,21 @@ function iframeHandler() {
   let currentHref
 
 
-  /* 1. 无法操作iframe的情况下，直接返回不进行处理 */
+  /* 1. 无法操作iframe的情况下，线路 1 结束 */
   try {
     currentHref = target.contentWindow.location.href  
   } catch (error) {
 
-    /* 隐藏nav次级菜单和main遮罩（如果有） */
+    /* 隐藏nav次级菜单 */
     hideAllNavDetails()
-    loadingOverlay('hide')
     
-    /* 打印错误并返回 ，线路 1 结束*/
+    /* 打印错误并返回 */
     errorHandler(`iframe加载发生错误, 原因:\n${error.stack}`)
     return
 
   }
   
-  /* 2. 可以操作iframe, 线路 1继续进行*/
+  /* 2. 可以操作iframe, 线路 1 继续进行 */
   /* 添加iframe遮罩 */
   /* (关闭条件：1、pageHandler执行完毕) */
   loadingOverlay('show', { transparent: false, iframe: target })
@@ -146,9 +152,8 @@ function pageHandler(id, iframe) {
     errorHandler(error.stack, 'console')
   } 
 
-  /* 必须启动loadingOverlay */
+  /* 必须关闭遮罩 */
   finally {
     loadingOverlay('hide', { iframe: iframe })
-    loadingOverlay('hide')
   }
 }
