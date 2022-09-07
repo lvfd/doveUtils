@@ -25,7 +25,6 @@ import {
 document.addEventListener('DOMContentLoaded', function() {
 
   /* 添加遮罩 */
-  /* (关闭条件：1、iframe加载错误; 2、pageHandler执行完毕) */
   loadingOverlay('show', { transparent: false })
 
   /* jquery更新 */
