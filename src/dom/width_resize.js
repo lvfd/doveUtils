@@ -1,5 +1,8 @@
-export default function(iframe, classlistArray){
+export default function(iframe /*or null*/, classlistArray){
+  
+  /* 目前只处理iframe内的页面宽度 */
   if (!iframe) return 'no';
+  
   const containerClassList = classlistArray
   function addClass(node, list) {
     if (list && list.length > 0) {
@@ -9,11 +12,13 @@ export default function(iframe, classlistArray){
     } 
   }
   try {
-    const rootDoc = iframe.contentDocument
+    const rootDoc = iframe? iframe.contentDocument: document
     if (rootDoc.querySelector('.uk-container')) {
       return 'no'
     }
-    iframe.parentElement.style.width = '100%';
+    if (iframe) {
+      iframe.parentElement.style.width = '100%'
+    }
     let wrap
     const rightContent = rootDoc.querySelector('body > #rightContent')
     const wrapTableList = rootDoc.querySelectorAll('table[width*="810"], table[width*="988"]')
@@ -21,7 +26,7 @@ export default function(iframe, classlistArray){
     const allTab = rootDoc.querySelectorAll('table[width*="780"]')
     const wrapDiv_BOP = rootDoc.querySelector('div[style*=height][style*=overflow-y][style*=overflow-x][style*=auto][style*=hidden]')
     
-    /* 去除所有具有固定宽度的div宽度 */
+    /* 去除所有具有固定宽度的div宽度并设置为100% */
     if (allDiv.length > 0) {
       for (let i = 0; i < allDiv.length; i++) {
         const div = allDiv[i]
@@ -32,7 +37,7 @@ export default function(iframe, classlistArray){
       }
     }
 
-    /* 去除所有具有固定宽度的table宽度 */
+    /* 去除所有具有固定宽度的table宽度并设置为100% */
     if (allTab.length > 0) {
       allTab.forEach(function(table) {
         table.removeAttribute('width')
@@ -50,6 +55,7 @@ export default function(iframe, classlistArray){
     /* 具有id=rightContent的div直接处理*/
     if (rightContent) {
       wrap = rightContent
+      wrap.style.width = 'initial'
       wrap.classList.add('uk-container')
       addClass(wrap, containerClassList)
     }
