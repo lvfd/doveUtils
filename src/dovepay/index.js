@@ -59,12 +59,14 @@ function Entry() {
     loadingOverlay('hide')
   }
 
-  /* 有iframe监听load */
-  var iframe = document.querySelector('#content_opr')
-  if (iframe) {
+  /* 有iframe, 如果已加载，执行函数，并监听load */
+  const iframe = document.querySelector('#content_opr')
   
+  if (iframe) {
+
     /* 线路 1: */
     iframe.addEventListener('load', iframeHandler)
+    // iframe.onload = iframeHandler
 
     /* 线路 2: */
     iframe.addEventListener('error', function() {
@@ -74,7 +76,6 @@ function Entry() {
 
   /* 没有iframe直接执行 */
   else {
-
     /* 线路 3: */
     pageHandler(document.body.id);
   }
