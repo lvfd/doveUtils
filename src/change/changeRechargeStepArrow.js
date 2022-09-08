@@ -1,4 +1,4 @@
-import regExp from './filter'
+// import regExp from './filter'
 import {
   log_changeDom as log,
   getObjWindow as getWindow,
@@ -11,11 +11,11 @@ import {
 function changeRechargeStepArrow(iframe) {
   const rootDoc = getDocument(iframe)
   const iframeSrc = getWindow(iframe).location.href
-  const entryReg = regExp.accountAction
-  const key = entryReg.test(iframeSrc)
-  if (key === false) {
-    return
-  }
+  // const entryReg = regExp.accountAction
+  // const key = entryReg.test(iframeSrc)
+  // if (key === false) {
+  //   return
+  // }
   log(`--------> ${iframeSrc} 进入changeRechargeStepArrow方法`)
   
   const alreadyUpdate = rootDoc.querySelector('progress.uk-progress')
@@ -26,7 +26,7 @@ function changeRechargeStepArrow(iframe) {
   if (oldTd.length < 1) {
     return
   }
-  const imgReg = new RegExp(/images.cz.03.bg/, 'i')
+  const imgReg = new RegExp(/images.cz.0\d.bg/, 'i')
   let tdNode = null
   for (let i = 0; i < oldTd.length; i++) {
     const tdBgVal = oldTd[i].getAttribute('background')
