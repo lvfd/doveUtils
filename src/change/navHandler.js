@@ -17,6 +17,24 @@ export function dovePayNavHandler() {
       navChildLinkList.forEach(function(navChild) {
         navChild.style.fontSize = '0.5rem'
       })
+
+      /* 子菜单设置 */
+      const linklist = document.querySelectorAll('ul.uk-nav.uk-dropdown-nav > li > a')
+      if (linklist.length > 0) {
+        linklist.forEach(function(link) {
+          /* 禁用右键菜单 */
+          link.addEventListener('contextmenu', function(event) {
+            event.preventDefault()
+          })
+          /* 禁用ctrl + 右键 */
+          link.addEventListener('click', function(event) {
+            if (event.ctrlKey) {
+              event.preventDefault()
+            }
+          })
+        })
+      }
+      
     // }
   } catch(error) {
     console.error(error.stack)
