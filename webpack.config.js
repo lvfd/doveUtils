@@ -37,7 +37,7 @@ let config = {
 
 /* 配置货运系统 */
 function getOutputByPlatform(platform) {
-  if (/win32/.test(platform)) {
+  if (/(win32)|(darwin)/.test(platform)) {
     return path.resolve(__dirname, '../', 'dovepay-freight', 'dist')
   }
   if (/linux/.test(platform)) {
@@ -53,6 +53,7 @@ config_dovepayFreight.output = {
   filename: config.output.filename,
   path: getOutputByPlatform(platform),
 }
+config_dovepayFreight.optimization = {}
 
 /* 加入生产或开发环境参数 */
 function setByEnv(config, env) {
