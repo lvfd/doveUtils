@@ -2,6 +2,8 @@ import Glob_fn from './Global'
 import {fn_getMes, fn_remMes} from './Message'
 import {Listbox} from './Listbox'
 import {Sta_table} from './StationPages'
+import {Sys_table} from './SystemPages'
+import {Age_table} from './AgentPages'
 
 // 检查response：
 export function checkRes (res) {
@@ -245,7 +247,7 @@ export function fetch_age_bindConsumer(url, data) {  // 绑定商户
         }
       } else {
         var mes = fn_getMes('绑定/解绑失败', {style: 'danger', close: true});
-        $(mes).insertBefore($form);
+        $(mes).insertBefore(document.querySelector('form'));
       }
     }
   });

@@ -47,7 +47,7 @@ function getOutputByPlatform(platform) {
 let config_dovepayFreight = Object.assign({}, config)
 config_dovepayFreight.name = 'dovepay-freight'
 config_dovepayFreight.entry = {
-  dovepayFreight: './src/dovepay-freight',
+  dovepayFreight: './src/dovepay-freight/Entry',
 }
 config_dovepayFreight.output = {
   filename: config.output.filename,
