@@ -381,7 +381,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
         data : {
           m : 'sendCode',
           holderID : root.querySelector("#holderID").value,
-          cardNo : root.querySelector("#cardNo").value,
+          cardNo : root.querySelector("#cardNo").value.replace(/\s|\D/g, ''),
           cardHolder : root.querySelector("#cardHolder").value,
           holderPhone : root.querySelector("#holderPhone").value,
           holderCardType : holderCardType_value,

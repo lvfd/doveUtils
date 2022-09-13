@@ -13,7 +13,8 @@ export function getNodeBase(type) {
     }
     return `${protocol}//${host}`
   }
-  return `${protocol}//${hostname}`
+  // return `${protocol}//${hostname}`
+  return 'https://test.dovepay.com'
 }
 
 export function getNodeSuffix() {
