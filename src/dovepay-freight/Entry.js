@@ -19,6 +19,7 @@ import {
 import {
   initStation_initTabs, initStation_discountPoliciesManagementDetails
 } from './DiscountPages'
+import * as dataStatistic from './dataStatistic'
 import './initJqueryAjax'
 
 $(document).ready(function() {
@@ -162,5 +163,12 @@ function EntryJS() {
   if (document.querySelector('input[data-pageId=station_billMangement_queryBills]')) {
     initStation_billMangement_queryBills();
   }
+  // 初始化station: 数据统计:
+  if (document.querySelector('input[data-pageId=dataStatisticIndex]')) {
+    dataStatistic.dsIndex()
+  }
+  // 初始化station: 数据统计明细:
+  if (document.querySelector('input[data-pageId=dataStatisticDetails]')) {
+    dataStatistic.dsDetails()
+  }
 }
-
