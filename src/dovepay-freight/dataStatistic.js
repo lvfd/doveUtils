@@ -1,9 +1,7 @@
 import Glob_fn from './Global'
 import fn_initPaginate from './Paginate'
 import {
-  logDefault as log,
-  errlog,
-  errorHandler,
+  logDefault as log, errlog, errorHandler,
 } from '../public'
 import Canvas from './canvas'
 import chartConfig from './dataStatisticChartConfig'
@@ -25,6 +23,7 @@ export function dsDetails() {
   
   /* table */
   bindButtons(loadDataDetails)
+  .catch(error => errorHandler(error))
   
   /* chart */
   const cvs = new Canvas('#dataStatisticChart')
@@ -145,10 +144,8 @@ function loadData(response, pageNumber, pageSize) {
       tdAction.appendChild(tdActionLink)
       tr.appendChild(tdAction)
       tdActionLink.innerText = '查看详细'
-      // const sendDataArr = ['billTime', 'esbCustomerId', 'billRuleId']
       propArr.forEach((prop) => {
         tdActionLink.dataset[prop] = line[prop]
-        // tdActionLink.setAttribute(`data-${prop}`, line[prop])
       })
       tdActionLink.addEventListener('click', toDetails)
     })
@@ -157,16 +154,20 @@ function loadData(response, pageNumber, pageSize) {
 function toDetails(event) {
   event.preventDefault()
   const el = event.target
-  const url = './dataStatistic/details'
-  let postData = {
-    billRuleId: document.querySelector('input[name=billRuleIdValue]').value
-  }
-  if (el.dataset) {
-    for(let prop in el.dataset) {
-      postData[prop] = el.dataset[prop]
+  try {
+    const url = './dataStatistic/details'
+    let postData = {
+      billRuleId: document.querySelector('input[name=billRuleIdValue]').value
     }
+    if (el.dataset) {
+      for(let prop in el.dataset) {
+        postData[prop] = el.dataset[prop]
+      }
+    }
+    Glob_fn.submVirtForm(url, postData)
+  } catch(e) {
+    errorHandler(e.stack)
   }
-  Glob_fn.submVirtForm(url, postData)
 }
 function loadDataDetails(response, pageNumber, pageSize) {
   log(response)
