@@ -20,6 +20,7 @@ export function dsIndex() {
 
 export function dsDetails() {
   log('进入 ----------> dataStatistic Details')
+  setParentLink('#parentLink', 'dovepay-freight/station/dataStatistic')
   
   /* table */
   bindButtons(loadDataDetails)
@@ -169,8 +170,17 @@ function toDetails(event) {
     errorHandler(e.stack)
   }
 }
+function setParentLink(node, link) {
+  const a = document.querySelector(node)
+  const loc = window.location
+  a.setAttribute('src', `${loc.protocol}//${loc.host}/${link}`)
+}
 function loadDataDetails(response, pageNumber, pageSize) {
-  log(response)
+  try {
+    log(response)
+  } catch(e) {
+    errorHandler(e.stack)
+  }
 }
 
 
