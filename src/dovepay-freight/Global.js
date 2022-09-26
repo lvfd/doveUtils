@@ -674,13 +674,11 @@ var Glob_fn = {
       }
     },
     hideTable: function() {
-      document.body.style.overflowY = 'hidden';
       var tab = document.getElementById('dataTable');
       if (!tab) return;
       tab.setAttribute('hidden', '');
     },
     showTable: function() {
-      document.body.style.overflowY = 'auto';
       var tab = document.getElementById('dataTable');
       if (!tab) return;
       tab.removeAttribute('hidden');

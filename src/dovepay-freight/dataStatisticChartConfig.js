@@ -1,8 +1,10 @@
+import {errorHandler} from '../public'
+
 const color = {
   blue: 'rgb(3, 78, 162)',
   yellow: 'rgb(250, 166, 26)',
 }
-const legendLabel = '图例'
+const legendLabel = '金额'
 
 const type = 'bar'
 const options = {
@@ -11,35 +13,58 @@ const options = {
   }
 }
 
-function getLabels() {
-  return [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-  ]
+export default function(res) {
+  const axisData = getAxisData(res)
+  return {
+    type: type,
+    data: getData(axisData),
+    options: options,
+  }
 }
 
-function getData() {
-  return [0, 10, 5, 2, 20, 30, 45]
+function getAxisData(res) {
+  try {
+    const data = res.data
+    let axisData = []
+    data.forEach((line) => {
+      let object = {}
+      object.label = line.billTime
+      object.index = line.totalAmount
+      axisData.push(object)
+    })
+    axisData.sort((firstItem, secondItem) => firstItem.label - secondItem.label)
+    return axisData
+  } catch(e) {
+    errorHandler(e.stack)
+  }
 }
 
-const data = {
-  labels: getLabels(),
-  datasets: [{
-    data: getData(),
-    label: legendLabel,
-    backgroundColor: color.blue,
-    borderColor: color.blue,
-  }]
-}
+function getData(data) {
+  
+  return {
+    labels: getLabels(data),
+    datasets: [{
+      data: getIndex(data),
+      label: legendLabel,
+      backgroundColor: color.blue,
+      borderColor: color.blue,
+    }]
+  }
 
-const config = {
-  type: type,
-  data: data,
-  options: options
-}
+  function getLabels(data) {
+    let array = []
+    data.forEach((line) => {
+      array.push(line.label)
+    })
+    return array
+  }
 
-export default config
+  function getIndex(data) {
+    let array = []
+    data.forEach((line) => {
+      array.push(line.index)
+    })
+    return array
+  }
+  
+}

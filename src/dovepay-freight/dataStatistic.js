@@ -20,18 +20,18 @@ export function dsIndex() {
 
 export function dsDetails() {
   log('进入 ----------> dataStatistic Details')
+  
   setParentLink('#parentLink', 'dovepay-freight/station/dataStatistic')
   
+  queryBillRule()
+  .then(response => setBillRuleText(response))
+  .catch(error => errlog(error))
+
   /* table */
   bindButtons(loadDataDetails)
   .catch(error => errorHandler(error))
   
-  /* chart */
-  const cvs = new Canvas('#dataStatisticChart')
-  .setSize([16, 9])
-  .buildChart(chartConfig)
-
-  log(cvs)
+ 
 }
 
 function initWdatePicker() {
@@ -77,6 +77,25 @@ function setBillRule(response) {
       // errorHandler(e.stack)
     }
   })
+}
+function setBillRuleText(res) {
+  try {
+    let id = document.querySelector('input[name="billRuleId"]')
+    let text = document.querySelector('#billRuleText')
+    if (!id.value) {
+      text.value = '全部'
+    } else {
+      const dataArr = res.data
+      dataArr.some((data) => {
+        if (id.value === data.billRuleId) {
+          text.value = data.billRuleName
+          return true
+        }
+      })
+    }
+  } catch(e) {
+    errlog(e.stack)
+  }
 }
 function bindButtons(cb, dataHandler) {
   return new Promise((res, rej) => {
@@ -156,7 +175,8 @@ function toDetails(event) {
   event.preventDefault()
   const el = event.target
   try {
-    const url = './dataStatistic/details'
+    const loc = window.location
+    const url = `${loc.protocol}//${loc.host}/dovepay-freight/station/dataStatistic/details`
     let postData = {
       billRuleId: document.querySelector('input[name=billRuleIdValue]').value
     }
@@ -173,13 +193,59 @@ function toDetails(event) {
 function setParentLink(node, link) {
   const a = document.querySelector(node)
   const loc = window.location
-  a.setAttribute('src', `${loc.protocol}//${loc.host}/${link}`)
+  a.setAttribute('href', `${loc.protocol}//${loc.host}/${link}`)
 }
 function loadDataDetails(response, pageNumber, pageSize) {
   try {
     log(response)
+    const table = document.getElementById('dataTable')
+    const trInThead = Glob_fn.Table.getThTr(table)
+    setThead(trInThead)
+    setTbody(table, response)
+    fn_initPaginate(response, pageNumber, pageSize, fetchData, loadData)
   } catch(e) {
     errorHandler(e.stack)
+  }
+  try {
+    chartHandler(response)
+  } catch(e) {
+    errorHandler(e.stack)
+  }
+  function setThead(tr) {
+    const set = Glob_fn.Table.setTh
+    const textArr = ['序号', '年月', '总金额', '结算客户名称']
+    textArr.forEach((text) => {
+      set(tr, text)
+    })
+  }
+  function setTbody(table, res) {
+    const tbody = table.querySelector('tbody')
+    tbody.innerHTML = ''
+    const data = res.data
+    if (!data || data.length < 1) {
+      const tab = Glob_fn.Table
+      const tr0 = tab.showNoData(tab.getThTr(table).querySelectorAll('th').length)
+      tbody.appendChild(tr0)
+      return
+    }
+    data.forEach((line) => {
+      const tr = document.createElement('tr')
+      tbody.appendChild(tr)
+      const set = Glob_fn.Table.setTd
+      const propArr = ['serialNumber', 'billTime', 'totalAmount',
+        'esbCustomerName']
+      propArr.forEach((prop) => {
+        set(tr, line[prop])
+      })
+    })
+  }
+   /* chart */
+  function chartHandler(res) {
+    const cvs = new Canvas('#dataStatisticChart')
+    .setSize([16, 9])
+    .buildChart(chartConfig(res))
+
+    log(cvs)
   }
 }
 
