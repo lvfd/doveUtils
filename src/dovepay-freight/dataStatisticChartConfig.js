@@ -48,6 +48,7 @@ function getData(data) {
       label: legendLabel,
       backgroundColor: color.blue,
       borderColor: color.blue,
+      maxBarThickness: 100,
     }]
   }
 
