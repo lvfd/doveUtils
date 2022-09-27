@@ -6,10 +6,10 @@ import {Sys_table} from './SystemPages'
 import {Age_table} from './AgentPages'
 
 // 检查response：
-export function checkRes (res) {
+export function checkRes (res, callback) {
   if (res.code != '200') {
     var errmsg = '返回数据结果错误! ' + res.code + ': ' + res.msg;
-    Glob_fn.errorHandler(errmsg); 
+    Glob_fn.errorHandler(errmsg, callback); 
     if (console) {
       console.error('response: ', res);
     }
@@ -96,11 +96,15 @@ export function fetchData(url, data, callback, config) {
       return;
     }
   }
+  let checkResCallback
+  if (config && typeof config === 'function') {
+    checkResCallback = config
+  }
   var ajaxConfig = {
     url: url,
     data: postData,
     success: function(res) {
-      if (checkRes(res) === false) return;
+      if (checkRes(res, checkResCallback) === false) return;
       if (res.msg == 'success') {
         try {
           if (rawData && rawData.pageNumber) {

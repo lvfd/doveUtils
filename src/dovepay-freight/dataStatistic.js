@@ -28,10 +28,9 @@ export function dsDetails() {
   .catch(error => errlog(error))
 
   /* table */
-  bindButtons(loadDataDetails)
+  bindButtons(loadDataDetails, null , () => {history.back()})
   .catch(error => errorHandler(error))
   
- 
 }
 
 function initWdatePicker() {
@@ -97,7 +96,7 @@ function setBillRuleText(res) {
     errlog(e.stack)
   }
 }
-function bindButtons(cb, dataHandler) {
+function bindButtons(cb, dataHandler, checkResCallback) {
   return new Promise((res, rej) => {
     try {
       fn_initExportBtn(fetch_exportExcel)
@@ -105,7 +104,7 @@ function bindButtons(cb, dataHandler) {
       errlog(e.stack)
     }
     try {
-      fn_initSubmitBtn(1, 15, fetchData, cb, dataHandler)
+      fn_initSubmitBtn(1, 15, fetchData, cb, dataHandler, checkResCallback)
     } catch(e) {
       rej(e.stack)
     }

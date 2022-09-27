@@ -32,7 +32,8 @@ function getAxisData(res) {
       object.index = line.totalAmount
       axisData.push(object)
     })
-    axisData.sort((firstItem, secondItem) => firstItem.label - secondItem.label)
+    axisData.sort((firstItem, secondItem) => 
+      parseInt(firstItem.label) - parseInt(secondItem.label))
     return axisData
   } catch(e) {
     errorHandler(e.stack)
