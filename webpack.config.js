@@ -55,12 +55,19 @@ config_dovepayFreight.output = {
 }
 config_dovepayFreight.optimization = {}
 
+/* 配置doveMgr */
+let config_dovemgr = Object.assign({}, config)
+config_dovemgr.name = 'dovemgr'
+config_dovemgr.entry = {
+  dovemgr: './src/dovemgr',
+}
+
 /* 加入生产或开发环境参数 */
 function setByEnv(config, env) {
   if (env === 'development') {
     config.mode = 'development'
     config.devtool = 'inline-source-map'
-    config.output.clean = true
+    // config.output.clean = true
     config.plugins = [new HtmlWebpackPlugin()]
   }
   if (env === 'production') {
@@ -74,4 +81,5 @@ function setByEnv(config, env) {
 module.exports = [
   setByEnv(config, env),
   setByEnv(config_dovepayFreight, env),
+  setByEnv(config_dovemgr, env),
 ]

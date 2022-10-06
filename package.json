@@ -6,6 +6,8 @@
   "scripts": {
     "paydev": "npx webpack --config-name dovepay --node-env development",
     "paypro": "npx webpack --config-name dovepay --node-env production",
+    "mgrdev": "npx webpack --config-name dovemgr --node-env development",
+    "mgrpro": "npx webpack --config-name dovemgr --node-env production",
     "fredev": "npx webpack --config-name dovepay-freight --node-env development",
     "frepro": "npx webpack --config-name dovepay-freight --node-env production"
   },
