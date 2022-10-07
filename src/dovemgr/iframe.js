@@ -1,8 +1,5 @@
 import contentHandler from './contentDocument'
-
-/* 配置: */
-const show = (el) => el.classList.remove('uk-invisible')
-const hide = (el) => el.classList.add('uk-invisible')
+import {show, hide} from './functions'
 
 export default function(iframe) {
   if (!iframe) return

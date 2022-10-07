@@ -1,4 +1,5 @@
 import setIframe from './iframe'
+import {show} from './functions'
 
 export default function() {
   try {
@@ -8,6 +9,9 @@ export default function() {
     setMenu()
   } catch(e) {
     console.error('页面框架main.js处理失败', e.stack)
+  } finally {
+    const footer = document.querySelector('footer')
+    if (footer) show(footer)
   }
 }
 
@@ -16,7 +20,6 @@ export function setIframeHeight() {
     const iframeHeight = getIframeHeight()
     const iframe = document.querySelector('#frame_content')
     iframe.height = iframeHeight
-    showFooter()
   } catch(e) {
     console.error('初始化iframe错误', e.stack)
   }
@@ -27,16 +30,6 @@ function getIframeHeight() {
   const fh = window.getComputedStyle(document.querySelector('footer')).getPropertyValue('height')
   const deciHeight = parseInt(hh) + parseInt(fh)
   return window.innerHeight - deciHeight
-}
-
-function showFooter() {
-  try {
-    const footer = document.querySelector('footer.uk-invisible')
-    if (!footer) return
-    footer.classList.remove('uk-invisible')
-  } catch(e) {
-    console.error('处理footer失败', e.stack)
-  }
 }
 
 function setMenu() {

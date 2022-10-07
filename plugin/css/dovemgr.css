@@ -1,0 +1,21 @@
+/*------------doveMgr新框架-----------*/
+#tabco, #tabcoo, .width02 {
+  width:100%; box-sizing: border-box; border:hidden
+}
+.textcontent, .mainContent {
+  width:100%; box-sizing: border-box
+}
+
+div[style*="825px"], div[style*="800px"] {
+  width:100%; height:100%;
+  box-sizing: border-box
+}
+div[style*="810px"] {
+  width:100%; box-sizing: border-box
+}
+
+table[width*="1000"], table[width*="810"],
+table[width*="805"], table[width*="800"] {
+  width: 100%; box-sizing: border-box;
+  word-break: break-all;
+}
