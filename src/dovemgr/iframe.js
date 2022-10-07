@@ -23,10 +23,9 @@ function iframeHandler(e) {
     iframe.contentWindow.addEventListener('unload', () => {
       hide(iframe)
     })
-    contentHandler(iframe.contentDocument)
+    contentHandler(iframe)
   } catch(e) {
-    console.error('iframe处理失败', e.stack)
-  } finally {
     show(iframe)
+    console.error('iframe处理失败', e.stack)
   }
 }
