@@ -15,7 +15,8 @@ div[style*="810px"] {
 }
 
 table[width*="1000"], table[width*="810"],
-table[width*="805"], table[width*="800"] {
+table[width*="805"], table[width*="800"],
+.textcontent > table {
   width: 100%; box-sizing: border-box;
   word-break: break-all;
 }

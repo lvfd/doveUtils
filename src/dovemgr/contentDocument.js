@@ -5,6 +5,16 @@ import {show} from './functions'
 export default function(iframe) {
   try {
 
+    const href = iframe.contentWindow.location.href
+    console.log(href)
+
+    const userweb = /dovepayUserWebMgrAction/
+    if (userweb.test(href)) {
+      console.log('用户系统')
+      show(iframe)
+      return
+    }
+
     const js = importJs(iframe, showModalDialog)
     js.addEventListener('error', () => console.error('加载polyfill错误'))
 
