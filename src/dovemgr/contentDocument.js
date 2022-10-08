@@ -1,13 +1,14 @@
-import importStyle from './importStyle'
-import {mgrcss} from './importStyle'
+import {importCss, mgrcss} from './import'
+import {importJs, showModalDialog} from './import'
 import {show} from './functions'
-
 
 export default function(iframe) {
   try {
-    const icd = iframe.contentDocument
-    importStyle(icd, mgrcss)
-    const css = icd.querySelector(`link#${mgrcss[0]}`)
+
+    const js = importJs(iframe, showModalDialog)
+    js.addEventListener('error', () => console.error('加载polyfill错误'))
+
+    const css = importCss(iframe, mgrcss)
     css.addEventListener('error', () => {
       show(iframe)
       console.error('加载css错误')
@@ -15,6 +16,7 @@ export default function(iframe) {
     css.addEventListener('load', () => {
       show(iframe)
     })
+    
   } catch(e) {
     show(iframe)
     console.error('处理iframe.contentDocument失败', e.stack)
