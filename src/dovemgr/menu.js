@@ -29,6 +29,8 @@ function fetchDetailMenu(aList, i) {
         if (i < aList.length-1) {
           i++
           fetchDetailMenu(aList, i)
+        } else {
+          document.querySelector('button.toMenu').click()
         }
       } catch(e) {
         console.error('次级菜单设置错误', i, aList[i], e.stack)

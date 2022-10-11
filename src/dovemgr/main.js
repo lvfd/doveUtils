@@ -1,11 +1,12 @@
 import setIframe from './iframe'
 import setMenu from './menu'
 import {show} from './functions'
+import iframeContentHandler from './contentDocument'
 
 export default function() {
   try {
     const iframe = document.querySelector('#frame_content')
-    setIframe(iframe)
+    setIframe(iframe, iframeContentHandler)
     setIframeHeight()
     setMenu()
   } catch(e) {

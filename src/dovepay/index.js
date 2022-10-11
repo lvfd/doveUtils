@@ -32,11 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
   .then(success => log(`页面框架: ${success}`))
   .catch(error => errorHandler([error, 'console']))
 
-  /* 加入uikit */
-  importUikit()
-  .then(success => log(`页面框架${success}`))
-  .catch(error => errorHandler([error, 'console']))
-
   /* 开始同步函数 */
   .then(() => Entry())
 })

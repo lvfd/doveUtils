@@ -18,7 +18,8 @@ let babelLoaderConfig = {
 let config = {
   name: 'dovepay',
   entry: {
-    dovepay_recharge: './src/dovepay',
+    // dovepay_recharge: './src/dovepay',
+    dovepay: './src/dovepay/entry',
   },
   output: {
     // filename: '[name].[contenthash].js',
