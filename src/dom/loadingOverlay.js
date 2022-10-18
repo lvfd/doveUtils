@@ -1,8 +1,4 @@
-import {
-  errorHandler
-} from '../public' 
-
-function loadingOverlay(show, config/*{html: '<h1>loading</h1>', transparent: false}, iframe: '#iframeId'*/) {
+export default function (show, config/*{html: '<h1>loading</h1>', transparent: false}, iframe: '#iframeId'*/) {
   try {
 
     const html = config && config.html? config.html + '<span class="sr-only">加载中...</span>': '<div uk-spinner></div><span class="sr-only">加载中...</span>'
@@ -70,9 +66,7 @@ function loadingOverlay(show, config/*{html: '<h1>loading</h1>', transparent: fa
       }
 
     }
-  } catch (error) {
-    errorHandler([error, 'console'])
+  } catch (e) {
+    console.error(`遮罩层${show}操作失败`, e.stack)
   }
 }
-
-export default loadingOverlay

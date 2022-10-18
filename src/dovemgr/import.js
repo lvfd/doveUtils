@@ -11,7 +11,7 @@ export function importCss(iframe, url) {
   try {
     const icd = iframe.contentDocument
     const ready = icd.querySelector(`link[href="${url}"]`)
-    if (ready) return ready
+    if (ready) return 'ready'
     const link = document.createElement('link')
     link.setAttribute('rel', 'stylesheet')
     link.setAttribute('type', 'text/css')
@@ -28,7 +28,7 @@ export function importJs(iframe, url) {
   try {
     const icd = iframe.contentDocument
     const ready = icd.querySelector(`script[src="${url}"]`)
-    if (ready) return ready
+    if (ready) return 'ready'
     const script = document.createElement('script')
     script.setAttribute('src', url)
     const head = icd.querySelector('head')
@@ -47,15 +47,29 @@ export function importJs(iframe, url) {
 export function importUk(iframe) {
   return new Promise((resolve, reject) => {
     const css = importCss(iframe, ukcss)
-    css.addEventListener('error', () => reject('¼ÓÔØuikit.cssÊ§°Ü'))
-    css.addEventListener('load', () => {
+    if (css === 'ready') {
+      importUkjs()
+    } else {
+      css.addEventListener('error', () => reject('¼ÓÔØuikit.cssÊ§°Ü'))
+      css.addEventListener('load', importUkjs)
+    }
+    function importUkjs() {
       const js = importJs(iframe, ukjs)
-      js.addEventListener('error', () => reject('¼ÓÔØuikit.jsÊ§°Ü'))
-      js.addEventListener('load', () => {
-        const icon = importJs(iframe, ukiconjs)
-        icon.addEventListener('error', () => reject('¼ÓÔØuikit-icon.jsÊ§°Ü'))
-        icon.addEventListener('load', () => resolve())
-      })
-    })
+      if (js === 'ready') {
+        importUkiconjs()
+      } else {
+        js.addEventListener('error', () => reject('¼ÓÔØuikit.jsÊ§°Ü'))
+        js.addEventListener('load', importUkiconjs)
+      }
+    }
+    function importUkiconjs() {
+      const js = importJs(iframe, ukiconjs)
+      if (js === 'ready') {
+        resolve()
+      } else {
+        js.addEventListener('error', () => reject('¼ÓÔØuikit-icon.jsÊ§°Ü'))
+        js.addEventListener('load', () => resolve())
+      }
+    }
   })
 }

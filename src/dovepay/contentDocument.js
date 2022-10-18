@@ -1,10 +1,12 @@
 import {importCss, payiframecss, importJs, showModalDialog, importUk} from '../dovemgr/import'
-import {show, transLinks} from '../dovemgr/functions'
+import {transLinks} from '../dovemgr/functions'
 import {hideDropdown} from './functions'
+import {display} from './main'
 import contentDocumentHandler from './contentDocumentHandler'
 
 export default function(iframe) {
   try {
+    console.log('------>onload', `href=${iframe.contentWindow.location.href}`, `src=${iframe.src}`)
 
     /* 绑定点击事件 */
     iframe.contentDocument.body.addEventListener('click', () => hideDropdown())
@@ -40,10 +42,7 @@ export default function(iframe) {
   }
 }
 
-export function display(iframe) {
-  hideDropdown()
-  show(iframe)
-}
+
 
 function syncImport(iframe) {
   return new Promise((resolve, reject) => {

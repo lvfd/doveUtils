@@ -1,12 +1,18 @@
 import setIframe from '../dovemgr/iframe'
 import iframeContentHandler from './contentDocument'
+import {hideDropdown} from './functions'
+import {show as mgrShow, hide as mgrHide} from '../dovemgr/functions'
+import overlay from '../dom/loadingOverlay'
+import {adaptContentIframe} from '../dom'
 
 export default function() {
   try {
+    setSubNav()
+    adaptContentIframe()
     const iframe = document.querySelector('#content_opr')
     setIframeHeight(iframe)
     window.addEventListener('resize', () => setIframeHeight(iframe))
-    setIframe(iframe, iframeContentHandler)
+    setIframe(iframe, iframeContentHandler, {show: display, hide: hide})
   } catch(e) {
     console.error('页面框架main.js处理失败', e.stack)
   }
@@ -28,8 +34,41 @@ export function setIframeHeight(iframe) {
     const htmlh = html? window.getComputedStyle(html).getPropertyValue('height'): 0
     const height = Math.max(parseInt(bodyh), parseInt(htmlh), minHeight)
     iframe.style.height = `${height}px`
+    // console.log('----------------------->', height, bodyh, htmlh )
     return height
   } catch(e) {
     console.error('设置iframe高度失败', e.stack)
+  }
+}
+
+export function display(iframe) {
+  hideDropdown()
+  mgrShow(iframe)
+  overlay('hide')
+}
+
+function hide(iframe) {
+  try {
+    overlay('show', {transparent: true})
+    mgrHide(iframe)
+  } catch(e) {
+    console.error('隐藏iframe失败', e.stack)    
+  }
+}
+
+function setSubNav() {
+  try {
+    UIkit.util.on('#my_menu div[uk-dropdown]', 'beforeshow', (e) => {
+      const li = e.srcElement.parentElement
+      if (!li) return
+      li.classList.add('active')
+    })
+    UIkit.util.on('#my_menu div[uk-dropdown]', 'hidden', (e) => {
+      const li = e.srcElement.parentElement
+      if (!li) return
+      li.classList.remove('active')
+    })
+  } catch(e) {
+    console.error('绑定UIkit事件失败', e.stack)
   }
 }

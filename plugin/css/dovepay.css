@@ -3,6 +3,17 @@ header .uk-logo > img {
   height: 60px;
   padding: 15px 0;
 }
+.uk-subnav>*>:first-child,
+#my_menu .uk-subnav > li > a:link {
+  color: #fff;
+}
+#my_menu .uk-subnav > li > a:hover {
+  color: rgb(250,166,26);
+}
+#my_menu .uk-subnav > li.active > a {
+  color: rgb(250,166,26);
+}
+
 
 /* 锁屏div样式 */
 .black_overlay {

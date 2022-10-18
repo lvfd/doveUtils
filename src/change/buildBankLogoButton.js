@@ -1,6 +1,5 @@
 import regExp from './filter'
 import {
-  log_changeDom as log,
   getObjWindow as getWindow,
   getObjDocument as getDocument,
   bankInfo
@@ -14,7 +13,6 @@ function buildBankLogoButton(iframe) {
   if (key === false) {
     return
   }
-  log(`--------> ${iframeSrc} 进入 buildBankLogoButton 方法`)
 
   /* 首先检查dove-banklogo*/
   const targetButtonSpan = rootDoc.querySelectorAll('.dove-banklogo')

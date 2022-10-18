@@ -16,11 +16,6 @@ let babelLoaderConfig = {
 }
 
 let config = {
-  name: 'dovepay',
-  entry: {
-    // dovepay_recharge: './src/dovepay',
-    dovepay: './src/dovepay/entry',
-  },
   output: {
     // filename: '[name].[contenthash].js',
     filename: '[name].js',
@@ -36,15 +31,22 @@ let config = {
   },
 }
 
-/* 配置货运系统 */
-function getOutputByPlatform(platform) {
-  if (/(win32)|(darwin)/.test(platform)) {
-    return path.resolve(__dirname, '../', 'dovepay-freight', 'dist')
-  }
-  if (/linux/.test(platform)) {
-    return path.resolve(__dirname, '../', '../', 'n-app-ft', 'dist')
-  }
+
+/* 配置dovepay */
+let config_dovepay = Object.assign({}, config)
+config_dovepay.name = 'dovepay'
+config_dovepay.entry = {
+  dovepay: './src/dovepay/entry',
+  sysIndex: './src/dovepay/sys/index',
 }
+config_dovepay.output = {
+  filename: '[name].js',
+  path: path.resolve(__dirname, 'dist', 'dovepay'),
+}
+config_dovepay.optimization = {}
+
+
+/* 配置货运系统 */
 let config_dovepayFreight = Object.assign({}, config)
 config_dovepayFreight.name = 'dovepay-freight'
 config_dovepayFreight.entry = {
@@ -56,12 +58,14 @@ config_dovepayFreight.output = {
 }
 config_dovepayFreight.optimization = {}
 
+
 /* 配置doveMgr */
 let config_dovemgr = Object.assign({}, config)
 config_dovemgr.name = 'dovemgr'
 config_dovemgr.entry = {
   dovemgr: './src/dovemgr',
 }
+
 
 /* 加入生产或开发环境参数 */
 function setByEnv(config, env) {
@@ -78,9 +82,18 @@ function setByEnv(config, env) {
   }
   return config
 }
+/* 货运系统linux地址不同 */
+function getOutputByPlatform(platform) {
+  if (/(win32)|(darwin)/.test(platform)) {
+    return path.resolve(__dirname, '../', 'dovepay-freight', 'dist')
+  }
+  if (/linux/.test(platform)) {
+    return path.resolve(__dirname, '../', '../', 'n-app-ft', 'dist')
+  }
+}
 
 module.exports = [
-  setByEnv(config, env),
+  setByEnv(config_dovepay, env),
   setByEnv(config_dovepayFreight, env),
   setByEnv(config_dovemgr, env),
 ]
