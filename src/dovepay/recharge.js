@@ -43,6 +43,12 @@ RechargeUi.init_accountName = function(node) {
   }
 }
 
+RechargeUi.prototype.accountsRecConfirmMessage = function(iframe) {
+  const root = RechargeUi.getRootNode(iframe)
+  changeDocumentTitle('德付通 - 请输入短信验证码')
+  init_step(root.querySelector('#rechargeStep'), [1, 3])
+}
+
 RechargeUi.prototype.accountsRecConfirmUi = function(iframe) {
   var root = RechargeUi.getRootNode(iframe);
   changeDocumentTitle('德付通 - 请确认充值信息');

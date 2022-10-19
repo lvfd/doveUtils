@@ -9,7 +9,7 @@ export default function(iframe) {
     console.log('------>onload', `href=${iframe.contentWindow.location.href}`, `src=${iframe.src}`)
 
     /* 绑定点击事件 */
-    iframe.contentDocument.body.addEventListener('click', () => hideDropdown())
+    iframe.contentDocument.addEventListener('click', () => hideDropdown())
 
     /* 过滤器 */
     const href = iframe.contentWindow.location.href
