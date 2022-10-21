@@ -403,7 +403,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
           text: '点击获取验证码',
           textDisable: '重新获取',
           button: regetBtn,
-          count: 10,
+          count: 60,
         });
       } else {
         UIkit.modal(modal).hide();
@@ -415,12 +415,13 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
     return function(e) {
       e.preventDefault();
       var modal = document.getElementById('getCode_addFastCard');
-      var smsInput = modal.querySelector('input[name="smsCode"');
+      var smsInput = modal.querySelector('input[name="smsCode"]');
       var val = smsInput.value;
       if (!val) {
-        UIkit.modal.alert("验证码不能为空").then(function(){
-          return;
-        });
+        return UIkit.modal.alert("验证码不能为空").then(() => {
+          UIkit.modal(modal).show()
+          smsInput.focus()
+        })
       }
       var result = null;
       $.ajax({
@@ -439,22 +440,22 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
         }
       });
       if(!result){
-        UIkit.modal.alert("远程数据获取失败").then(function(){
-          smsInput.focus();
+        return UIkit.modal.alert("远程数据获取失败").then(function(){
+          UIkit.modal(modal).show()
+          smsInput.focus()
         });
-        return;
       }
       if(result == '1'){
-        UIkit.modal.alert("验证码已失效").then(function(){
-          smsInput.focus();
+        return UIkit.modal.alert("验证码已失效").then(function(){
+          UIkit.modal(modal).show()
+          smsInput.focus()
         });
-        return;
       }
       if(result == '2'){
-        UIkit.modal.alert("输入的验证码不正确").then(function(){
-          smsInput.focus();
+        return UIkit.modal.alert("输入的验证码不正确").then(function(){
+          UIkit.modal(modal).show()
+          smsInput.focus()
         });
-        return;
       }
       callback.call();
     }
