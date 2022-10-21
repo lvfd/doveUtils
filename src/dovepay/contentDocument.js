@@ -3,10 +3,13 @@ import {transLinks} from '../dovemgr/functions'
 import {hideDropdown} from './functions'
 import {display} from './main'
 import contentDocumentHandler from './contentDocumentHandler'
+import {setIframeHeight as updateIframeHeight} from './main'
+import {filter} from './router'
+import catalog from './catalog'
 
 export default function(iframe) {
   try {
-    console.log('------>onload', `href=${iframe.contentWindow.location.href}`, `src=${iframe.src}`)
+    console.info('------>onload', `href=${iframe.contentWindow.location.href}`)
 
     /* 绑定点击事件 */
     iframe.contentDocument.addEventListener('click', () => hideDropdown())
@@ -20,6 +23,7 @@ export default function(iframe) {
       return
     }
 
+
     /* 转移body下的link */
     transLinks(iframe)
 
@@ -27,7 +31,34 @@ export default function(iframe) {
     const js = importJs(iframe, showModalDialog)
     js.addEventListener('error', () => console.error('加载polyfill错误'))
 
-    /* 同步import */
+    /* iframeDOM变动自动调整iframe高度 */
+    if (MutationObserver) {
+      try {
+        const mo = new MutationObserver(() => updateIframeHeight(iframe))
+        mo.observe(iframe.contentDocument.body, {
+          childList: true, 
+          subtree: true,
+          attributes: true,
+        })
+      } catch(e) {
+        console.error('绑定DOM树监听错误', e.stack)
+      }
+    }
+
+    /* 过滤器 */
+    let idArr = []
+    catalog.forEach((page) => {
+      idArr.push(page.id)
+    })
+    if (filter(iframe, idArr)) {
+      iframe.style.width = '100%'
+    } else {
+      iframe.style.width = '980px'
+      display(iframe)
+      return
+    }
+
+    /* import uikit */
     importUk(iframe)
     .then(() => syncImport(iframe))
     .then(() => contentDocumentHandler(iframe))

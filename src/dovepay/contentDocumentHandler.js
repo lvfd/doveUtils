@@ -14,18 +14,6 @@ export default function(iframe) {
     
     rechargeExec(iframe)
 
-    if (MutationObserver) {
-      try {
-        const mo = new MutationObserver(() => updateIframeHeight(iframe))
-        mo.observe(iframe.contentDocument.body, {
-          childList: true, 
-          subtree: true,
-          attributes: true,
-        })
-      } catch(e) {
-        console.error('绑定DOM树监听错误', e.stack)
-      }
-    }
     window.setTimeout(() => updateIframeHeight(iframe), 100)
 
   } catch(e) {
