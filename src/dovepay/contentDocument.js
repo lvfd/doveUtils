@@ -54,6 +54,7 @@ export default function(iframe) {
       iframe.style.width = '100%'
     } else {
       iframe.style.width = '980px'
+      updateIframeHeight(iframe)
       display(iframe)
       return
     }
