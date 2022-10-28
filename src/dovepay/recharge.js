@@ -21,25 +21,26 @@ RechargeUi.getRootNode = function(iframe) {
 RechargeUi.init_accountName = function(node) {
   var showLength = 3;
   var specStr = '***';
-  var input = node.querySelector('input#inp_accountName').value;
   try {
-    var position = input.search('@');
+    var input = node.querySelector('input#inp_accountName').value;
+    var position = input.search('@')
+    var acc_outp = node.querySelector('#accountName')
     if ( position === -1 ) {
-      throw new Error('发生错误: 用户名不是邮箱格式');
+      acc_outp.value = input
+      return
+    }
+    if ( position < 4 ) {
+      input = input.slice(0, position) + specStr + input.slice(position);
+    } else {
+      input = input.slice(0, showLength) + specStr + input.slice(position);
+    }
+    if (acc_outp.tagName === 'INPUT') {
+      acc_outp.value = input
+    } else {
+      acc_outp.innerText = input
     }
   } catch (e) {
-    errHandler(e, true);
-  }
-  if ( position < 4 ) {
-    input = input.slice(0, position) + specStr + input.slice(position);
-  } else {
-    input = input.slice(0, showLength) + specStr + input.slice(position);
-  }
-  var acc_outp = node.querySelector('#accountName')
-  if (acc_outp.tagName === 'INPUT') {
-    acc_outp.value = input  
-  } else {
-    acc_outp.innerText = input
+    console.error(e.stack)
   }
 }
 

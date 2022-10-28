@@ -1,4 +1,8 @@
-const host = 'https://test.dovepay.com'
+const hn = window.location.hostname
+const isProduction = /www\.dovepay\.com/.test(hn)
+const testHost = 'https://test.dovepay.com'
+const prodHost = 'https://www.dovepay.com'
+const host = isProduction? prodHost: testHost
 export var showModalDialog = `${host}/doveutils/plugin/showModalDialog.js`
 export var mgrcss = `${host}/doveutils/plugin/css/dovemgr.css`
 export var paycss = `${host}/doveutils/plugin/css/dovepay.css`
