@@ -18,13 +18,15 @@ let info = [
   {name: 'glb', regExp: '桂林银行'},
   {name: 'hzcb', regExp: '杭州银行'},
   {name: 'icbc', regExp: '(?:工行)|(?:工商银行)'},
-  {name: 'lzccb', regExp: '柳州银行'},
+  {name: 'lzccb', regExp: '(?:柳州银行)|(?:柳江柳银村镇银行)'},
   {name: 'nbcb', regExp: '宁波银行'},
   {name: 'qdccb', regExp: '青岛银行'},
   {name: 'spabank', regExp: '平安(?:银行)?'},
   {name: 'spdb', regExp: '浦发(?:银行)?'},
   {name: 'znx', regExp: '浙江农.*'},
   {name: 'bob', regExp: '北京银行'},
+  {name: 'cib', regExp: '兴业银行'},
+  {name: 'psbc', regExp: '(?:邮储银行)|(?:邮政储蓄银行)'},
 ]
 info.forEach(function(obj) {
   obj.path = `${basePath()}/doveutils/plugin/svg/banklogo/${obj.name}.svg`
