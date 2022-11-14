@@ -440,25 +440,27 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
           result = res;
         }
       });
-      if(result === '1'){
+      if(result === 1 || result === '1'){
         return UIkit.modal.alert("验证码已失效").then(function(){
           UIkit.modal(modal).show()
           smsInput.focus()
         });
       }
-      if(result === '2'){
+      else if(result === 2 || result === '2'){
         return UIkit.modal.alert("输入的验证码不正确").then(function(){
           UIkit.modal(modal).show()
           smsInput.focus()
         });
       }
-      if (result === '0') {
+      else if (result === 0　|| result === '0') {
         return callback.call();
       }
-      return UIkit.modal.alert("远程数据获取失败").then(function(){
-        UIkit.modal(modal).show()
-        smsInput.focus()
-      });
+      else {
+        return UIkit.modal.alert("远程数据获取失败").then(function(){
+          UIkit.modal(modal).show()
+          smsInput.focus()
+        });
+      }
     }
   }
   function toAddCard() {
