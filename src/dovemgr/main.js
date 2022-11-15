@@ -11,7 +11,7 @@ window.addEventListener('resize', setIframeHeight)
 
 function mainHandler() {
   try {
-    // import ('@dove-css/dovemgr.css')
+    import ('@dove-css/dovemgr.css')
     dominit()
     uk2dom()
     const iframe = document.querySelector('#frame_content')

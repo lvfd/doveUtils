@@ -95,11 +95,15 @@ const config = {
     splitChunks: {
       chunks: 'all',
       cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'initial',
+          minChunks: 2,
+        },
         libs: {
           name: 'libs',
           filename: `libs/[name]-${version}.min.js`,
           test: /[\\/]node_modules[\\/]/,
-          // chunks: 'initial'
         },
         jquery: {
           test:/[\\/]node_modules[\\/]jquery-(v2|lts)/,
@@ -142,6 +146,7 @@ const config = {
     new webpack.ProvidePlugin({
       $: 'jquery-lts',
       jQuery: 'jquery-lts',
+      'window.jQuery': 'jquery-v2',
     })
   ]
 }

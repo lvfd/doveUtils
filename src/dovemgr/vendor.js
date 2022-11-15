@@ -6,8 +6,7 @@ export default () => {
     return Promise.all([
       import ('uikit-v2/dist/css/uikit.min.css'),
       import ('uikit-v2/dist/js/uikit.min.js'),
-      import ('dom4'),
-      // import ('@dove-css/dovemgr.css')
+      import ('dom4')
     ])
   }
   else {
