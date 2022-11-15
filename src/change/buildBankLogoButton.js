@@ -1,4 +1,4 @@
-import regExp from './filter'
+// import regExp from './filter'
 import {
   getObjWindow as getWindow,
   getObjDocument as getDocument,
@@ -7,12 +7,12 @@ import {
 
 function buildBankLogoButton(iframe) {
   const rootDoc = getDocument(iframe)
-  const iframeSrc = getWindow(iframe).location.href
-  const entryReg = regExp.accountAction
-  const key = entryReg.test(iframeSrc)
-  if (key === false) {
-    return
-  }
+  // const iframeSrc = getWindow(iframe).location.href
+  // const entryReg = regExp.accountAction
+  // const key = entryReg.test(iframeSrc)
+  // if (key === false) {
+  //   return
+  // }
 
   /* 首先检查dove-banklogo*/
   const targetButtonSpan = rootDoc.querySelectorAll('.dove-banklogo')

@@ -1,3 +1,5 @@
+import BrowserDetector from 'browser-dtector'
+const browser = new BrowserDetector(window.navigator.userAgent).parseUserAgent()
 export default function() {
   try {
     const aList = document.querySelectorAll('.showList')
@@ -16,20 +18,19 @@ function fetchDetailMenu(aList, i) {
     url: 'navAction.do',
     data: {
       m: 'display',
-      rc: aList[i].dataset.id,
+      rc: aList[i].getAttribute('data-id'),
     },
     dataType: 'html',
     success: function(res) {
       try {
-        const ul = document.createElement('ul')
-        ul.classList.add('uk-nav-sub')
-        ul.classList.add('uk-nav-default')
+        const ul = aList[i].parentNode.querySelector('ul.uk-nav-sub')
+        if (!browser.isIE) ul.classList.add('uk-nav-default')
         ul.innerHTML = res
-        aList[i].parentNode.appendChild(ul)
         if (i < aList.length-1) {
           i++
           fetchDetailMenu(aList, i)
         } else {
+          if (browser.isIE) document.querySelectorAll('.uk-nav-divider').forEach(el => el.classList.remove('uk-nav-divider'))
           document.querySelector('button.toMenu').click()
         }
       } catch(e) {

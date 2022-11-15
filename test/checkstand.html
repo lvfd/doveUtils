@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="https://test.dovepay.com">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>德付通支付平台-测试</title>
+  <script type="text/javascript" src="/dovePay/js/jquery-one.seven.min.js"></script>
+  <link type="text/css" rel="stylesheet" href="/dovePay/css/dovePay2.0/base.css" />
+  <link type="text/css" rel="stylesheet" href="/dovePay/style/payweb.css" />
+  <link type="text/css" rel="stylesheet" href="/dovePay/css/dovePay2.0/headAndFoot.css" />
+  <link type="text/css" rel="stylesheet" href="/dovePay/css/thickbox.css" />
+  <link type="text/css" rel="stylesheet" href="/dovePay/css/password2.css" />
+  <style>
+    .payOl {
+      margin: 1.6em 0;
+      padding: 0;
+    }
+
+    .bankTable {
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .bankTable span {
+      display: block;
+      float: left;
+      height: 50px;
+      padding: 10px 30px 0 30px;
+    }
+
+    .bankTable span input, .bankTable span img {
+      vertical-align: middle;
+    }
+
+    .search-condition-boxHd {
+      background-color: #eaeff5;
+      border-bottom: 1px solid #dadfe3;
+      color: #555;
+      font-family: microsoft yahei;
+      font-size: 12px;
+      height: 43px;
+      line-height: 43px;
+      text-align: center;
+    }
+
+    .search-condition-boxHd .on {
+      background-color: #fff;
+      color: #234662;
+      font-weight: 700;
+      margin-bottom: -1px;
+      padding-bottom: 1px;
+      position: relative;
+    }
+
+    .search-condition-nav {
+      border-left: 1px solid #dadfe3;
+      border-right: 1px solid #dadfe3;
+      float: left;
+      height: 43px;
+      margin-left: -1px;
+      width: 139px;
+      line-height: 43px;
+    }
+
+    .search-condition-boxHd a:hover {
+      line-height: 43px;
+    }
+
+    .bb {
+      position: relative;
+    }
+
+    .bb a {
+      position: relative;
+      display: block;
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .aa {
+      position: absolute;
+      top: 23px;
+      right: 0px;
+      display: none;
+      width: 100%;
+      height: 100px;
+      background: #e4f4fc;
+      word-break: break-all;
+      overflow-y: auto;
+      padding: 5px;
+    }
+  </style>
+  <script language="javascript" src="/dovePay/js/PassGuardCtrl.js"></script>
+  <script language="javascript" src="/dovePay/js/crypto-js.js"></script>
+  <script language="javascript" src="/dovePay/js/thickbox.js"></script>
+  <script language="javascript" src="/dovePay/js/password.js"></script>
+  <script language="javascript" src="/dovePay/js/dfp_CH01.js"></script>
+  <script>
+    $(function(){
+      tabView(".search-condition-nav","on");
+      
+      $(".bb").hover(function(){
+        $(".aa").show();
+      },function(){
+        $(".aa").hide();
+      })
+    });
+    function tabView(originClassName,addClassName){
+      $(originClassName).click(function() {
+        $(originClassName).removeClass(addClassName);
+        $(this).addClass(addClassName);
+      });
+    }
+  </script>
+  <script type="text/javascript">
+    var dfp = model.dfp.getDfpValues(); 
+    dfp();
+
+    window.onload = function(){
+      var str = document.getElementsByName("checkstandWay");
+      var objarray = str.length;
+      for (var i = 0; i < objarray; i++) {
+        if (str[i].checked == true) {
+          changeStyle();
+        }
+      }
+      var payType = $("#payType").val();
+      if (payType == 4) {
+        document.getElementById("wzhPay").style.display = "";
+      }
+    }
+    
+    function checkForm() {
+      var pwd = document.payForm.password.value;
+      var userId = document.payForm.userId.value;
+      if (pwd == "" || userId == "") {
+        document.getElementById("errLi1").style.display = "";
+        document.getElementById("errLi2").style.display = "";
+        document.getElementById("errMsg").innerHTML = "对不起，用户名和密码不能为空！";
+        return;
+      } else {
+        document.getElementById("errLi1").style.display = "none";
+        document.getElementById("errLi2").style.display = "none";
+        document.getElementById("errMsg").innerHTML = "";
+      }
+    }
+    /* 虚拟银联卡表单验证 */
+    function checkFormVCBankId() {
+      var pwd = document.payFormVC.passwordVC.value;
+      var userId = document.payFormVC.bankId.value;
+      if (pwd == "" || userId == "") {
+        document.getElementById("errLi1").style.display = "";
+        document.getElementById("errLi2").style.display = "";
+        document.getElementById("errMsg").innerHTML = "对不起，用户名和密码不能为空！";
+        return;
+      } else {
+        document.getElementById("errLiVC1").style.display = "none";
+        document.getElementById("errLiVC2").style.display = "none";
+        document.getElementById("errMsgVC").innerHTML = "";
+      }
+    }
+    function f1() {
+      if(document.getElementById("formButtonId")){
+        document.getElementById("formButtonId").disabled=true;
+      }
+      if(document.getElementById("formButtonVCId")){
+        document.getElementById("formButtonVCId").disabled=true;
+      }
+    }
+    
+    function checkScan() {
+      if(jQuery("input[name=bankId]:checked").length==0){
+        alert("请您选择扫码方式！");
+        return false;
+      }
+      return true;
+    }
+
+    function showZH() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "none";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "none";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "none";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "none";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "none";
+      }
+    }
+    function showWZH() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "none";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "none";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "none";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "none";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "none";
+      }
+    }
+    function showALI() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "none";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "none";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "none";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "none";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "none";
+      }
+    }
+    function showWECHAT() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "none";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "none";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "none";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "none";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "none";
+      }
+    }
+    function showMaster() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "none";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "none";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "none";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "none";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "none";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "";
+      }
+    }
+    
+    /* 虚拟银联卡支付 LN 2020/12/06*/
+    function showVirtualCard() {
+      if(document.getElementById("vcPay")){
+        document.getElementById("vcPay").style.display = "";
+      }
+      if(document.getElementById("zhPay")){
+        document.getElementById("zhPay").style.display = "none";
+      }
+      if(document.getElementById("aliPay")){
+        document.getElementById("aliPay").style.display = "none";
+      }
+      if(document.getElementById("wechatPay")){
+        document.getElementById("wechatPay").style.display = "none";
+      }
+      if(document.getElementById("wzhPay")){
+        document.getElementById("wzhPay").style.display = "none";
+      }
+      if(document.getElementById("masterPay")){
+        document.getElementById("masterPay").style.display = "none";
+      }
+    }
+    function changeStyle(){
+      var chkObjs = document.getElementsByName("checkstandWay");
+      $("ol.SelectBank").css({"display":"none"});
+      for(var i=0;i<chkObjs.length;i++){
+        if(chkObjs[i].checked){
+          var title_id = chkObjs[i].value;
+          var params = title_id.split("_");
+          $("#payInput_" + params[1]).css({"display":""});
+          break; 
+        } 
+      }
+    }
+  </script>
+</head>
+<body>
+  
+<!DOCTYPE html>
+
+
+<html>
+<head>
+<script>
+/* HTML5 tag support */
+document.createElement('header');
+document.createElement('nav');
+document.createElement('section');
+document.createElement('article');
+document.createElement('footer');
+</script>
+
+<style type="text/css">
+#ie6shengji{background-color:#ffffff; left:0; font-size:16px; color:#ff0000; width:97%; padding: 2px 15px 2px 23px; text-align:left;}
+body{
+font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+font-size: 14px;
+}
+#_C4symbol, #_C4banner{
+    z-index:1000;
+}
+</style>
+<link rel="shortcut icon" href="/dovePay/images/favicon.ico" type="image/x-icon" />
+<link rel="Bookmark" href="/dovePay/images/favicon.ico" type="image/x-icon" />
+<link type="text/css" href="/dovePay/css/dovePay2.0/font-awesome.min.css" rel="stylesheet">
+<!--[if IE 7]>
+    <link rel="stylesheet" href="/dovePay/css/dovePay2.0/font-awesome-ie7.min.css">
+<![endif]-->
+</head>
+
+<body id="desktop">
+    <div id="page">
+        <!--[if lte IE 6]>
+            <div id="ie6shengji">亲爱的用户朋友，您正在使用浏览器版本过低(IE6，或使用IE6内核的国产浏览器)，请升级新版IE浏览器，以获得最佳浏览效果。</div>
+        <![endif]-->
+            <section class="gblMHeader">
+                <!-- topBar Begin -->
+                <div role="banner" class="outer">
+                   <div class="topBar">
+                      <ul>
+                          
+                        <ul>
+                            <li style="width:988px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    
+                                </table>
+                            </li>
+                        </ul>
+                        
+                      </ul>
+                   </div>
+                </div>
+                <!-- topBar End -->
+                <!-- navigation Begin -->
+                <div class="nav">
+                   <div class="navOut">
+                     <nav role="navigation">
+                         <ul>
+                             <li class="logo"><a href="/dovePay/index.jsp"><img alt="dovePay首页" src="/dovePay/images/dovePay2.0/logo_dovePay_298x71.png"></a></li>
+                             <li class=" dropdown ">    
+                               <a href="/dovePay/default.jsp" aria-expanded="false">行业解决方案</a>
+                               <ul class="ul1">
+                                  <li class="title">
+                                      <ul class="ulw1">
+                                      <li><a href="/dovePay/default.jsp#normalPay" tabindex="-1" class="head"><span>&diams;&nbsp;行业通用支付应用</span></a></li>
+                                      <li><a href="/dovePay/default.jsp#normalPay" tabindex="-1">航空公司</a></li>
+                                      <li><a href="/dovePay/default.jsp#normalPay" tabindex="-1">票务平台</a></li>
+                                      <li><a href="/dovePay/default.jsp#normalPay" tabindex="-1">机票代理</a></li>
+                                      </ul>
+                                  </li>
+                                  <li class="title">
+                                      <ul class="ulw1">
+                                      <li><a href="/dovePay/default.jsp#proPay" tabindex="-1" class="head"><span>&diams;&nbsp;专属领域支付应用</span></a></li>
+                                      <li><a href="/dovePay/default.jsp#proPay" tabindex="-1">BSP在线支付平台</a></li>
+                                      <li><a href="/dovePay/default.jsp#proPay" tabindex="-1">机票数据服务</a></li>
+                                      <li><a href="/dovePay/default.jsp#proPay" tabindex="-1">Agentsky支付服务</a></li>
+                                      <li><a title="点击下载票速通插件" href="https://www.dovepay.com/dovePnrMgr/download/ElectronicTicketFerry.exe" tabindex="-1">票速通插件</a></li>
+                                      </ul>
+                                  </li>
+                              </ul>
+                            </li>
+                            <li class=" dropdown ">
+                              <a href="/dovePay/zfcp.jsp" aria-expanded="false">支付产品</a>
+                              <ul class="ul2">
+                                 <li class="title">
+                                     <ul class="ulw2">
+                                     <li><a href="/dovePay/zfcp.jsp#receivePay" tabindex="-1" class="head"><span>&diams;&nbsp;收款产品</span></a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#receivePay" tabindex="-1">网银支付</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#receivePay" tabindex="-1">快捷/无卡支付</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#receivePay" tabindex="-1">批量代扣</a></li>
+                                     </ul>
+                                 </li>                       
+                                 <li class="title">
+                                     <ul class="ulw2">
+                                     <li><a href="/dovePay/zfcp.jsp#paymentPay" tabindex="-1" class="head"><span>&diams;&nbsp;付款产品</span></a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#paymentPay" tabindex="-1">批量付款</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#paymentPay" tabindex="-1">实时分账</a></li>
+                                     </ul>
+                                 </li>
+                                 <li class="title">
+                                     <ul class="ulw2">
+                                     <li><a href="/dovePay/zfcp.jsp#accountPay" tabindex="-1" class="head"><span>&diams;&nbsp;账户产品</span></a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#accountPay" tabindex="-1">现金账户</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#accountPay" tabindex="-1">业务应用账户</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#accountPay" tabindex="-1">集团账户</a></li>      
+                                     </ul>  
+                                 </li>                    
+                                 <li class="title">
+                                     <ul class="ulw2">
+                                     <li><a href="/dovePay/zfcp.jsp#appreciatePay" tabindex="-1" class="head"><span>&diams;&nbsp;增值产品</span></a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#appreciatePay" tabindex="-1">行业缴费</a></li>
+                                     <li><a href="/dovePay/zfcp.jsp#appreciatePay" tabindex="-1">自动对账</a></li>
+                                     </ul>
+                                 </li>
+                              </ul>
+                            </li>
+                            <li class=" dropdown ">    
+                              <a href="javascript:void(0);" aria-expanded="false">客户服务</a>
+                              <ul class="ul3">
+                                <li class="title">
+                                    <ul class="ulw3">
+                                    <li><a href="/dovePay/new_helpingCenter/helpingCenter.jsp" tabindex="-1">帮助中心</a></li>
+                                    </ul>
+                                </li>
+                              </ul> 
+                            </li>
+                            <li class=" dropdown ">    
+                              <a href="javascript:void(0);" aria-expanded="false">金融服务</a>
+                              <ul class="ul3">
+                                <li class="title">
+                                    <ul class="ulw3">
+                                    <li><a href="http://test.dovepay.com/htbxpt/" target="_blank" tabindex="-1">保险服务</a></li>
+                                    </ul>
+                                </li>
+                              </ul> 
+                            </li>
+                       </ul>
+                       
+                       <div class="navUtilitiesSec">
+                       
+                        &nbsp;
+                       
+                       </div>
+                  </nav>
+                </div>
+              </div>
+            </section>
+    </div>
+</body>
+</html>
+  <div class="blackDotsHeroTop"></div>
+  <div class="payw">
+    <div class="leftpay"
+      style="height: auto; overflow: hidden; padding-bottom: 50px;">
+      
+        <div class="titpy">
+          <img src="/dovePay/images/tit_ddxx.gif"
+            alt="订单信息" width="110" height="43" />
+        </div>
+        <table width="700" height="60" border="1" align="center"
+          cellpadding="1" cellspacing="1" bgcolor="#FFFFFF">
+          <tr>
+            <td align="center" bgcolor="#b6e6fb">商品名称</td>
+            <td align="center" bgcolor="#b6e6fb">商品描述</td>
+            <td align="center" bgcolor="#b6e6fb">订单号</td>
+            <td align="center" bgcolor="#b6e6fb">金额(元)</td>
+            <td align="center" bgcolor="#b6e6fb">下单时间</td>
+            <td align="center" bgcolor="#b6e6fb">备注信息</td>
+          </tr>
+          <tr>
+            <td align="center" bgcolor="#e4f4fc">YiZhanShi</td>
+            <td align="center" bgcolor="#e4f4fc">Ticket</td>
+            <td align="center" bgcolor="#e4f4fc">ZF20221108100115119</td>
+            <td align="center" bgcolor="#e4f4fc">
+              50.00 
+            </td>
+            <td align="center" bgcolor="#e4f4fc">
+              2022年11月08日 
+            </td>
+            <td align="center" bgcolor="#e4f4fc" id="zhangjie">
+               ext1 
+            </td>
+          </tr>
+        </table>
+        <br />
+        
+<div class="titpy clear search-condition-boxHd">
+  
+    <a class="search-condition-nav" title="账户支付" onclick="showZH()" href="javascript:;">账户支付</a> 
+  
+  
+    <a class="search-condition-nav" title="网银支付" onclick="showWZH()" href="javascript:;">网银支付</a>
+  
+  
+    <a class="search-condition-nav" title="微信扫码支付" onclick="showWECHAT()" href="javascript:;">微信扫码支付</a>
+  
+  
+    <a class="search-condition-nav" title="支付宝扫码支付" onclick="showALI()" href="javascript:;">支付宝扫码支付</a>
+  
+  
+    <a class="search-condition-nav" title="MASTER外卡支付" onclick="showMaster()" href="javascript:;">国际信用卡支付(IC PAY)</a>
+  
+  
+    <a class="search-condition-nav" title="联名卡支付" onclick="showVirtualCard()" href="javascript:;">联名卡支付</a>
+  
+  
+</div>
+        <!-- 账户、网银、支付宝、微信,国际信用卡，银联卡支付  -->
+        
+
+
+    
+    
+<script language="javascript" src="/dovePay/js/PassGuardCtrl.js"></script>
+<script language="javascript" src="/dovePay/js/crypto-js.js"></script>
+<script language="javascript" src="/dovePay/js/thickbox.js"></script>
+<script language="javascript" src="/dovePay/js/password.js"></script>
+<script type="text/javascript">
+$(function(){
+  createpassword1();
+});
+
+function FormSubmit(){  
+  //风控指纹采集
+    var deviceFinger = model.dfp.getDeviceFinger();
+    document.getElementById("deviceFinger").value = deviceFinger;
+    var deviceToken = model.dfp.getDeviceToken();
+    document.getElementById("deviceToken").value = deviceToken;
+    
+  var userId = document.getElementById("userId").value;
+  if(userId==""){
+    alert("用户名不能为空");
+    return false;
+  }
+  document.getElementById("formButtonId").disabled=true;
+  window.setTimeout("f1();", 3000 );
+
+  if(pgeditoraccount.pwdValid()==1){
+    alert("密码不符合要求");
+     _$("_ocx_passwordaccount").focus();
+     return false;
+  }   
+  if(pgeditoraccount.pwdLength()==0){
+       alert("密码不能为空");
+     _$("_ocx_passwordaccount").focus();
+     return false;
+  }
+  
+  $.ajax({
+    url: "/dovePay/srand_num.jsp?" + get_time(),
+    type : "GET",
+    async : false,
+    success : function(srand_num) {
+      pgeditoraccount.pwdSetSk(srand_num);
+    }
+  });
+
+  var PwdResult = pgeditoraccount.pwdResultSMGM();
+  _$("password").value = PwdResult;//获得密码密文,赋值给表单
+  var macResult = pgeditoraccount.machineNetwork();
+  _$("macNumber").value = macResult;
+  document.payForm.submit();
+}
+</script>
+
+
+
+
+  <form class="payForm" id="zhPay" action="/dovePay/payAction.do" name="payForm" method="post" >
+    <input type="hidden" name="orderId" value="2022110800454747" /> 
+    <input type="hidden" name="isBlRepay" value="0" /> 
+    <input type="hidden" name="m" value="login" />
+    <input type="hidden" id="macNumber" name="macNumber" value="" />
+    <input type="hidden" id="SAFE_PLUGIN_LOGIN_PASSWORD" name="SAFE_PLUGIN_LOGIN_PASSWORD" />
+    <input type="hidden" name="token" value="1667872830416" />
+    <input type="hidden" name="deviceToken" id="deviceToken" /> 
+    <input type="hidden" name="deviceFinger" id="deviceFinger" /> 
+    <div class="pay_iput" style="height: auto; overflow: hiddenq; text-align: center">
+      <table cellpadding="0" cellspacing="0" border="0" width="500" align="center">
+        <tr>
+          <td align="right" height="35">账户登录名：</td>
+          <td align="left" width="160"><input name="userId" id="userId" type="text" value="" onblur="checkForm()" /></td>
+          <td width="185"></td>
+        </tr>
+        <tr>
+          <td align="right" height="35" valign="middle">交易密码：&nbsp;</td>
+          <td align="left">&nbsp;
+            <span id="_ocx_password_account_str"></span>
+            
+            <script type="text/javascript">
+              
+                  function createpassword1(){
+                    var random , datab;
+                      //请求通讯加密两个参数(随机数pgeRZRandNum和数据B pgeRZDataB)
+                      Ajax.request({
+                          url : "/dovePay/skey_enstr.jsp?" + get_time(),
+                          type :"GET",
+                          async : false,
+                          success : function(xhr){
+                              var skey_enstr = pgeCtrl.trim(xhr.responseText);
+                              var o = skey_enstr.split(",");
+                              random = o[0];
+                              datab = o[1];
+                          }
+                      });
+                      //new 控件对象
+                      window.pgeditoraccount = new pge({
+                          pgePath : "/dovePay/ocx/",
+                          pgeId : "_ocx_passwordaccount",//控件id
+                          pgeEditType : 0,//控件显示类型,0(星号),1(明文)
+                          pgeEreg1 : "[\\s\\S]*",//输入过程中字符类型限制，如"[0-9]*"表示只能输入数字
+                          pgeEreg2 : "[\\s\\S]{6,20}",//输入完毕后字符类型判断条件，与pgeditor.pwdValid()方法对应
+                          pgeMaxLength : 20,//允许最大输入长度
+                          pgeTabIndex : 1,//tab键顺序
+                          pgeClass : "ocx_style",//控件css样式
+                          pgeInstallClass : "ocx_style",//针对安装或升级的css样式
+                          pgeOnKeyDown :"FormSubmit()",//回车键响应函数，需焦点在控件中才能响应
+                          tabCallBack : "input2",//火狐tab键回调函数,设置要跳转到的对象ID
+                          AffineX:getPasswordAffineX(),
+                          AffineY:getPasswordAffineY(),
+                          pgeWindowID : "password" + new Date().getTime() + 1,
+                          pgeRZRandNum : random,
+                          pgeRZDataB : datab
+                          
+                      });
+
+                      //定义公共对象
+                      window.pgeCtrl = pgeditoraccount;
+                      //绘制控件标签
+                      pgeCtrl.pwdhtml("_ocx_password_account_str",pgeditoraccount.load());
+                      //初始化
+                      pgeInit();
+                  }
+                    
+                  /**
+                    * 银联无卡快捷支付页确认支付按钮
+                    * @returns {Boolean}
+                    */
+                   function quickConfirmPayunionpay(){
+                    var ObjValue= document.getElementById("accountChoose");
+                    if(ObjValue!=null && ObjValue.checked){
+                      $('#isTogether').val("1");
+                    }
+                    $('#payUserBank_m').val('quickPayment');
+                    $('#payUserBank_m1').val('quickPayment');
+
+                    if(pgeditorunionpay.pwdValid()==1){
+                      alert("密码不符合要求");
+                       _$("_ocx_passwordunionpay").focus();
+                       return false;
+                    }   
+                    if(pgeditorunionpay.pwdLength()==0){
+                         alert("密码不能为空");
+                       _$("_ocx_passwordunionpay").focus();
+                       return false;
+                    }
+                    
+                    $.ajax({
+                      url: "/dovePay/srand_num.jsp?"+get_time(),
+                      type: "GET",
+                      async: false,
+                      success: function(srand_num){
+                        pgeditoSMnionpay.pwdSetSk(srand_num);
+                      }
+                     });
+
+                    var PwdResult=pgeditorunionpay.pwdResultSMGM();
+                    _$("password").value=PwdResult;//获得密码密文,赋值给表单
+                    var macResult = pgeditor.machineNetwork();
+                    _$("macNumber").value = macResult;
+                    //提交form
+                    document.payUserBank.submit();
+                   }
+            </script>
+                
+            <input type="hidden" name="password" id="password" value="" />
+          </td>
+          <td align="right" height="35" valign="middle"><span class="tips">&nbsp;如忘记密码，请联系客服！</span></td>
+          
+        </tr>
+        
+        <tr>
+          <td align="center" colspan="3" height="35">
+            <input type="button"  id="formButtonId"  value="提交" class="botton" onclick="FormSubmit();" /> 
+            <input type="reset"  value="重置" class="botton" />
+          </td>
+        </tr>
+        <tr>
+          <td id="errLi1" style="text-align:right; font-weight:bold; display: none">&nbsp;</td>
+          <td id="errLi2"  style="display: none">
+            <span class="redab" id="errMsg">
+              
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+
+<!--id="zhPay"  账户 -->
+        
+
+
+<script language="javascript" src="/dovePay/js/PassGuardCtrl.js"></script>
+<script language="javascript" src="/dovePay/js/crypto-js.js"></script>
+<script language="javascript" src="/dovePay/js/thickbox.js"></script>
+<script type="text/javascript">
+$(function(){
+  createpasswordVC();
+});
+
+function get_time(){
+return new Date().getTime();
+}
+function _$(v){
+  return document.getElementById(v);
+}
+
+function FormSubmitVC(){  
+  //风控指纹采集
+  var deviceFinger = model.dfp.getDeviceFinger();
+  document.getElementById("deviceFingerId").value = deviceFinger;
+  var deviceToken = model.dfp.getDeviceToken();
+  document.getElementById("deviceTokenId").value = deviceToken;
+    
+  var userId = document.payFormVC.userId.value;
+  if(userId==""){
+    alert("用户名不能为空");
+    return false;
+  }
+  document.getElementById("formButtonVCId").disabled=true;
+  window.setTimeout("f1();", 3000 );
+  if(pgeditoraccountVC.pwdValid()==1){
+    alert("密码不符合要求");
+     _$("_ocx_passwordaccountVC").focus();
+     return false;
+  }   
+  if(pgeditoraccountVC.pwdLength()==0){
+       alert("密码不能为空");
+     _$("_ocx_passwordaccountVC").focus();
+     return false;
+  }
+  
+  $.ajax({
+    url: "/dovePay/srand_num.jsp?" + get_time(),
+    type : "GET",
+    async : false,
+    success : function(srand_num) {
+      pgeditoraccountVC.pwdSetSk(srand_num);
+    }
+  });
+
+  var PwdResult = pgeditoraccountVC.pwdResultSMGM();
+  document.getElementById("passwordVcId").value= PwdResult;;//获得密码密文,赋值给表单
+  var macResult = pgeditoraccountVC.machineNetwork();
+  document.getElementById("macNumberId").value= macResult;
+  
+  document.payFormVC.submit();
+}
+</script>
+
+
+<div id="vcPay"  style="display: none;" align="center">
+  <form class="payForm"  action="/dovePay/payAction.do" name="payFormVC" method="post" >
+    <input type="hidden" name="orderId" value="2022110800454747" /> 
+    <input type="hidden" name="m" value="virtualCardPay" />
+    <input type="hidden" id="macNumberId" name="macNumberVC" value="" />
+    <input type="hidden" id="SAFE_PLUGIN_LOGIN_PASSWORD" name="SAFE_PLUGIN_LOGIN_PASSWORD" />
+    <input type="hidden" name="token" value="1667872830416" />
+    <input type="hidden" name="deviceToken" id="deviceTokenId" /> 
+    <input type="hidden" name="deviceFinger" id="deviceFingerId" /> 
+    <div class="pay_iput" style="height: auto; overflow: hiddenq; text-align: center">
+      <table cellpadding="0" cellspacing="0" border="0" width="500" align="center">
+        <tr>
+          <td align="right" height="35">联名卡号：</td>
+          <td align="left" width="160"><input name="bankId" type="text" value="" onblur="checkFormVCBankId()"  /></td>
+          <td width="185"></td>
+        </tr>
+        <tr>
+          <td align="right" height="35">账户登录名：</td>
+          <td align="left" width="160"><input name="userId" type="text" value=""  /></td>
+          <td width="185"></td>
+        </tr>
+        <tr>
+          <td align="right" height="35" valign="middle">交易密码：&nbsp;</td>
+          <td align="left">&nbsp;
+            <span id="spanId"></span>
+            <script type="text/javascript">
+            //密码控件
+            function createpasswordVC(){
+              var random , datab;
+                //请求通讯加密两个参数(随机数pgeRZRandNum和数据B pgeRZDataB)
+                Ajax.request({
+                    url : "/dovePay/skey_enstr.jsp?" + get_time(),
+                    type :"GET",
+                    async : false,
+                    success : function(xhr){
+                        var skey_enstr = pgeCtrl.trim(xhr.responseText);
+                        var o = skey_enstr.split(",");
+                        random = o[0];
+                        datab = o[1];
+                    }
+                });
+                //new 控件对象
+                window.pgeditoraccountVC = new pge({
+                    pgePath : "/dovePay/ocx/",
+                    pgeId : "_ocx_passwordaccountVC",//控件id
+                    pgeEditType : 0,//控件显示类型,0(星号),1(明文)
+                    pgeEreg1 : "[\\s\\S]*",//输入过程中字符类型限制，如"[0-9]*"表示只能输入数字
+                    pgeEreg2 : "[\\s\\S]{6,20}",//输入完毕后字符类型判断条件，与pgeditor.pwdValid()方法对应
+                    pgeMaxLength : 20,//允许最大输入长度
+                    pgeTabIndex : 1,//tab键顺序
+                    pgeClass : "ocx_style",//控件css样式
+                    pgeInstallClass : "ocx_style",//针对安装或升级的css样式
+                    pgeOnKeyDown :"FormSubmitVC()",//回车键响应函数，需焦点在控件中才能响应
+                    tabCallBack : "input2",//火狐tab键回调函数,设置要跳转到的对象ID
+                    AffineX:getPasswordAffineX(),
+                    AffineY:getPasswordAffineY(),
+                    pgeWindowID : "passwordVC" + new Date().getTime() + 1,
+                    pgeRZRandNum : random,
+                    pgeRZDataB : datab
+                });
+                //定义公共对象
+                window.pgeCtrl = pgeditoraccountVC;
+                //绘制控件标签
+                pgeCtrl.pwdhtml("spanId",pgeditoraccountVC.load());
+                //初始化
+                pgeInit();
+            } 
+            </script>
+            <input type="hidden" name="passwordVC" id="passwordVcId" value="" />
+          </td>
+          <td align="right" height="35" valign="middle"><span class="tips">&nbsp;请输入账户交易密码，非银联卡密码！</span></td>
+          
+        </tr>
+        
+        <tr>
+          <td align="center" colspan="3" height="35">
+            <input type="button" id="formButtonVCId"  value="提交" class="botton" onclick="FormSubmitVC();" /> 
+            <input type="reset"  value="重置" class="botton" />
+          </td>
+        </tr>
+        <tr>
+          <td id="errLiVC1" style="text-align:right; font-weight:bold; display: none">&nbsp;</td>
+          <td id="errLiVC2"  style="display: none">
+            <span class="redab" id="errMsgVC">
+              
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</div>
+
+<!-- id="vcPay"  银联卡支付-->
+        
+
+
+
+  <div id="wzhPay"  style="display: none;">
+    <div class="titpy" style="height:auto; padding-bottom: 5px;">
+      
+
+
+
+
+
+
+
+<tr>
+  <td><!-- <img src="images/tit_yhxz.gif" alt="银行信息" width="110" height="43"/> --> <span style="color:#F4A460">请选择支付方式 :　　</span></td>
+  <td>
+    <label>
+      
+      <input type="radio" name='checkstandWay' value="payTitle_2" 
+        onclick="changeStyle();" style="border: 0px;"/>个人网银
+      
+      <input type="radio" name='checkstandWay' value="payTitle_3" 
+        onclick="changeStyle();" style="border: 0px;"/>企业网银
+      
+    </label> 
+  </td>
+</tr>
+    </div>
+    <form class="payForm" action="/dovePay/payAction.do" method="post" name="payUserBank" id='payUserBank' onsubmit="return checkBankId();">
+      <input type="hidden" name="orderId" value="2022110800454747" />
+      <input type="hidden" id='payUserBank_m' name="m" value="confirmPayType" /> 
+      <input type="hidden" id="creditType" name="creditType" value="0" /> 
+      <input type="hidden" id="payType" name="payType" value="2" /> 
+      <input type="hidden" id="SAFE_PLUGIN_LOGIN_PASSWORD" name="SAFE_PLUGIN_LOGIN_PASSWORD" /> 
+      <input type="hidden" name="token" value="1667872830427" />
+      
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="x-ua-compatible" content="ie=7" />
+<script type="text/javascript" src="/dovePay/js/jquery.DatePicker.min.js"></script>
+<script type="text/javascript" src="/dovePay/js/CheckstandBanks.js"></script>
+<script language="javascript" src="/dovePay/js/PassGuardCtrl.js"></script>
+<script language="javascript" src="/dovePay/js/crypto-js.js"></script>
+<script language="javascript" src="/dovePay/js/thickbox.js"></script>
+<script language="javascript" src="/dovePay/js/password.js"></script>
+<style>
+  .payOl{
+    margin:1.6em 0;
+    padding:0;
+  }
+  .bankTable{
+    margin-top:5px;
+    width:100%;
+  }
+  .bankTable span{
+    display: block;
+    float: left;
+    height: 50px;
+    padding: 10px 30px 0 30px;
+  }
+  .bankTable span input, .bankTable span img { vertical-align: middle;}
+</style>
+<script>
+function popUp() {
+  showModalDialog('/dovePay/xieyi.jsp','德付通快捷支付服务协议-法审','dialogWidth:600px;dialogHeight:300px;center: yes;help:yes;resizable:yes;status:yes;unadornen:yes') ;
+}
+
+function setLineBank(){
+  var payUserBank_m1= document.getElementById("payUserBank_m1");
+  if(payUserBank_m1){
+    document.getElementById("payUserBank_m1").value="confirmPayType";
+  }
+  if(checkBankId()){
+    document.payUserBank.submit();
+  }
+}
+
+
+//删除卡弹出交易密码框
+function openwindow(cardId,buyorderId,iWidth,iHeight){  
+  // url 转向网页的地址  
+  // name 网页名称，可为空  
+  // iWidth 弹出窗口的宽度  
+  // iHeight 弹出窗口的高度  
+  //window.screen.height获得屏幕的高，window.screen.width获得屏幕的宽  
+  var iTop = (window.screen.height-30-iHeight)/2; //获得窗口的垂直位置;  
+  var iLeft = (window.screen.width-10-iWidth)/2; //获得窗口的水平位置;  
+  window.open("/dovePay/verifyTransactionPassword.jsp?cardId="+cardId+"&buyorderId="+buyorderId,"",'height='+iHeight+',innerHeight='+iHeight+',width='+iWidth+',innerWidth='+iWidth+',top='+iTop+',left='+iLeft+',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');  
+} 
+
+// 解约银行卡
+function unbind(cardId,buyorderId){
+  $.ajax({
+    type : 'POST',
+    url : $('#payAction').val(),
+    data : {
+      m : 'deleteCard',
+      cardId : cardId,
+      buyorderId : buyorderId,
+      checkstandWay : 'unionpayNocard'
+    },
+    dataType : 'text',
+    cache : false,
+    async : false,// 设成同步
+    success : function(data, textStatus, jqXHR) {
+      // 3. 刷新当前界面
+      // history.go(0);
+      $('#spanunionpay_' + cardId).remove();
+      // 4. 隐藏显示的div
+      $('#quickConfirmDivunionpay').hide();
+      return true;
+    },
+    error : function(data, textStatus, jqXHR) {
+      data = eval("(" + data + ")");
+      alert(data.msg);
+      return false;
+    }
+  });
+}
+
+function validDateTr() {
+  var val = jQuery("#fastCardDateTr").val();
+  if(val == "")
+    val = null;
+  
+  if ($("#fastCardDatep").is(":visible")==true && val == null) {
+    jQuery("#fastCardDateErr").html("有效期不能为空");
+    return false;
+  }
+  jQuery("#fastCardDateErr").html("");
+  return true;
+}
+  $(function() {
+    var fcd = document.getElementById("fastCardDateTr");
+    //IE 按Backspace 页面回退bug 
+    fcd.onkeydown = function(event) {
+      e = event ? event : (window.event ? window.event : null);
+      if (e.keyCode == 8) {
+        return false;
+      }
+    };
+    $("#fastCardDateTr").datePicker({
+      followOffset : [ 0, 24 ],
+      altFormat : 'yy-mm',
+      minDate : new Date(),
+      showMode : 1,
+      onselect : function(date, formatDate) {
+        fcd.readOnly = false;
+        fcd.value = formatDate;
+        fcd.readOnly = true;
+      }
+    });
+
+    $('#fastCardDateTr').blur(validDateTr);
+
+  });
+</script>
+<input type="hidden" id='payAction' value='/dovePay/payAction.do' />
+<input type="hidden" id='creditCardPayMent' value='/dovePay/creditCardPayMentAction.do' />
+
+  <input type="hidden" id='torderId' value='2022110800454747' />
+  <input type="hidden" id='storeId' value='m0' />
+  <input type="hidden" id='ext3' value='null' />
+  <input type="hidden" id='buyorderId' value='null' />
+
+<ol class="yui-nav2 SelectBank clearfix line_h36" id="payInput_13" style="display: none">
+  <table class="bankChoice" border="0" align="center" cellpadding="0" cellspacing="0" style="text-align: left;margin-top: 5px; width: 540px;">
+  <tr>
+    <td height="60" valign="top" class="blank">
+
+        <span>
+          <input type="radio" name="bankId" value="NUCCDCCCB|dove|NUCCDCCCB|13"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/NUCCDCCCB.jpg" title="中国建设银行" style="border: 1px solid #66CCCC;" alt="中国建设银行" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="unionpayNOCARDBCCB|dove|unionpayNOCARDBCCB|13"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpayNOCARDBCCB.jpg" title="北京银行-银联无卡快捷" style="border: 1px solid #66CCCC;" alt="北京银行-银联无卡快捷" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="unionpayNOCARDICBC|dove|unionpayNOCARDICBC|13"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpayNOCARDICBC.jpg" title="工商银行" style="border: 1px solid #66CCCC;" alt="工商银行" />
+        </span>
+
+    </td>
+  </tr>
+</table>
+<div class="til_iput">
+  <input type="button" name="button" value="提交" onclick="setLineBank();" class="botton"  style="margin:0 auto;display:block" />
+</div>
+</ol>
+
+<ol class="yui-nav2 SelectBank clearfix line_h36" id="payInput_2" style="display: none">
+  <table class="bankChoice" border="0" align="center" cellpadding="0" cellspacing="0" style="text-align: left;margin-top: 5px; width: 540px;">
+  <tr>
+    <td height="60" valign="top" class="blank">
+
+        <span>
+          <input type="radio" name="bankId" value="unionpayTokenCredit|dove|unionpayTokenCredit|2"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpayTokenCredit.jpg" title="银联Token支付-贷记" style="border: 1px solid #66CCCC;" alt="银联Token支付-贷记" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="RXTICBC|HXB_RXTKH|RXTICBC|2"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/RXTICBC.jpg" title="工商银行-02" style="border: 1px solid #66CCCC;" alt="工商银行-02" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="unionpaywgB2CCCBCREDIT|unionpaywgB2C|CCB|2"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpaywgB2CCCBCREDIT.jpg" title="建设银行-贷记卡-银联网关个人版" style="border: 1px solid #66CCCC;" alt="建设银行-贷记卡-银联网关个人版" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="unionpayTokenDebit|dove|unionpayTokenDebit|2"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpayTokenDebit.jpg" title="银联token支付-借记" style="border: 1px solid #66CCCC;" alt="银联token支付-借记" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="RXTCMB|HXB_RXTKH|RXTCMB|2"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/RXTCMB.jpg" title="招商银行-02" style="border: 1px solid #66CCCC;" alt="招商银行-02" />
+        </span>
+
+    </td>
+  </tr>
+</table>
+<div class="til_iput">
+  <input type="button" name="button" value="提交" onclick="setLineBank();" class="botton"  style="margin:0 auto;display:block" />
+</div>
+</ol>
+
+<ol class="yui-nav2 SelectBank clearfix line_h36" id="payInput_3" style="display: none">
+  <table class="bankChoice" border="0" align="center" cellpadding="0" cellspacing="0" style="text-align: left;margin-top: 5px; width: 540px;">
+  <tr>
+    <td height="60" valign="top" class="blank">
+
+        <span>
+          <input type="radio" name="bankId" value="NUCCB2BCMBC|NUCCB2B|CMBC|3"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/NUCCB2BCMBC.jpg" title="中国民生银行-网联" style="border: 1px solid #66CCCC;" alt="中国民生银行-网联" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="CMBCHINA2B2B|dove|CMBCHINA2B2B|3"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/CMBCHINA2B2B.jpg" title="招商银行企业银行" style="border: 1px solid #66CCCC;" alt="招商银行企业银行" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="BOCB2B|dove|BOCB2B|3"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/BOCB2B.jpg" title="中国银行企业版" style="border: 1px solid #66CCCC;" alt="中国银行企业版" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="unionpaywgB2BCCB|unionpaywgB2B|CCB|3"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/unionpaywgB2BCCB.jpg" title="建设银行-银联网关-企业版" style="border: 1px solid #66CCCC;" alt="建设银行-银联网关-企业版" />
+        </span>
+
+        <span>
+          <input type="radio" name="bankId" value="NUCCB2BICBC|NUCCB2B|ICBC|3"  style="border: 0px; margin: 5px 0px; width: 15px;"/>
+          <img src="/dovePay/images/bank/NUCCB2BICBC.jpg" title="中国工商银行-网联" style="border: 1px solid #66CCCC;" alt="中国工商银行-网联" />
+        </span>
+
+    </td>
+  </tr>
+</table>
+<div class="til_iput">
+  <input type="button" name="button" value="提交" onclick="setLineBank();" class="botton"  style="margin:0 auto;display:block" />
+</div>
+</ol>
+
+
+    </form>
+  </div>
+
+        
+
+
+
+  <div id="aliPay"  style="display: none;" align="center">
+    <form class="payForm" action="/dovePay/aLIUnionPayQrCodeAction.do" method="post" onsubmit="" >
+      <input type="hidden" name="orderId" value="2022110800454747" />
+      <input type="hidden"  name="m" value="getAggregateQRCode" /> 
+      <br/>
+      <input type="radio" name="bankId" value="UNIONALIPAYWEB" />
+      <img src="/dovePay/images/alipay.png"  height="100" width="200" style="border: 1px solid #66CCCC;"/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <input type="submit" value="提交" class="botton"  style="margin:0 auto;display:block" />
+    </form>
+  </div>
+<!-- id="AliPay" 支付宝-->
+        
+
+
+
+  <div id="wechatPay"  style="display: none;" align="center">
+    <form class="payForm" action="/dovePay/wXUnionPayQrCodeAction.do" method="post"  onsubmit="">
+        <input type="hidden" name="orderId" value="2022110800454747" />
+      <input type="hidden"  name="m" value="getAggregateQRCode" /> 
+      <br/>
+      <input type="radio" name="bankId" value="UNIONWECHATPAYJSAPI" />
+      <img src="/dovePay/images/wechatpay.png" height="100" width="200" style="border: 1px solid #66CCCC;"/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <input type="submit" value="提交" class="botton"  style="margin:0 auto;display:block" />
+    </form>
+  </div>
+<!--id="wechatPay"   微信-->
+        
+
+    <div id="masterPay"  style="display: none;" align="center">
+        <form class="payForm" action="/dovePay/payAction.do" method="post"
+              onsubmit="return checkCard();">
+            <input type="hidden" name="orderId" id="orderId" value="2022110800454747"/>
+            <input type="hidden" name="m" value="masterPay"/>
+            <input type="hidden" name="browser" id="browser" value=""/>
+            <br/>
+            <table cellpadding="0" cellspacing="0" border="0" width="700" align="center">
+                <tr>
+                    <td align="right" height="35" width="400">货币类型(Currency Type)：</td>
+                    <td align="left" width="160">CNY</td>
+                    <td width="185"></td>
+                </tr>
+                <tr>
+                    <td align="right" height="35"><span style="color:red">*</span>卡号(Card Number)：</td>
+                    <td align="left" width="160">
+                        <input name="cardno" id="cardno" type="text" value="" maxlength="19" minlength="9"
+                               onkeyup="this.value=this.value.replace(/[^\d]/g,'')"/>
+                        <br/>
+                        <span id="cardnomess" style="color: red; font-size: 12px;width:300px;display:block"></span>
+                    </td>
+                    <td width="185"></td>
+                </tr>
+                <tr>
+                    <td align="right" height="35"><span style="color:red">*</span>有效期(Valid Thru)：</td>
+                    <td align="left" width="160"><input name="expiry" id="expiry" type="text" value=""
+                                                        maxlength="5"
+                                                        onkeyup="this.value=this.value.replace(/[^\d]/g,'');expiryDate()"/>
+                        <br/><span id="expirymess" style="color: red; font-size: 12px"></span></td>
+                    <td width="185">(MM/YY)</td>
+                </tr>
+                <tr>
+                    <td align="right" height="35"><span style="color:red">*</span>CVV2：</td>
+                    <td align="left" width="160"><input name="cvvcode" id="cvvcode" type="text" value="" maxlength="4"
+                                                        minlength="3"
+                                                        onkeyup="this.value=this.value.replace(/[^\d]/g,'')"/>
+                        <br/><span id="cvvcodemess" style="color: red; font-size: 12px"></span></td>
+                    <td width="185"><a href="#" onclick="document.getElementById('leftDiv1').style.display = 'block'">
+                        <span style="color:blue">查看样例(Example)</span></a></td>
+                </tr>
+                <tr>
+                    <td colspan="3" height="10"></td>
+                </tr>
+                <tr>
+                    <td align="right"><span style="color: red">注：</span></td>
+                    <td align="left" colspan="2"><span style="color: red">目前仅支持万事达与JCB的外卡支付。</span></td>
+                </tr>
+                <tr>
+                    <td align="right"><span style="color: red">Note：</span></td>
+                    <td align="left" colspan="2"><span style="color: red">Only mastercard and JCB are supported.</span>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <br/>
+            <input type="submit" value="提交支付(Confirm Payment)" id="btsub" class="botton"
+                   style="margin:0 auto;display:block"/>
+        </form>
+        <div id="leftDiv1" class="white_content">
+            <div class='divclose'><span onclick="document.getElementById('leftDiv1').style.display='none'">
+                            关闭</span></div>
+            <img src="/dovePay/images/cvv2.jpg" height="100" width="200"/>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    function expiryDate() {
+        var expiry = $("#expiry").val();
+        if (expiry.length < 2) {
+            expiry = expiry.replace(/[^\d]/g, '');
+        }
+        if (expiry.length >= 2 && expiry.indexOf("/") == -1) {
+            expiry = expiry.substr(0, 2) + "/" + expiry.substr(2);
+        }
+        if (expiry.length > 3) {
+            var yy = expiry.substr(3);
+            if (yy.indexOf("/") != -1) {
+                yy = expiry.replace(/[^\d]/g, '');
+                expiry = expiry.substr(0, 3) + yy;
+            }
+        }
+        $("#expiry").val(expiry);
+    }
+
+    function checkCard() {
+        document.getElementById("cardnomess").innerText = "";
+        document.getElementById("expirymess").innerText = "";
+        document.getElementById("cvvcodemess").innerText = "";
+        var check = /^[0-9]{9,19}$/;
+        var cardno = $("#cardno").val();
+        if (!check.test(cardno)) {
+            document.getElementById("cardnomess").innerText = "请输入卡号(Please enter the card number)";
+            /*             document.getElementById("cardnomess").innerText = "卡号格式为9-19位的整数!"; */
+            return false;
+        }
+        var check2 = /^\d{2}\/\d{2}$/;
+        var expiry = $("#expiry").val();
+        if (!check2.test(expiry)) {
+            document.getElementById("expirymess").innerText = "请输入有效期(Please enter the Valid Thru)";
+            /*             document.getElementById("expirymess").innerText = "有效期格式为MM/YY的整数!"; */
+            return false;
+        }
+        var check3 = /^[0-9]{3,4}$/;
+        var cvvcode = $("#cvvcode").val();
+        if (!check3.test(cvvcode)) {
+            document.getElementById("cvvcodemess").innerText = "请输入CVV2(Please enter the CVV2)";
+            /*             document.getElementById("cvvcodemess").innerText = "卡号格式为3-4位的整数!"; */
+            return false;
+        }
+        var brows = getBrowserInfo();
+        $("#browser").val(brows.browser);
+        //因3DS接口缓慢,需添加遮罩提示用户
+        loading();
+    }
+
+    function loading() {
+        var mask_bg = document.createElement("div");
+        mask_bg.id = "mask_bg";
+        mask_bg.style.position = "absolute";
+        mask_bg.style.top = "0px";
+        mask_bg.style.left = "0px";
+        mask_bg.style.width = "100%";
+        mask_bg.style.height = "100%";
+        mask_bg.style.backgroundColor = "#777";
+        mask_bg.style.opacity = 0.6;
+        mask_bg.style.zIndex = 10001;
+        document.body.appendChild(mask_bg);
+
+        var mask_msg = document.createElement("div");
+        mask_msg.style.position = "absolute";
+        mask_msg.style.top = "35%";
+        mask_msg.style.left = "42%";
+        mask_msg.style.backgroundColor = "white";
+        mask_msg.style.border = "#336699 1px solid";
+        mask_msg.style.textAlign = "center";
+        mask_msg.style.fontSize = "1.1em";
+        mask_msg.style.fontWeight = "bold";
+        mask_msg.style.padding = "0.5em 3em 0.5em 3em";
+        mask_msg.style.zIndex = 10002;
+        mask_msg.innerText = "正在进行3DS验证,请稍候...";
+        mask_bg.appendChild(mask_msg);
+    }
+
+
+    function getBrowserInfo() {
+        var Sys = {};
+        var ua = navigator.userAgent.toLowerCase();
+
+        var re = /(msie|firefox|chrome|opera|version).*?([\d.]+)/;
+        var m = ua.match(re);
+        if (m == null && ua.indexOf("rv:11") > -1) {
+            Sys.browser = "msie";
+            Sys.ver = "11.X";
+        } else if (m == null && ua.indexOf("rv:11") < 0) {
+            Sys.browser = "other";
+            Sys.ver = "未知";
+        } else {
+
+            Sys.browser = m[1].replace(/version/, "safari");
+            Sys.ver = m[2];
+        }
+        return Sys;
+    }
+</script>
+<style type="text/css">
+    .white_content {
+        display: none;
+        position: absolute;
+        top: 65%;
+        left: 52%;
+        background-color: white;
+        z-index: 1000;
+        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+
+    .divclose {
+        position: absolute;
+        top: 1px;
+        right: 1px;
+    }
+
+    #btsub { /* 按钮美化 */
+        width: 170px; /* 宽度 */
+        height: 40px; /* 高度 */
+        border-width: 0px; /* 边框宽度 */
+        border-radius: 5px; /* 边框半径 */
+        background: #483D8B; /* 背景颜色 */
+        cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+        outline: none; /* 不显示轮廓线 */
+        font-family: Microsoft YaHei; /* 设置字体 */
+        color: white; /* 字体颜色 */
+        font-size: 12px; /* 字体大小 */
+    }
+
+    #btsub:hover { /* 鼠标移入按钮范围时改变颜色 */
+        background: #5599FF;
+    }
+
+
+</style><!-- id="masterPay"  国际信用卡-->
+
+      
+      
+    </div>
+
+    <div class="rightpay" style="height: auto">
+      <span><img
+        src="/dovePay/images/helphot.gif" alt="在线客服"
+        width="224" height="117" /></span>
+      <div class="helptext">
+        <ul>
+          <li class="titb">&nbsp;<b style="color: #253d83;"><a
+              href="/dovePay/protected/notice/noticeAction.do?m=getAllNoticeList">公告</a></b></li>
+          <li><a href="#"></a></li>
+          
+          <li>&middot; <a
+            href="/dovePay/protected/notice/noticeAction.do?m=getNoticeDetail&ID=NT20220802151246"
+            target="_blank">789789 </a>
+          </li>
+          
+          <li>&middot; <a
+            href="/dovePay/protected/notice/noticeAction.do?m=getNoticeDetail&ID=NT20220802151112"
+            target="_blank">12312312 </a>
+          </li>
+          
+          <li>&middot; <a
+            href="/dovePay/protected/notice/noticeAction.do?m=getNoticeDetail&ID=NT20220802150410"
+            target="_blank">test2 </a>
+          </li>
+          
+          <li>&middot; <a
+            href="/dovePay/protected/notice/noticeAction.do?m=getNoticeDetail&ID=NT20220802145145"
+            target="_blank">test </a>
+          </li>
+          
+          <li>&middot; <a
+            href="/dovePay/protected/notice/noticeAction.do?m=getNoticeDetail&ID=NT20181105143200"
+            target="_blank">1212 </a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+    <div class="cb"></div>
+  </div>
+  
+
+<section role="contentinfo" id="gblMarketingFooter">
+  <div class="utility">
+    <div class="footerNav"> 
+      <nav>
+        <ul>
+          <li><a href="/dovePay/aboutUs.jsp" target="_parent">关于我们</a></li>
+          <li><a href="/dovePay/newsCenter.jsp" target="_parent">资讯中心</a></li>
+          <li><a href="/dovePay/partner.jsp" target="_parent">合作伙伴</a></li>
+          <li><a href="/dovePay/safeCenter.jsp" target="_parent">安全中心</a></li>
+          <li><a href="/dovePay/connectUs.jsp" target="_parent">联系我们</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <!--footer menu END-->
+  <!--footer content-->
+  <div class="shadowLine"></div>
+  <div class="footer">
+    <!--copyright-->
+    <div class="footerCopy padding2 clearfix">
+      <div class="legal w600 bc">
+            <img class="copyright" alt="中国航信"
+                src="/dovePay/images/dovePay2.0/logo_travelsky_84x44.png">
+            <div class="fl">
+                <p class="copyright">Copyright @ 2011-<span id="thisYear"></span> 北京亚科技术开发有限责任公司 | 德付通版权所有</p>
+                <p class="copyright">京ICP证111044号 | 京ICP备15054350号-1 | 京公网安备11010502022624</p>
+            </div>
+        </div>
+      <div class="col-contact"> <!-- css:mpp3 head -->
+        <p>客服电话：</p>
+        <p class="phone" id="tele1">010-56896666</p>
+      </div>
+    </div>
+  </div>
+ </section>
+ <script src="/dovePay/js/timerSet.js"></script>
+ <script src="/dovePay/js/displayThisYear.js"></script>
+</body>
+</html>
+

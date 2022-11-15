@@ -26,7 +26,7 @@ export default function(iframe) {
 function rechargeExec(iframe) {
   try {
     buildBankLogoButton(iframe)
-    if (iframe.contentDocument.body.id) {
+    if (iframe.contentDocument.body) {
       const id = iframe.contentDocument.body.id
       if (!rechargeUi[id]) return
       rechargeUi[id].call(this, iframe)

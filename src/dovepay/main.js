@@ -4,6 +4,7 @@ import {hideDropdown} from './functions'
 import {show as mgrShow, hide as mgrHide} from '../dovemgr/functions'
 import overlay from '../dom/loadingOverlay'
 import {adaptContentIframe} from '../dom'
+import {checkBrowser} from '../public/browser'
 
 export default function() {
   try {
@@ -38,18 +39,22 @@ export function setIframeHeight(iframe) {
     return height
   } catch(e) {
     console.error('设置iframe高度失败', e.stack)
-  }
+  }``
 }
 
 export function display(iframe) {
   hideDropdown()
   mgrShow(iframe)
-  overlay('hide')
+  if (checkBrowser.notIE) {
+    overlay('hide')
+  }
 }
 
 function hide(iframe) {
   try {
-    overlay('show', {transparent: true})
+    if (checkBrowser.notIE) {
+      overlay('show', {transparent: true})
+    }
     mgrHide(iframe)
   } catch(e) {
     console.error('隐藏iframe失败', e.stack)    
@@ -58,17 +63,20 @@ function hide(iframe) {
 
 function setSubNav() {
   try {
-    UIkit.util.on('#my_menu div[uk-dropdown]', 'beforeshow', (e) => {
-      const li = e.srcElement.parentElement
-      if (!li) return
-      li.classList.add('active')
-    })
-    UIkit.util.on('#my_menu div[uk-dropdown]', 'hidden', (e) => {
-      const li = e.srcElement.parentElement
-      if (!li) return
-      li.classList.remove('active')
-    })
+    if (checkBrowser.isIE) return
+    UIkit.util.on('#my_menu div[uk-dropdown]', 'beforeshow', setActiveStyle)
+    UIkit.util.on('#my_menu div[uk-dropdown]', 'hidden', removeActiveStyle)
   } catch(e) {
     console.error('绑定UIkit事件失败', e.stack)
+  }
+  function setActiveStyle(e) {
+    const li = e.srcElement.parentElement
+    if (!li) return
+    li.classList.add('active')
+  }
+  function removeActiveStyle(e) {
+    const li = e.srcElement.parentElement
+    if (!li) return
+    li.classList.remove('active')
   }
 }

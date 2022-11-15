@@ -1,0 +1,83 @@
+/* custom  */
+header .uk-logo > img {
+  height: 60px;
+  padding: 15px 0;
+}
+.uk-subnav>*>:first-child,
+#my_menu .uk-subnav > li > a:link {
+  color: #fff;
+}
+#my_menu .uk-subnav > li > a:hover {
+  color: rgb(250,166,26);
+}
+#my_menu .uk-subnav > li.active > a {
+  color: rgb(250,166,26);
+}
+
+
+/* 锁屏div样式 */
+.black_overlay {
+    display: none;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: #EEEEEE;
+    z-index: 1001;
+    -moz-opacity: 0.8;
+    opacity: .80;
+    filter: alpha(opacity=80);
+}
+
+.white_content {
+    display: none;
+    position: absolute;
+    top: 35%;
+    left: 30%;
+    width: 30%;
+    height: 25%;
+    padding: 8px;
+    border: 8px solid #AAAAAA;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+}
+
+.tip {
+    position: absolute;
+    top: 25%;
+    left: 30%;
+    width: 50%;
+    height: 25%;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+}
+
+.succ {
+    position: absolute;
+    top: 65%;
+    left: 20%;
+    width: 15%;
+    height: 15%;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+}
+
+.fail {
+    position: absolute;
+    top: 65%;
+    left: 65%;
+    width: 15%;
+    height: 15%;
+    background-color: white;
+    z-index: 1002;
+    overflow: auto;
+}
+
+#ie6shengji{background-color:#ffffff; left:0; font-size:16px; color:#ff0000; width:97%; padding: 2px 15px 2px 23px; text-align:left;}
+#_C4symbol, #_C4banner{
+  z-index:1000;
+}

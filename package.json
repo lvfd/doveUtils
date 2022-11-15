@@ -1,15 +1,17 @@
 {
   "name": "dove-utils",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Compile, compress and publish the javascript for all projects.",
   "main": "index.js",
   "scripts": {
+    "build-ban": "npx webpack --config-name ban",
+    "build-dovemgr": "npx webpack --config webpack.dovemgr.js",
     "paydev": "npx webpack --config-name dovepay --node-env development",
     "paypro": "npx webpack --config-name dovepay --node-env production",
-    "mgrdev": "npx webpack --config-name dovemgr --node-env development",
-    "mgrpro": "npx webpack --config-name dovemgr --node-env production",
     "fredev": "npx webpack --config-name dovepay-freight --node-env development",
-    "frepro": "npx webpack --config-name dovepay-freight --node-env production"
+    "frepro": "npx webpack --config-name dovepay-freight --node-env production",
+    "test": "npx webpack --config-name test",
+    "prod-dovemgr": "npm run build-ban && npm run build-dovemgr"
   },
   "repository": {
     "type": "git",
@@ -26,17 +28,29 @@
     "url": "https://github.com/lvfd/doveUtils/issues"
   },
   "homepage": "https://github.com/lvfd/doveUtils#readme",
-  "browserslist": "> 0.25%, not dead",
+  "browserslist": [
+    "IE >= 9"
+  ],
   "devDependencies": {
     "@babel/core": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
     "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
     "eslint-plugin-json": "^3.1.0",
-    "html-webpack-plugin": "^5.5.0",
+    "file-loader": "^6.2.0",
+    "jquery-lts": "npm:jquery@^3.6.1",
+    "jquery-v2": "npm:jquery@^2.2.4",
+    "showmodaldialog": "^1.0.0",
+    "style-loader": "^3.3.1",
+    "uikit-lts": "github:lvfd/uikit#master",
+    "uikit-v2": "npm:uikit@^2.27.4",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "chart.js": "^3.9.1"
+    "browser-dtector": "^3.2.0",
+    "chart.js": "^3.9.1",
+    "core-js": "^3.26.0",
+    "dom4": "^2.1.6"
   }
 }

@@ -1,4 +1,7 @@
 /dist/*
+!/dist/index.html
+/test/*
+!/test/*.html
 # !/dist/css/
 # /dist/css/*
 # !/dist/css/uikit.css

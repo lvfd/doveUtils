@@ -486,7 +486,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
       success : function(data) {
         if(data == '1'){
           UIkit.modal.alert('添加银行卡成功。').then(function(){
-            window.location.href="protected/accountAction.do?m=managerFastCard";
+            iframe.contentWindow.location.href="protected/accountAction.do?m=managerFastCard";
           });
         } else {
           UIkit.modal.alert("添加银行卡失败。");

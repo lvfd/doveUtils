@@ -1,17 +1,21 @@
-import Canvas from '../../dovepay-freight/canvas'
+import {checkBrowser} from '../../public/browser'
 
 window.addEventListener('load', () => {
   try {
     const dataEl = document.querySelector('input#accountData')
     if (!dataEl) return
 
-    const cvs = new Canvas('#accountDetails')
-    .setSize([7, 2])
-    .buildChart(config(dataEl))
+    if (checkBrowser.isIE) return
+      
+    import('../../dovepay-freight/canvas').then((module) => {
+      const Canvas = module.default
+      const cvs = new Canvas('#accountDetails')
+      .setSize([7, 2])
+      .buildChart(config(dataEl))
+      // console.log(module.default)
+      console.log(cvs)
+    })
     
-    // triggerTooltip(cvs.chart)
-    
-    console.log('chart初始化完毕')
   } catch(e) {
     console.error('chart初始化失败', e.stack)
   }

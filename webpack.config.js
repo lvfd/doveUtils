@@ -1,5 +1,4 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const env = process.env.NODE_ENV
 const platform = process.platform
 
@@ -10,20 +9,105 @@ let babelLoaderConfig = {
   use: {
     loader: "babel-loader",
     options: {
-      presets: ['@babel/preset-env']
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            "targets": {"ie": "9"},
+            "useBuiltIns": "entry",
+            // "useBuiltIns": "usage",
+            "corejs": "3"
+          }
+        ],
+      ],
     },
   },
 }
 
-let config = {
+
+/* ban */
+const ban = {
+  mode: 'production',
+  name: 'ban',
+  entry: './src/public/entry/ban',
   output: {
-    // filename: '[name].[contenthash].js',
+    filename: 'ban-v1.0.min.js',
+    path: path.resolve(__dirname, 'dist', 'utils')
+  }
+}
+
+/* dovepay */
+let config_dovepay = {
+  name: 'dovepay',
+  entry: {
+    dovepay: './src/dovepay/entry',
+    sysIndex: './src/dovepay/sys',
+    browser: './src/public/browser',
+    convert: './src/public/convert',
+  },
+  output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist', 'dovepay'),
+    clean: true,
+  },
+  module: {
+    rules: [babelLoaderConfig],
   },
   optimization: {
     splitChunks: {
-      chunks: 'all',
+      cacheGroups: {
+        commons: {
+          chunks: 'all',
+        },
+      }
+    }
+  },
+}
+
+/* dovepay-freight */
+let config_dovepayFreight = {
+  name: 'dovepay-freight',
+  entry: {
+    dovepayFreight: './src/dovepay-freight/Entry',
+  },
+  output: {
+    filename: '[name].js',
+    path: getOutputByPlatform(platform),
+  },
+  module: {
+    rules: [babelLoaderConfig],
+  },
+}
+
+
+/* 配置test */
+let config_test = {
+  name: 'test',
+  entry: {
+    test: './test/src/test'
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'test', 'dist'),
+    environment: {
+      // The environment supports arrow functions ('() => { ... }').
+      // arrowFunction: false,
+      // // The environment supports BigInt as literal (123n).
+      // bigIntLiteral: false,
+      // // The environment supports const and let for variable declarations.
+      // const: true,
+      // // The environment supports destructuring ('{ a, b } = obj').
+      // destructuring: true,
+      // // The environment supports an async import() function to import EcmaScript modules.
+      // dynamicImport: false,
+      // // The environment supports 'for of' iteration ('for (const x of array) { ... }').
+      // forOf: true,
+      // // The environment supports ECMAScript Module syntax to import ECMAScript modules (import ... from '...').
+      // module: false,
+      // // The environment supports optional chaining ('obj?.a' or 'obj?.()').
+      // optionalChaining: true,
+      // // The environment supports template literals.
+      // templateLiteral: true,
     },
   },
   module: {
@@ -32,48 +116,11 @@ let config = {
 }
 
 
-/* 配置dovepay */
-let config_dovepay = Object.assign({}, config)
-config_dovepay.name = 'dovepay'
-config_dovepay.entry = {
-  dovepay: './src/dovepay/entry',
-  sysIndex: './src/dovepay/sys/index',
-}
-config_dovepay.output = {
-  filename: '[name].js',
-  path: path.resolve(__dirname, 'dist', 'dovepay'),
-}
-config_dovepay.optimization = {}
-
-
-/* 配置货运系统 */
-let config_dovepayFreight = Object.assign({}, config)
-config_dovepayFreight.name = 'dovepay-freight'
-config_dovepayFreight.entry = {
-  dovepayFreight: './src/dovepay-freight/Entry',
-}
-config_dovepayFreight.output = {
-  filename: config.output.filename,
-  path: getOutputByPlatform(platform),
-}
-config_dovepayFreight.optimization = {}
-
-
-/* 配置doveMgr */
-let config_dovemgr = Object.assign({}, config)
-config_dovemgr.name = 'dovemgr'
-config_dovemgr.entry = {
-  dovemgr: './src/dovemgr',
-}
-
-
 /* 加入生产或开发环境参数 */
 function setByEnv(config, env) {
   if (env === 'development') {
     config.mode = 'development'
     config.devtool = 'inline-source-map'
-    // config.output.clean = true
-    config.plugins = [new HtmlWebpackPlugin()]
   }
   if (env === 'production') {
     config.output.filename = '[name].min.js'
@@ -93,7 +140,8 @@ function getOutputByPlatform(platform) {
 }
 
 module.exports = [
+  ban,
   setByEnv(config_dovepay, env),
   setByEnv(config_dovepayFreight, env),
-  setByEnv(config_dovemgr, env),
+  config_test,
 ]

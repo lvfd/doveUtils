@@ -1,4 +1,4 @@
 export default {
-    accountAction: new RegExp(/dovePay.protected.accountAction/, 'i'),
-    userweb: new RegExp(/((\.dovepay\.com.*)|(localhost.*))\/dovepay-user-web/),
+    accountAction: /dovePay.protected.accountAction/i,
+    userweb: /((\.dovepay\.com.*)|(localhost.*))\/dovepay-user-web/,
 }

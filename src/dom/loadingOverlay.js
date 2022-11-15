@@ -19,7 +19,7 @@ export default function (show, config/*{html: '<h1>loading</h1>', transparent: f
       }
 
       /* 解决dovePay项目zindex问题 */
-      if (nodelistCannotCover.length > 0) {
+      if (nodelistCannotCover && nodelistCannotCover.length > 0) {
         nodelistCannotCover.forEach(function(nodeCannotCover) {
           nodeCannotCover.style.zIndex = 0
         })
@@ -52,7 +52,7 @@ export default function (show, config/*{html: '<h1>loading</h1>', transparent: f
       }
       
       /* 还原dovePay项目zindex */
-      if (nodelistCannotCover.length > 0) {
+      if (nodelistCannotCover && nodelistCannotCover.length > 0) {
         nodelistCannotCover.forEach(function(nodeCannotCover) {
           nodeCannotCover.style.zIndex = 2
         })

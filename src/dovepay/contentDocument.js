@@ -16,8 +16,7 @@ export default function(iframe) {
 
     /* 过滤器 */
     const href = iframe.contentWindow.location.href
-    const userweb = /dovepayUserWebMgrAction/
-    if (userweb.test(href)) {
+    if (/dovepayUserWebMgrAction/.test(href)) {
       console.log('用户系统')
       display(iframe)
       return
@@ -32,7 +31,7 @@ export default function(iframe) {
     js.addEventListener('error', () => console.error('加载polyfill错误'))
 
     /* iframeDOM变动自动调整iframe高度 */
-    if (MutationObserver) {
+    if (typeof MutationObserver === 'function') {
       try {
         const mo = new MutationObserver(() => updateIframeHeight(iframe))
         mo.observe(iframe.contentDocument.body, {

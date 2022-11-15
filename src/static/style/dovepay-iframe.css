@@ -1,0 +1,31 @@
+@CHARSET "UTF-8";
+.bankRadios.other {
+  display: none;
+}
+.dove-banklogo.uk-button img {
+  vertical-align: middle;
+}
+.dove-banklogo {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.dove-banklogo::after {
+  content: attr(data-content);
+  visibility: hidden;
+}
+.dove-superscript.uk-badge {
+  vertical-align: top;
+  margin-left: -2em;
+  margin-top: -0.5em;
+}
+.offlineRechargeBanklist li{
+  width: auto;
+}
+#rightContSon #bankInput_xianxia .offlineRechargeBanklist span {
+  color: #666;
+}
+#bankInput_xianxia ul,
+#bankInput_xianxia ul li {
+  float: none;
+}

@@ -1,0 +1,73 @@
+@CHARSET "UTF-8";
+h1, h2, h3 {
+  margin-top: 0;
+}
+.uk-subnav>*>:first-child{
+  font-size: 12px;
+}
+.uk-modal-title {
+  font-size: 18px;
+}
+.dove-blue.uk-button,
+.uk-checkbox:checked, .uk-checkbox:indeterminate, .uk-radio:checked,
+.uk-badge{
+  background-color: rgb(3,78,162);
+}
+.uk-progress::-webkit-progress-value {
+  background-color: rgb(3,78,162);
+}
+.uk-progress::-moz-progress-bar {
+  background-color: rgb(3,78,162);
+}
+.dove-blue.uk-button:hover {
+  background-color: rgb(3,63,134);
+}
+.dove-yellow.uk-button {
+  background-color: rgb(250,166,26);
+}
+.dove-yellow.uk-button:hover {
+  background-color: rgb(238,155,17);
+}
+.uk-progress {
+  color: rgb(3,78,162);
+}
+.bankRadios.other {
+  display: none;
+}
+.dove-banklogo.uk-button img {
+  vertical-align: middle;
+}
+.dove-banklogo {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.dove-banklogo::after {
+  content: attr(data-content);
+  visibility: hidden;
+}
+.dove-superscript.uk-badge {
+  vertical-align: top;
+  margin-left: -2em;
+  margin-top: -0.5em;
+}
+#rightContSon .SelectBank a.uk-button,
+.SelectBank input[type=button] {
+  color: white;
+}
+.offlineRechargeBanklist li{
+  width: auto;
+}
+#rightContSon #bankInput_xianxia .offlineRechargeBanklist span {
+  color: #666;
+}
+#accountsRechargeUi input[name=Submit],
+.SelectBank a.uk-button,
+.SelectBank a.uk-button:hover {
+  height: inherit;
+  line-height: inherit;
+}
+#bankInput_xianxia ul,
+#bankInput_xianxia ul li {
+  float: none;
+}
