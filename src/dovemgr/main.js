@@ -5,13 +5,16 @@ import getVendor from '@dove-mgr/vendor'
 import setMenu from '@dove-mgr/menu'
 import iframeContentHandler from '@dove-mgr/contentDocument'
 import uk2dom from '@dove-mgr/uk2dom'
+import mgr_css from '@dove-css/dovemgr.css'
 
-window.addEventListener('DOMContentLoaded', () => getVendor().then(() => mainHandler()).catch(e => console.error(e)))
+getVendor()
+document.write(`<link type="text/css" rel="stylesheet" href="${mgr_css}">`)
+
+window.addEventListener('DOMContentLoaded', mainHandler)
 window.addEventListener('resize', setIframeHeight)
 
 function mainHandler() {
   try {
-    import ('@dove-css/dovemgr.css')
     dominit()
     uk2dom()
     const iframe = document.querySelector('#frame_content')

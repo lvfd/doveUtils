@@ -1,17 +1,6 @@
 ﻿import BrowserDetector from 'browser-dtector'
-import urls from '../public/urls'
 
 const browser = new BrowserDetector(window.navigator.userAgent).parseUserAgent()
-
-const host = urls.host.inTime
-export var paycss = `${host}${urls.plugin.css.dovepay}`
-export var payiframecss = `${host}${urls.plugin.css['dovepay-iframe']}`
-export var ukcss = `${host}${urls.uikit.v3.css}`
-export var ukjs = `${host}${urls.uikit.v3.js}`
-export var ukiconjs = `${host}${urls.uikit.v3.icon}`
-export var v2css = `${host}${urls.uikit.v2.css}`
-export var v2js = `${host}${urls.uikit.v2.js}`
-export var v2convert = `${host}${urls.uikit.v2.convert}`
 
 export function importCss(iframe, url) {
   try {
@@ -27,6 +16,7 @@ export function importCss(iframe, url) {
     return link
   } catch(e) {
     console.error('引入css错误', e.stack)
+    return 'Error'
   }
 }
 
@@ -47,6 +37,7 @@ export function importJs(iframe, url) {
     return script
   } catch(e) {
     console.error('引入js错误', e.stack)
+    return 'Error'
   }
 }
 
