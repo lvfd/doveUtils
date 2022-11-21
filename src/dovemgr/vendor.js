@@ -12,14 +12,17 @@ import jquery_v2 from 'jquery-v2'
 import jquery_lts from 'jquery-lts'
 import dom4 from 'dom4'
 import showmodaldialog from 'showmodaldialog'
-
-// import {importCss, importJs, importUk} from '@dove/import'
+import addDom from '@dove/import'
+import dovemgr_css from '@dove-css/dovemgr.css'
 
 const browser = new BrowserDetector(window.navigator.userAgent).parseUserAgent()
 
-export default () => {
+export default (iframe) => {
   if (browser.isIE) {
-    return document.write(`
+    return iframe? 
+    addDom({url: dovemgr_css, type: 'link', root: iframe})
+    .catch(e => console.log(e))
+    : document.write(`
       <link type="text/css" rel="stylesheet" href="${uk_css_v2}">
       <script type="text/javascript" src="${jquery_v2}"></script>
       <script type="text/javascript" src="${uk_js_v2}"></script>
@@ -27,7 +30,13 @@ export default () => {
     `)
   }
   else {
-     return document.write(`
+    return iframe?
+    Promise.all([
+      addDom({url: dovemgr_css, type: 'link', root: iframe}),
+      addDom({url: showmodaldialog, type: 'script', root: iframe})
+    ])
+    .catch(e => console.log(e))
+    : document.write(`
       <link type="text/css" rel="stylesheet" href="${uk_css_lts}">
       <script type="text/javascript" src="${jquery_lts}"></script>
       <script type="text/javascript" src="${uk_js_lts}"></script>

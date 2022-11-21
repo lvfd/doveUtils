@@ -1,6 +1,5 @@
-import {importCss, importJs} from '../public/import'
-import urls from '../public/urls'
 import {show, setInlineStyle, transLinks} from '@dove/functions'
+import getVendor from '@dove-mgr/vendor'
 
 export default function(iframe) {
   try {
@@ -17,16 +16,13 @@ export default function(iframe) {
     /* 转移body下的link */
     transLinks(iframe)
 
-    /* import files into iframe (async) */
-    const js = importJs(iframe, `${urls.host.inTime}${urls.plugin.js.showModalDialog}`)
-    js.addEventListener('error', () => console.error('加载polyfill错误'))
-    const css = importCss(iframe, `${urls.host.inTime}${urls.plugin.css.dovemgr}`)
-    css.addEventListener('error', () => {
-      show(iframe)
-      console.error('加载css错误')
-    })
-    css.addEventListener('load', () => {
+    getVendor(iframe)
+    .then(() => {
       inlineStyleHandler(iframe)
+      show(iframe)
+    })
+    .catch(e => {
+      console.error(e)
       show(iframe)
     })
 
