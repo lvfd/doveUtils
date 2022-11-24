@@ -1,4 +1,8 @@
-import urls from './urls'
+/* 
+Usage:
+  dovemgr 
+*/
+
 import Logo from '@dove-img/dovepay.svg'
 
 export default function() {
@@ -19,7 +23,7 @@ const init = {
         el.appendChild(img)
       })
     } catch(e) {
-      console.error(data, ...args)
+      console.error(e, e.stack)
     }
   }
 }

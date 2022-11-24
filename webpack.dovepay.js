@@ -7,14 +7,15 @@ const config = {
   // devtool: 'source-map',
   mode: 'development',
   // devtool: 'inline-source-map',
-  name: 'dovemgr',
+  name: 'dovepay',
   entry: {
-    main: './src/dovemgr/main'
+    main: './src/dovepay/main',
+    sysIndex: './src/dovepay/sys'
   },
   output: {
     clean: true,
     filename: `[name]-${version}.min.js`,
-    path: path.resolve(__dirname, 'dist', 'dovemgr')
+    path: path.resolve(__dirname, 'dist', 'dovepay')
   },
   optimization: {
     splitChunks: {

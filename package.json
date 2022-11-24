@@ -6,12 +6,12 @@
   "scripts": {
     "build-ban": "npx webpack --config-name ban",
     "build-dovemgr": "npx webpack --config webpack.dovemgr.js",
-    "paydev": "npx webpack --config-name dovepay --node-env development",
-    "paypro": "npx webpack --config-name dovepay --node-env production",
+    "build-dovepay": "npx webpack --config webpack.dovepay.js",
     "fredev": "npx webpack --config-name dovepay-freight --node-env development",
     "frepro": "npx webpack --config-name dovepay-freight --node-env production",
     "test": "npx webpack --config-name test",
-    "prod-dovemgr": "npm run build-ban && npm run build-dovemgr"
+    "prod-dovemgr": "npm run build-ban && npm run build-dovemgr",
+    "prod-dovepay": "npm run build-ban && npm run build-dovepay"
   },
   "repository": {
     "type": "git",
@@ -45,7 +45,8 @@
     "uikit-lts": "github:lvfd/uikit#master",
     "uikit-v2": "npm:uikit@^2.27.4",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.10.0",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "browser-dtector": "^3.2.0",

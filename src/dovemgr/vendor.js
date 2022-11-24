@@ -45,12 +45,3 @@ export default (iframe) => {
     `)
   }
 }
-
-// export var byAddDom = (iframe) => {
-//   if (browser.isIE) {
-
-//   }
-//   else {
-
-//   }
-// }

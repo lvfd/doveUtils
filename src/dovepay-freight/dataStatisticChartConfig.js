@@ -1,5 +1,3 @@
-import {errorHandler} from '../public'
-
 const color = {
   blue: 'rgb(3, 78, 162)',
   yellow: 'rgb(250, 166, 26)',
@@ -36,7 +34,7 @@ function getAxisData(res) {
       parseInt(firstItem.label) - parseInt(secondItem.label))
     return axisData
   } catch(e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
 }
 

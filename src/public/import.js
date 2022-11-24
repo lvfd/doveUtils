@@ -1,4 +1,9 @@
-﻿export default function(config) {
+﻿/* 
+Usage:
+  dovemgr 
+*/
+
+export default function(config) {
   try {
     const url = config.url
     const type = config.type

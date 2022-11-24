@@ -17,14 +17,9 @@ export default function(iframe) {
     transLinks(iframe)
 
     getVendor(iframe)
-    .then(() => {
-      inlineStyleHandler(iframe)
-      show(iframe)
-    })
-    .catch(e => {
-      console.error(e)
-      show(iframe)
-    })
+    .then(() => inlineStyleHandler(iframe))
+    .catch(e => console.error(e))
+    .finally(() => show(iframe))
 
   } catch(e) {
     show(iframe)

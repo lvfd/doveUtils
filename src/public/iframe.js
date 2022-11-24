@@ -1,4 +1,9 @@
-﻿import {show as defaultShow, hide as defaultHide} from './functions'
+﻿/* 
+Usage:
+  dovemgr 
+*/
+
+import {show as defaultShow, hide as defaultHide} from './functions'
 
 export default function(iframe, loadHandler, config) {
   if (!iframe) return

@@ -1,15 +1,5 @@
-﻿import {
-  // log_recharge as log,
-  errHandler, 
-  getDigitUppercase as digitUppercase, 
-} from '../public'
-import {
-  encryptMobileNumber,
-  changeDocumentTitle,
-  init_step,
-  initModalShower,
-  init_btn_countdown,
-} from '../dom'
+﻿import {digitUppercase, encryptMobileNumber, changeDocumentTitle} from '@dove/functions'
+import {init_step, initModalShower, init_btn_countdown} from '@dove-pay/functions'
 
 function RechargeUi() {}
 
@@ -212,7 +202,7 @@ RechargeUi.prototype.accountsRechargeUi = function(iframe) {
             //   resizeMainContentIframe(config.iframe)
             // }
           } catch(e) {
-            errHandler(e);
+            console.error(e, e.stack);
           }
           function removeOthersStyle(links) {
             for (var i = 0; i < links.length; i++) {
@@ -452,7 +442,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
           smsInput.focus()
         });
       }
-      else if (result === 0　|| result === '0') {
+      else if (result === 0|| result === '0') {
         return callback.call();
       }
       else {
@@ -497,8 +487,7 @@ RechargeUi.prototype.addFastCardUi = function(iframe) {
       }
     });
   }
-};
-
+}
 
 var rechargeUi = new RechargeUi();
 

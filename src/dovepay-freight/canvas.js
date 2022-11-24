@@ -1,25 +1,19 @@
-import {
-  getObjDocument,
-  errlog,
-  logDefault as log,
-} from '../public'
-
 import Chart from 'chart.js/auto'
 
 export default function Canvas(selector, config) {
   if (!selector) {
-    return errlog('缺少参数: ("#canvasID", {[iframeNode: DocumentIframeNode, ctx: "2d"]})')
+    return console.error('缺少参数: ("#canvasID", {[iframeNode: DocumentIframeNode, ctx: "2d"]})')
   }
-  const rootDocument = getObjDocument(config? config.iframeNode: null)
+  const rootDocument = config && config.iframeNode? config.iframeNode.contentDocument: document
   const cvs = rootDocument.querySelector(selector)
   const ctx = config && config.ctx? config.ctx: '2d'
-  if (!cvs) return errlog('不能初始化canvas，因为定位不到DOM')
-  if (!cvs.getContext) return errlog('浏览器不支持canvas')
+  if (!cvs) return console.error('不能初始化canvas，因为定位不到DOM')
+  if (!cvs.getContext) return console.error('浏览器不支持canvas')
   this.node = cvs
   this.ctx = cvs.getContext(ctx)
   this.height = 300
   this.width = 150
-  log('canvas初始化成功')
+  console.log('canvas初始化成功')
 }
 
 Canvas.prototype.setSize = function(ratio) {
@@ -33,10 +27,9 @@ Canvas.prototype.setSize = function(ratio) {
     canvasNode.height = canvasHeight
     this.width = canvasNode.width
     this.height = canvasNode.height
-    log('canvas宽高设置成功')
     return this
   } catch(e) {
-    errlog(e.stack)
+    console.error(e.stack)
     return this
   }
 }
@@ -48,10 +41,10 @@ Canvas.prototype.buildChart = function(chartjsConfig) {
     const chart = new Chart(ctx, chartjsConfig)
     this.chart = chart
     this.chartjsConfig = chartjsConfig
-    log('Chart.js配置成功')
+    console.log('Chart.js配置成功')
     return this
   } catch(e) {
-    errlog(e.stack)
+    console.error(e.stack)
     return this
   }
 }
@@ -63,7 +56,7 @@ Canvas.prototype.buildChart = function(chartjsConfig) {
 //     ctx.fillText(chartTitle, 10, 50)
 //     return this
 //   } catch(e) {
-//     errlog(e.stack)
+//     console.error(e.stack)
 //     return this
 //   }
   
@@ -82,7 +75,7 @@ Canvas.prototype.buildChart = function(chartjsConfig) {
 //     }
 //     return this
 //   } catch(e) {
-//     errlog(e.stack)
+//     console.error(e.stack)
 //     return this
 //   }
 // }

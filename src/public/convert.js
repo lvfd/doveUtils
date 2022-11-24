@@ -1,3 +1,8 @@
+/* 
+Usage:
+  dovemgr 
+*/
+
 export default (iframe) => {
   try {
     const rd = iframe? iframe.contentDocument: document

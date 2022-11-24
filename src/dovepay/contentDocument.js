@@ -1,35 +1,15 @@
-import {importCss, payiframecss, importJs, showModalDialog, importUk} from '../dovemgr/import'
-import {transLinks} from '../dovemgr/functions'
-import {hideDropdown} from './functions'
-import {display} from './main'
-import contentDocumentHandler from './contentDocumentHandler'
-import {setIframeHeight as updateIframeHeight} from './main'
-import {filter} from './router'
-import catalog from './catalog'
+import getVendor from '@dove-pay/vendor'
+import {transLinks} from '@dove/functions'
+import {hideDropdown, display, setIframeHeight as updateIframeHeight,
+  filter, catalog} from '@dove-pay/functions'
+import checkExpiredInfo from '@dove-pay/page/checkExpiredInfo'
+import buildBankLogoButton from '@dove-pay/buildBankLogoButton'
+import rechargeUi from '@dove-pay/recharge'
 
 export default function(iframe) {
   try {
-    console.info('------>onload', `href=${iframe.contentWindow.location.href}`)
-
     /* 绑定点击事件 */
     iframe.contentDocument.addEventListener('click', () => hideDropdown())
-
-    /* 过滤器 */
-    const href = iframe.contentWindow.location.href
-    if (/dovepayUserWebMgrAction/.test(href)) {
-      console.log('用户系统')
-      display(iframe)
-      return
-    }
-
-
-    /* 转移body下的link */
-    transLinks(iframe)
-
-    /* 异步import */
-    const js = importJs(iframe, showModalDialog)
-    js.addEventListener('error', () => console.error('加载polyfill错误'))
-
     /* iframeDOM变动自动调整iframe高度 */
     if (typeof MutationObserver === 'function') {
       try {
@@ -43,7 +23,15 @@ export default function(iframe) {
         console.error('绑定DOM树监听错误', e.stack)
       }
     }
-
+    /* 不处理用户系统 */
+    const href = iframe.contentWindow.location.href
+    if (/dovepayUserWebMgrAction/.test(href)) {
+      console.log('用户系统')
+      display(iframe)
+      return
+    }
+    /* 转移body下的link */
+    transLinks(iframe)
     /* 过滤器 */
     let idArr = []
     catalog.forEach((page) => {
@@ -51,34 +39,50 @@ export default function(iframe) {
     })
     if (filter(iframe, idArr)) {
       iframe.style.width = '100%'
-    } else {
+    }
+    else {
       iframe.style.width = '980px'
       updateIframeHeight(iframe)
-      display(iframe)
-      return
+      return display(iframe)
     }
-
-    /* import uikit */
-    importUk(iframe)
-    .then(() => syncImport(iframe))
-    .then(() => contentDocumentHandler(iframe))
-    .catch((reject) => {
-      console.error('引入uikit组件错误:', reject)
-      display(iframe)
-    })
+    /* continue: */
+    getVendor(iframe)
+    .then(() => iframeHandler(iframe))
+    .catch(e => console.error(e))
+    .finally(() => display(iframe))
 
   } catch(e) {
-    display(iframe)
     console.error('处理iframe.contentDocument失败', e.stack)
+    return display(iframe)   
   }
 }
 
+function iframeHandler(iframe) {
+  try {
+    /* 主页提示过期更新 */
+    if (/rightByUserWeb\.jsp/.test(iframe.contentWindow.location.href)) {
+      checkExpiredInfo()
+    }
+    /* 充值UI */
+    rechargeExec(iframe)
+    /* 重设高度 */
+    window.setTimeout(() => updateIframeHeight(iframe), 100)
+  } catch(e) {
+    console.error('处理iframe页面出错', e.stack)
+  } finally {
+    display(iframe)
+  }
+}
 
-
-function syncImport(iframe) {
-  return new Promise((resolve, reject) => {
-    const css = importCss(iframe, payiframecss)
-    css.addEventListener('error', () => reject('加载iframe内css失败'))
-    css.addEventListener('load', () => resolve())
-  })
+function rechargeExec(iframe) {
+  try {
+    buildBankLogoButton(iframe)
+    if (iframe.contentDocument.body) {
+      const id = iframe.contentDocument.body.id
+      if (!rechargeUi[id]) return
+      rechargeUi[id].call(this, iframe)
+    }
+  } catch(e) {
+    console.error('充值UI界面处理错误', e.stack)
+  }
 }

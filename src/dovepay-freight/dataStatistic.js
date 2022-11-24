@@ -1,8 +1,5 @@
 import Glob_fn from './Global'
 import fn_initPaginate from './Paginate'
-import {
-  logDefault as log, errlog, errorHandler,
-} from '../public'
 import Canvas from './canvas'
 import chartConfig from './dataStatisticChartConfig'
 import {
@@ -10,26 +7,26 @@ import {
 } from './AjaxManager'
 
 export function dsIndex() {
-  log('进入 ----------> dataStatistic Index')
+  console.log('进入 ----------> dataStatistic Index')
   initWdatePicker()
   queryBillRule()
   .then(response => setBillRule(response))
   .then(() => bindButtons(loadData, saveBillRuleId))
-  .catch(error => errorHandler(error))
+  .catch(error => console.error(error))
 }
 
 export function dsDetails() {
-  log('进入 ----------> dataStatistic Details')
+  console.log('进入 ----------> dataStatistic Details')
   
   setParentLink('#parentLink', 'dovepay-freight/station/dataStatistic')
   
   queryBillRule()
   .then(response => setBillRuleText(response))
-  .catch(error => errlog(error))
+  .catch(error => console.error(error))
 
   /* table */
   bindButtons(loadDataDetails, null , () => {history.back()})
-  .catch(error => errorHandler(error))
+  .catch(error => console.error(error))
   
 }
 
@@ -44,7 +41,7 @@ function initWdatePicker() {
       })
     })
   } catch (e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
 }
 function queryBillRule() {
@@ -73,7 +70,7 @@ function setBillRule(response) {
       resolve('success')
     } catch(e) {
       rej(e.stack)
-      // errorHandler(e.stack)
+      // console.error(e.stack)
     }
   })
 }
@@ -93,7 +90,7 @@ function setBillRuleText(res) {
       })
     }
   } catch(e) {
-    errlog(e.stack)
+    console.error(e.stack)
   }
 }
 function bindButtons(cb, dataHandler, checkResCallback) {
@@ -101,7 +98,7 @@ function bindButtons(cb, dataHandler, checkResCallback) {
     try {
       fn_initExportBtn(fetch_exportExcel)
     } catch(e) {
-      errlog(e.stack)
+      console.error(e.stack)
     }
     try {
       fn_initSubmitBtn(1, 15, fetchData, cb, dataHandler, checkResCallback)
@@ -114,19 +111,19 @@ function saveBillRuleId(data) {
   try {
     document.querySelector('input[name="billRuleIdValue"]').value = data.billRuleId
   } catch(e) {
-    errlog(e.stack)
+    console.error(e.stack)
   }
 }
 function loadData(response, pageNumber, pageSize) {
   try {
-    log(response)
+    console.log(response)
     const table = document.getElementById('dataTable')
     const trInThead = Glob_fn.Table.getThTr(table)
     setThead(trInThead)
     setTbody(table, response)
     fn_initPaginate(response, pageNumber, pageSize, fetchData, loadData)
   } catch(e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
   function setThead(tr) {
     const set = Glob_fn.Table.setTh
@@ -186,7 +183,7 @@ function toDetails(event) {
     }
     Glob_fn.submVirtForm(url, postData)
   } catch(e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
 }
 function setParentLink(node, link) {
@@ -196,19 +193,19 @@ function setParentLink(node, link) {
 }
 function loadDataDetails(response, pageNumber, pageSize) {
   try {
-    log(response)
+    console.log(response)
     const table = document.getElementById('dataTable')
     const trInThead = Glob_fn.Table.getThTr(table)
     setThead(trInThead)
     setTbody(table, response)
     fn_initPaginate(response, pageNumber, pageSize, fetchData, loadData)
   } catch(e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
   try {
     chartHandler(response)
   } catch(e) {
-    errorHandler(e.stack)
+    console.error(e.stack)
   }
   function setThead(tr) {
     const set = Glob_fn.Table.setTh
@@ -244,7 +241,7 @@ function loadDataDetails(response, pageNumber, pageSize) {
     .setSize([16, 9])
     .buildChart(chartConfig(res))
 
-    log(cvs)
+    console.log(cvs)
   }
 }
 

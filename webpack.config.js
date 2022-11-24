@@ -36,34 +36,6 @@ const ban = {
   }
 }
 
-/* dovepay */
-let config_dovepay = {
-  name: 'dovepay',
-  entry: {
-    dovepay: './src/dovepay/entry',
-    sysIndex: './src/dovepay/sys',
-    browser: './src/public/browser',
-    convert: './src/public/convert',
-  },
-  output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist', 'dovepay'),
-    clean: true,
-  },
-  module: {
-    rules: [babelLoaderConfig],
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        commons: {
-          chunks: 'all',
-        },
-      }
-    }
-  },
-}
-
 /* dovepay-freight */
 let config_dovepayFreight = {
   name: 'dovepay-freight',
