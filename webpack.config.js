@@ -113,7 +113,6 @@ function getOutputByPlatform(platform) {
 
 module.exports = [
   ban,
-  setByEnv(config_dovepay, env),
   setByEnv(config_dovepayFreight, env),
   config_test,
 ]

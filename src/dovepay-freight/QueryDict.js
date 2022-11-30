@@ -1,4 +1,4 @@
-import {errorHandler} from '../public'
+import Glob_fn from './Global'
 
 function QueryDict(){
   this.api = document.querySelector('input[name=dict_api]').value;
@@ -16,6 +16,6 @@ export default function fn_queryDict(name, cb) {
   try {
     qd.query(name, cb);
   } catch(err) {
-    errorHandler(err);
+    Glob_fn.errorHandler(err);
   }
 }
