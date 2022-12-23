@@ -28,7 +28,7 @@ const config = {
         },
         libs: {
           name: 'libs',
-          filename: `libs/[name]-${version}.min.js`,
+          filename: `libs/[name].min.js`,
           test: /[\\/]node_modules[\\/]/,
         }
       }
